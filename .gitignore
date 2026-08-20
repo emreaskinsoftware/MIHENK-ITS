@@ -1,9 +1,37 @@
+# Bağımlılıklar
 node_modules/
+**/node_modules/
+
+# Derleme çıktıları
 .next/
+**/.next/
 out/
 build/
-.env*.local
-.DS_Store
+dist/
 *.tsbuildinfo
 next-env.d.ts
-.vercel
+
+# Ortam değişkenleri — API anahtarları ASLA depoya girmez
+.env
+.env.local
+.env*.local
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Model ağırlıkları (büyük dosyalar — Git LFS veya harici depo)
+04-model/**/*.bin
+04-model/**/*.safetensors
+04-model/**/*.pt
+04-model/**/checkpoints/
+
+# İşletim sistemi
+.DS_Store
+Thumbs.db
+
+# Editör
+.vscode/
+.idea/
