@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+  MİHENK — NSosyal görsel dili
+  Renkler ve ölçüler, NSosyal masaüstü arayüzünün karanlık temasından
+  referans alınarak tanımlanmıştır.
+*/
+@theme {
+  /* Yüzeyler */
+  --color-zemin: #0a0e15;
+  --color-kart: #141a24;
+  --color-yukseltilmis: #1b2331;
+  --color-hover: #212b3b;
+  --color-cizgi: #242e3e;
+
+  /* Metin */
+  --color-metin: #e9edf2;
+  --color-metin-ikincil: #8a97a6;
+  --color-metin-sonuk: #5d6b7c;
+
+  /* Marka */
+  --color-mavi: #2e90fa;
+  --color-mavi-koyu: #1d6fd4;
+  --color-camgobegi: #22c7e8;
+  --color-onayli: #1d9bf0;
+
+  /* Durum */
+  --color-basari: #22c55e;
+  --color-uyari: #f5a524;
+  --color-tehlike: #f4525f;
+
+  /* MİHENK katmanı — platformdan ayrışsın diye mor-menekşe aksan */
+  --color-mihenk: #a78bfa;
+  --color-mihenk-koyu: #7c5cf0;
+
+  --radius-kart: 18px;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+html { color-scheme: dark; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-zemin);
+  color: var(--color-metin);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Marka gradyanı — "Yeni Gönderi" butonu ve logo */
+.gradyan-marka {
+  background-image: linear-gradient(100deg, var(--color-camgobegi), var(--color-mavi));
+}
+.gradyan-metin {
+  background-image: linear-gradient(100deg, var(--color-camgobegi), var(--color-mavi));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Odak halkası — erişilebilirlik denetiminde klavye görünürlüğü için */
+:focus-visible {
+  outline: 2px solid var(--color-mavi);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-yukseltilmis);
+  border-radius: 999px;
+  border: 2px solid var(--color-zemin);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-hover); }
+
+/* Hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
