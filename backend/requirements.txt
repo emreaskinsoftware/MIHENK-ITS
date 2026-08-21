@@ -1,0 +1,23 @@
+# --- Çekirdek servis ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# --- Sayısal / kümeleme ---
+numpy==2.2.1
+scikit-learn==1.6.1
+
+# --- LLM sağlayıcı (bkz. app/llm/provider.py) ---
+anthropic==0.42.0
+
+# --- Gömme ve tespit modeli (ml/ tarafı) ---
+# NOT: torch sürümü platforma göre değişir; CPU kurulumu için
+#      pip install torch --index-url https://download.pytorch.org/whl/cpu
+sentence-transformers==3.3.1
+transformers==4.47.1
+datasets==3.2.0
+
+# --- Test ---
+pytest==8.3.4
+httpx==0.28.1
