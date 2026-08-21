@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import statistics
 import time
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -338,19 +339,64 @@ def main() -> None:
     ayristirici = argparse.ArgumentParser(description="YZ tespiti modelini eğitir")
     ayristirici.add_argument("--backend", choices=["tfidf", "berturk"], default="tfidf")
     ayristirici.add_argument("--seed", type=int, default=20260824)
+    ayristirici.add_argument(
+        "--seeds",
+        type=int,
+        default=1,
+        help=(
+            "Kaç farklı tohumla tekrarlı eğitim yapılsın (spec 7: ortalama ± "
+            "standart sapma). Kaydedilen model son tohuma aittir."
+        ),
+    )
     args = ayristirici.parse_args()
 
-    print(f"Eğitim başlıyor: {args.backend} (tohum {args.seed})")
-    rapor = egit_tfidf(args.seed) if args.backend == "tfidf" else egit_berturk(args.seed)
+    # NEDEN ÇOK TOHUM: Tek koşudan çıkan bir doğruluk değeri, modelin
+    # başarımını değil o koşunun şansını da içerir. Rapora ortalama ± standart
+    # sapma yazılır; tek sayı yazmak, olmayan bir kesinlik iddia etmektir.
+    #
+    # ÖLÇÜLEN NOT (rapora girer): TF-IDF + lojistik regresyon hattı bu veride
+    # TAM BELİRLENİMCİDİR; 5 tohumda standart sapma 0.000 çıktı. Tohum yalnızca
+    # çözücünün rastgeleliğini etkiliyor, o da lbfgs'te kullanılmıyor. Bu hattın
+    # gerçek değişkenliği VERİ tohumundan gelir:
+    #     python ml/scripts/build_dataset.py --seed <farklı>
+    # BERTurk tarafında ise ağırlık başlatma ve parti karıştırma nedeniyle tohum
+    # farkı gerçek bir değişkenlik üretir; CPU maliyeti nedeniyle tek tohumla
+    # koşuldu ve bu sınırlılık model kartında belirtildi.
+    tohumlar = [args.seed + i for i in range(max(1, args.seeds))]
+    raporlar: list[EgitimRaporu] = []
+
+    for tohum in tohumlar:
+        print(f"Eğitim başlıyor: {args.backend} (tohum {tohum})")
+        rapor = egit_tfidf(tohum) if args.backend == "tfidf" else egit_berturk(tohum)
+        raporlar.append(rapor)
+        print(
+            f"  bitti: doğrulama doğruluğu={rapor.val_accuracy} F1={rapor.val_f1} "
+            f"süre={rapor.duration_s}s"
+        )
 
     ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
     kayit_yolu = ARTIFACT_DIR / f"training_{args.backend}.json"
-    kayit_yolu.write_text(json.dumps(asdict(rapor), ensure_ascii=False, indent=2), encoding="utf-8")
 
-    print(
-        f"bitti: doğrulama doğruluğu={rapor.val_accuracy} F1={rapor.val_f1} "
-        f"süre={rapor.duration_s}s"
-    )
+    dogruluklar = [r.val_accuracy for r in raporlar]
+    f1ler = [r.val_f1 for r in raporlar]
+    ozet = {
+        "backend": args.backend,
+        "model_name": raporlar[-1].model_name,
+        "seeds": tohumlar,
+        "runs": [asdict(r) for r in raporlar],
+        "val_accuracy_mean": round(statistics.mean(dogruluklar), 4),
+        "val_accuracy_std": round(statistics.stdev(dogruluklar), 4) if len(dogruluklar) > 1 else 0.0,
+        "val_f1_mean": round(statistics.mean(f1ler), 4),
+        "val_f1_std": round(statistics.stdev(f1ler), 4) if len(f1ler) > 1 else 0.0,
+        "hyperparameters": raporlar[-1].hyperparameters,
+    }
+    kayit_yolu.write_text(json.dumps(ozet, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    if len(raporlar) > 1:
+        print(
+            f"ORTALAMA: doğruluk {ozet['val_accuracy_mean']} ± {ozet['val_accuracy_std']} "
+            f"| F1 {ozet['val_f1_mean']} ± {ozet['val_f1_std']} ({len(tohumlar)} tohum)"
+        )
     print(f"eğitim kaydı -> {kayit_yolu}")
     print("NOT: Nihai metrikler test kümesinde ölçülür: python ml/scripts/evaluate.py")
 
