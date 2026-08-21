@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Görünür odak göstergesi (spec 6.9 erişilebilirlik).
+     NEDEN GLOBAL: Tek tek bileşenlere bırakılırsa biri unutulur ve klavye
+     kullanıcısı nerede olduğunu kaybeder. Varsayılanı güçlendiriyoruz. */
+  :focus-visible {
+    outline: 3px solid #0b5c4a;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  body {
+    @apply bg-mihenk-zemin text-mihenk-metin antialiased;
+  }
+
+  /* Hareket duyarlılığı olan kullanıcılar için animasyonlar kapatılır.
+     Bu bir tercih değil, erişilebilirlik gereğidir. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Vurgulanan gönderi: kaynak çipine tıklanınca kısa süre işaretlenir.
+     Renk TEK BAŞINA kullanılmaz; sol kenarda kalın çizgi de vardır. */
+  .gonderi-vurgulu {
+    @apply bg-mihenk-vurgu-acik;
+    border-left-width: 6px;
+    border-left-color: #0b5c4a;
+  }
+}
