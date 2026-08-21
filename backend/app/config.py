@@ -119,7 +119,11 @@ class Settings(BaseSettings):
     detection_epochs: int = 3
     detection_batch_size: int = 16
     detection_learning_rate: float = 2e-5
-    detection_max_length: int = 256
+    detection_max_length: int = 192
+    # Dondurulacak alt encoder katmani sayisi (0 = tam ince ayar).
+    # 6/12: gomme + alt yari dondurulur. Olculen gerekce train_detector.py'de:
+    # tam ince ayar bu makinede adim basina ~57 saniye suruyordu.
+    detection_frozen_layers: int = 6
 
     # ------------------------------------------------------------------
     # Veri yönetişimi (spec 5.3)

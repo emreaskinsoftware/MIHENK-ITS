@@ -208,34 +208,73 @@ def egit_berturk(seed: int) -> EgitimRaporu:
         label2id={ad: i for i, ad in enumerate(LABELS)},
     )
 
+    # --- CPU'da eğitilebilirlik için iki optimizasyon -------------------
+    # ÖLÇÜLEN SORUN: Sabit 256 token doldurma ve tüm katmanların eğitilmesiyle
+    # tek adım bu makinede ~57 saniye sürüyordu; 3 epoch ≈ 2 saat. Ekipte GPU
+    # yok ve modelin demo makinesinde yeniden eğitilebilmesi gerekiyor.
+    #
+    # 1) DİNAMİK DOLDURMA: Her parti, o partideki en uzun örneğe kadar
+    #    doldurulur. Veri setindeki metinlerin çoğu 50-100 token; sabit 256'ya
+    #    doldurmak hesabın büyük bölümünü boş token üzerinde harcıyordu.
+    #
+    # 2) KISMÎ İNCE AYAR: Gömme katmanı ve alt encoder katmanları dondurulur;
+    #    yalnızca üst katmanlar ve sınıflandırma başlığı eğitilir. Bu hem geri
+    #    yayılım maliyetini yarıya indirir hem de 714 örneklik küçük veri
+    #    setinde aşırı öğrenmeyi azaltır. Alt katmanlar genel dil bilgisini
+    #    taşır ve bu görev için yeniden öğrenilmesine gerek yoktur.
     class MetinKumesi(Dataset):
-        """Tokenize edilmiş metin kümesi."""
+        """Ham metin + etiket taşıyan küme; tokenizasyon parti anında yapılır."""
 
         def __init__(self, metinler: list[str], etiketler: list[int]) -> None:
-            self.kodlar = tokenizer(
-                metinler,
-                truncation=True,
-                padding="max_length",
-                max_length=config.detection_max_length,
-            )
+            self.metinler = metinler
             self.etiketler = etiketler
 
         def __len__(self) -> int:
             return len(self.etiketler)
 
-        def __getitem__(self, i: int) -> dict:
-            oge = {k: torch.tensor(v[i]) for k, v in self.kodlar.items()}
-            oge["labels"] = torch.tensor(self.etiketler[i])
-            return oge
+        def __getitem__(self, i: int) -> tuple[str, int]:
+            return self.metinler[i], self.etiketler[i]
+
+    def parti_hazirla(ogeler: list[tuple[str, int]]) -> dict:
+        """Parti içindeki en uzun örneğe kadar doldurur (dinamik doldurma)."""
+        metinler = [m for m, _ in ogeler]
+        etiketler = [e for _, e in ogeler]
+        kodlar = tokenizer(
+            metinler,
+            truncation=True,
+            padding=True,
+            max_length=config.detection_max_length,
+            return_tensors="pt",
+        )
+        kodlar["labels"] = torch.tensor(etiketler)
+        return kodlar
+
+    dondurulan_katman = config.detection_frozen_layers
+    if dondurulan_katman > 0:
+        for parametre in model.bert.embeddings.parameters():
+            parametre.requires_grad = False
+        for katman in model.bert.encoder.layer[:dondurulan_katman]:
+            for parametre in katman.parameters():
+                parametre.requires_grad = False
+    egitilebilir = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    toplam = sum(p.numel() for p in model.parameters())
+    print(f"  eğitilebilir parametre: {egitilebilir:,} / {toplam:,} "
+          f"(alt {dondurulan_katman} katman donduruldu)")
 
     egitim_yukleyici = DataLoader(
-        MetinKumesi(x_train, y_train), batch_size=config.detection_batch_size, shuffle=True
+        MetinKumesi(x_train, y_train),
+        batch_size=config.detection_batch_size,
+        shuffle=True,
+        collate_fn=parti_hazirla,
     )
-    optimizer = torch.optim.AdamW(model.parameters(), lr=config.detection_learning_rate)
+    optimizer = torch.optim.AdamW(
+        [p for p in model.parameters() if p.requires_grad], lr=config.detection_learning_rate
+    )
 
     model.train()
     for epoch in range(config.detection_epochs):
         toplam_kayip = 0.0
+        epoch_baslangic = time.perf_counter()
         for parti in egitim_yukleyici:
             optimizer.zero_grad()
             cikti = model(**parti)
@@ -245,7 +284,12 @@ def egit_berturk(seed: int) -> EgitimRaporu:
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
             toplam_kayip += float(cikti.loss)
-        print(f"  epoch {epoch + 1}/{config.detection_epochs} kayıp={toplam_kayip / max(1, len(egitim_yukleyici)):.4f}")
+        print(
+            f"  epoch {epoch + 1}/{config.detection_epochs} "
+            f"kayıp={toplam_kayip / max(1, len(egitim_yukleyici)):.4f} "
+            f"süre={time.perf_counter() - epoch_baslangic:.0f}s",
+            flush=True,
+        )
 
     model.eval()
     tahminler: list[int] = []
@@ -279,6 +323,10 @@ def egit_berturk(seed: int) -> EgitimRaporu:
             "max_length": config.detection_max_length,
             "optimizer": "AdamW",
             "grad_clip": 1.0,
+            "frozen_layers": config.detection_frozen_layers,
+            "padding": "dinamik (parti ici en uzun)",
+            "trainable_params": egitilebilir,
+            "total_params": toplam,
         },
         val_accuracy=round(dogruluk, 4),
         val_f1=round(_f1(y_val, tahminler), 4),
