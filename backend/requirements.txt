@@ -1,23 +1,40 @@
-# --- Çekirdek servis ---
-fastapi==0.115.6
-uvicorn[standard]==0.34.0
-pydantic==2.10.4
-pydantic-settings==2.7.1
+# MİHENK — Python bağımlılıkları
+#
+# Sürümler, projenin GERÇEKTEN ÜZERİNDE KOŞTUĞU ve testlerin geçtiği sürümlerdir
+# (21 Ağustos 2026). Denenmemiş sürüm numarası yazmıyoruz: "çalışması beklenen"
+# bir bağımlılık listesi, demo sabahı çalışmayan bir kurulum demektir.
+#
+# Alt sınır (>=) yerine sabit (==) tercih edildi; yarışma teslimi tekrar
+# üretilebilir olmalı.
 
-# --- Sayısal / kümeleme ---
-numpy==2.2.1
-scikit-learn==1.6.1
+# --- Çekirdek servis ---
+fastapi==0.135.2
+uvicorn[standard]==0.42.0
+pydantic==2.12.5
+pydantic-settings==2.13.1
+
+# --- Sayısal / kümeleme / model kalıcılığı ---
+numpy==1.26.4
+scikit-learn==1.5.0
+joblib==1.5.3
+
+# --- Ölçüm ---
+PyYAML==6.0.3
 
 # --- LLM sağlayıcı (bkz. app/llm/provider.py) ---
+# Yalnızca MIHENK_LLM_PROVIDER=api kullanılacaksa gerekir; varsayılan
+# FakeProvider hiçbir dış bağımlılık istemez.
 anthropic==0.42.0
 
 # --- Gömme ve tespit modeli (ml/ tarafı) ---
-# NOT: torch sürümü platforma göre değişir; CPU kurulumu için
-#      pip install torch --index-url https://download.pytorch.org/whl/cpu
-sentence-transformers==3.3.1
-transformers==4.47.1
-datasets==3.2.0
+# ÖNEMLİ: torch bu dosyada YOK; sürümü donanıma göre ayrı kurulur.
+#   NVIDIA GPU : pip install torch --index-url https://download.pytorch.org/whl/cu124
+#   CPU        : pip install torch --index-url https://download.pytorch.org/whl/cpu
+# Sistem cihazı kendisi seçer (MIHENK_DETECTION_DEVICE=auto); CUDA bulunursa
+# hem gömme hem de ince ayar GPU'ya taşınır (bkz. app/detection/device.py).
+sentence-transformers==6.0.0
+transformers==5.15.1
 
 # --- Test ---
-pytest==8.3.4
+pytest==9.0.2
 httpx==0.28.1

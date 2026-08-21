@@ -155,8 +155,15 @@ class SentenceTransformerEmbedder:
     def __init__(self, model_name: str | None = None) -> None:
         from sentence_transformers import SentenceTransformer  # yerel içe aktarım: ağır bağımlılık
 
+        from app.detection.device import resolve_runtime
+
+        # Gömme, KATMAN 1'in en ağır adımıdır: akıştaki HER gönderi için
+        # çalışır. CUDA varsa oraya taşımak, zenginleştirme süresini doğrudan
+        # düşürür. Cihaz kararı tespit modeliyle aynı yerden gelir ki iki
+        # bileşen farklı cihazlara dağılmasın.
+        self._profil = resolve_runtime()
         self.name = model_name or get_settings().embedding_model
-        self._model = SentenceTransformer(self.name)
+        self._model = SentenceTransformer(self.name, device=self._profil.device)
         self.dim = int(self._model.get_sentence_embedding_dimension())
 
     def embed(self, texts: list[str]) -> list[list[float]]:
@@ -164,6 +171,9 @@ class SentenceTransformerEmbedder:
             [f"passage: {t}" for t in texts],
             normalize_embeddings=True,  # kosinüs için L2 normalize
             show_progress_bar=False,
+            # GPU'da büyük parti belirgin kazanç sağlar; CPU'da bellek
+            # baskısını artırmamak için küçük tutulur.
+            batch_size=64 if self._profil.is_cuda else 16,
         )
         return [[float(x) for x in v] for v in vektorler]
 

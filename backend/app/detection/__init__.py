@@ -7,6 +7,17 @@
 
 from app.detection.decision import karar_ver, length_bucket
 from app.detection.detector import LABELS, get_detector, reset_detector
-from app.detection.service import detect
+from app.detection.device import RuntimeProfile, resolve_runtime
+from app.detection.service import detect, detect_many
 
-__all__ = ["LABELS", "detect", "get_detector", "karar_ver", "length_bucket", "reset_detector"]
+__all__ = [
+    "LABELS",
+    "RuntimeProfile",
+    "detect",
+    "detect_many",
+    "get_detector",
+    "karar_ver",
+    "length_bucket",
+    "reset_detector",
+    "resolve_runtime",
+]

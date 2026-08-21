@@ -44,15 +44,54 @@ Ayrıntı ve diyagramlar: [`docs/MIMARI.md`](docs/MIMARI.md)
 ```bash
 # 1) Python bağımlılıkları
 pip install -r backend/requirements.txt
+```
 
-# torch CPU kurulumu (platforma göre):
+### torch kurulumu — cihaza göre
+
+```bash
+# NVIDIA GPU varsa (önerilen — eğitim ve zenginleştirme belirgin hızlanır)
+pip install torch --index-url https://download.pytorch.org/whl/cu124
+
+# GPU yoksa
 pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+Kurulumu doğrulayın:
+
+```bash
+python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 ```
 
 ```bash
 # 2) Ön yüz
 cd frontend && npm install
 ```
+
+### Cihaz seçimi ve profiller
+
+Sistem cihazı kendisi seçer (`MIHENK_DETECTION_DEVICE=auto`). Ayarlar cihaza
+göre değişir; aynı depo iki makinede elle değiştirilmeden çalışır:
+
+| Ayar | CPU profili | GPU profili |
+|---|---|---|
+| Parti boyutu | 16 | 32 |
+| Dondurulan encoder katmanı | 9 (üst 3 katman eğitilir) | 0 (tam ince ayar) |
+| Karışık hassasiyet (AMP) | kapalı | açık |
+| Gömme parti boyutu | 16 | 64 |
+
+CPU profilinin neden kısıtlı olduğu ölçülmüştür: tam ince ayar + sabit
+doldurma ile adım başına ~57 saniye, alt 9 katman dondurulduğunda ~17 saniye
+(bkz. `backend/app/config.py`). GPU'da bu kısıtlara gerek yoktur.
+
+Zorlamak isterseniz:
+
+```bash
+export MIHENK_DETECTION_DEVICE=cuda   # CUDA yoksa hata verir, sessizce CPU'ya düşmez
+export MIHENK_DETECTION_DEVICE=cpu
+```
+
+> CUDA istendiği hâlde bulunamazsa sistem **hata verir**, sessizce CPU'ya
+> düşmez. Sebep: ölçüm koşusunda hangi cihazda çalıştığımızı bilmek zorundayız.
 
 ## Çalıştırma
 
@@ -87,13 +126,35 @@ koşarlar.
 
 ## Ölçüm — raporun tabloları
 
+Sıfırdan tam koşu (GPU'lu makinede önerilen sıra):
+
 ```bash
-python ml/scripts/build_dataset.py            # tespit veri seti + sızıntı denetimi
-python ml/scripts/train_detector.py --backend tfidf     # temel çizgi
-python ml/scripts/train_detector.py --backend berturk   # ana model
-python ml/scripts/build_faithfulness_set.py   # sadakat örneklemi
-python ml/scripts/evaluate.py                 # TÜM tablolar
+python ml/scripts/generate_feed.py --count 420          # sentetik akış
+python ml/scripts/build_dataset.py                      # veri seti + sızıntı denetimi
+python ml/scripts/build_faithfulness_set.py             # sadakat örneklemi
+
+python ml/scripts/train_detector.py --backend tfidf --seeds 5    # temel çizgi
+python ml/scripts/train_detector.py --backend berturk            # ana model
+
+MIHENK_EMBEDDING_BACKEND=e5 python ml/scripts/evaluate.py        # TÜM tablolar
 ```
+
+### Eğitim uzun sürerse — parçalı koşu
+
+CPU'da eğitim yarım saati bulabiliyor. `--max-steps` ile parçalara bölünebilir;
+ilerleme (model + optimizer momenti) diske kaydedilir ve aynı komut kaldığı
+yerden devam eder:
+
+```bash
+python ml/scripts/train_detector.py --backend berturk --max-steps 25   # tekrarla
+python ml/scripts/train_detector.py --backend berturk --bastan         # sıfırdan
+```
+
+GPU'da bu bayrağa gerek yoktur; eğitim tek seferde biter.
+
+> Yarım kalmış bir eğitim çıkarımda **kullanılmaz**: `detector.py` durum
+> dosyasını kontrol eder ve tamamlanmamış modeli reddeder. Yarım eğitilmiş bir
+> modelin olasılıkları kalibre değildir; çekimserlik bandı anlamını kaybeder.
 
 Çıktılar `eval/results/` altına hem JSON hem Markdown yazılır:
 

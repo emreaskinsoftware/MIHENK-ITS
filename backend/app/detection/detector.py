@@ -76,6 +76,8 @@ class BerturkDetector:
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
+        from app.detection.device import resolve_runtime
+
         self._torch = torch
         self.model_dir = model_dir or BERTURK_DIR
         if not self.model_dir.exists():
@@ -83,24 +85,49 @@ class BerturkDetector:
                 f"Model dizini yok: {self.model_dir}\n"
                 "Önce eğitin: python ml/scripts/train_detector.py --backend berturk"
             )
+        # Eğitim yarıda kesilmiş bir dizini çıkarımda kullanmıyoruz: yarım
+        # eğitilmiş model, kalibre olmamış olasılıklar üretir ve çekimserlik
+        # bandı anlamını kaybeder. Böyle bir durumda TF-IDF temel çizgisine
+        # düşmek (veya çekimser kalmak) daha dürüsttür.
+        durum_yolu = self.model_dir / "training_state.json"
+        if durum_yolu.exists():
+            import json
+
+            durum = json.loads(durum_yolu.read_text(encoding="utf-8"))
+            if not durum.get("done"):
+                raise RuntimeError(
+                    f"Eğitim tamamlanmamış (adım {durum.get('global_step')}). "
+                    "Tamamlayın: python ml/scripts/train_detector.py --backend berturk"
+                )
+
+        self._profil = resolve_runtime()
         self._tokenizer = AutoTokenizer.from_pretrained(str(self.model_dir))
-        self._model = AutoModelForSequenceClassification.from_pretrained(str(self.model_dir))
+        self._model = AutoModelForSequenceClassification.from_pretrained(
+            str(self.model_dir)
+        ).to(self._profil.device)
         self._model.eval()
+        self.name = f"berturk-finetuned[{self._profil.device}]"
 
     def predict_proba(self, texts: list[str]) -> list[float]:
         """Toplu çıkarım.
 
-        Parti boyutu 16: CPU'da bellek ve gecikme arasında makul denge.
-        max_length 256: veri setindeki en uzun kova (K3) 170 token civarı;
-        256 güvenli üst sınır ve gereksiz doldurma yapmaz.
+        Parti boyutu cihaz profilinden gelir (CPU'da küçük, GPU'da büyük).
+        `max_length` config'ten okunur ve eğitimdekiyle aynıdır: farklı olsaydı
+        uzun metinler eğitimde görülmemiş biçimde kırpılır, ölçüm kayardı.
         """
+        ayar = get_settings()
+        parti_boyutu = self._profil.batch_size
         sonuclar: list[float] = []
         with self._torch.no_grad():
-            for i in range(0, len(texts), 16):
-                parti = texts[i : i + 16]
+            for i in range(0, len(texts), parti_boyutu):
+                parti = texts[i : i + parti_boyutu]
                 girdiler = self._tokenizer(
-                    parti, padding=True, truncation=True, max_length=256, return_tensors="pt"
-                )
+                    parti,
+                    padding=True,
+                    truncation=True,
+                    max_length=ayar.detection_max_length,
+                    return_tensors="pt",
+                ).to(self._profil.device)
                 mantik = self._model(**girdiler).logits
                 olasiliklar = self._torch.softmax(mantik, dim=-1)[:, 1]
                 sonuclar.extend(float(x) for x in olasiliklar)

@@ -177,7 +177,7 @@ def egit_tfidf(seed: int) -> EgitimRaporu:
 # ----------------------------------------------------------------------
 # BERTurk ince ayarı
 # ----------------------------------------------------------------------
-def egit_berturk(seed: int) -> EgitimRaporu:
+def egit_berturk(seed: int, *, max_steps: int = 0, devam: bool = True) -> EgitimRaporu:
     """Türkçe encoder'ı ikili sınıflandırma için ince ayarlar.
 
     NEDEN TÜRKÇE-ÖZEL ENCODER: Çok dilli modeller Türkçe morfolojisini daha
@@ -188,10 +188,30 @@ def egit_berturk(seed: int) -> EgitimRaporu:
 
     Eğitim tamamen CPU'da koşabilecek boyutta tutulmuştur (küçük veri seti,
     3 epoch): ekipte GPU garantisi yok ve demo makinesinde çalışması gerekiyor.
+
+    Args:
+        seed: Rastgelelik tohumu.
+        max_steps: Bu çağrıda yapılacak en fazla optimizasyon adımı (0 = sınırsız).
+            Sınıra ulaşılırsa ilerleme kaydedilir ve çıkılır; aynı komut tekrar
+            çalıştırıldığında kaldığı yerden devam eder.
+        devam: Kayıtlı bir eğitim durumu varsa oradan devam et (varsayılan).
+            False verilirse temel modelden sıfırdan başlanır.
     """
+    import os
+
     import torch
     from torch.utils.data import DataLoader, Dataset
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
+    from app.detection.device import resolve_runtime
+
+    profil = resolve_runtime()
+    if not profil.is_cuda:
+        # torch, CPU'da varsayılan olarak fiziksel çekirdek sayısını kullanıyor
+        # (bu makinede 12 mantıksal çekirdeğin 8'i). Eğitim tamamen CPU'da
+        # koşacaksa tüm çekirdekleri vermek doğrudan süreye yansır.
+        torch.set_num_threads(os.cpu_count() or 8)
+    print(f"  {profil.summary()}", flush=True)
 
     baslangic = time.perf_counter()
     random.seed(seed)
@@ -207,7 +227,7 @@ def egit_berturk(seed: int) -> EgitimRaporu:
         num_labels=len(LABELS),
         id2label={i: ad for i, ad in enumerate(LABELS)},
         label2id={ad: i for i, ad in enumerate(LABELS)},
-    )
+    ).to(profil.device)
 
     # --- CPU'da eğitilebilirlik için iki optimizasyon -------------------
     # ÖLÇÜLEN SORUN: Sabit 256 token doldurma ve tüm katmanların eğitilmesiyle
@@ -250,7 +270,7 @@ def egit_berturk(seed: int) -> EgitimRaporu:
         kodlar["labels"] = torch.tensor(etiketler)
         return kodlar
 
-    dondurulan_katman = config.detection_frozen_layers
+    dondurulan_katman = profil.frozen_layers
     if dondurulan_katman > 0:
         for parametre in model.bert.embeddings.parameters():
             parametre.requires_grad = False
@@ -264,7 +284,7 @@ def egit_berturk(seed: int) -> EgitimRaporu:
 
     egitim_yukleyici = DataLoader(
         MetinKumesi(x_train, y_train),
-        batch_size=config.detection_batch_size,
+        batch_size=profil.batch_size,
         shuffle=True,
         collate_fn=parti_hazirla,
     )
@@ -272,37 +292,150 @@ def egit_berturk(seed: int) -> EgitimRaporu:
         [p for p in model.parameters() if p.requires_grad], lr=config.detection_learning_rate
     )
 
+    # --- Kaldığı yerden devam (checkpoint/resume) ----------------------
+    # NEDEN GEREKLİ: Bu makinede tam eğitim yaklaşık yarım saat sürüyor ve
+    # geliştirme ortamında uzun süreli arka plan süreçleri sonlandırılabiliyor
+    # (iki denemede eğitim sessizce kesildi). Parça parça koşabilmek, eğitimi
+    # ortama bağımlı olmaktan çıkarır. Ayrıca bu, GPU'suz bir ekibin modeli
+    # yeniden üretebilmesi için pratik bir gerekliliktir.
+    #
+    # Durum dosyası ilerlemeyi taşır; optimizer momentumu da kaydedilir çünkü
+    # AdamW'de moment durumu atılırsa devam eden eğitim baştan başlamış gibi
+    # davranır ve kayıp eğrisi bozulur.
+    durum_yolu = BERTURK_DIR / "training_state.json"
+    optimizer_yolu = BERTURK_DIR / "optimizer.pt"
+    baslangic_epoch = 0
+    global_adim = 0
+
+    if devam and durum_yolu.exists():
+        durum = json.loads(durum_yolu.read_text(encoding="utf-8"))
+        if durum.get("done"):
+            print("  eğitim zaten tamamlanmış (training_state.json: done=true)")
+        baslangic_epoch = int(durum.get("epoch", 0))
+        global_adim = int(durum.get("global_step", 0))
+        # Kaydedilmiş ağırlıkları yükle: temel modelden değil, kaldığı yerden.
+        model = AutoModelForSequenceClassification.from_pretrained(str(BERTURK_DIR)).to(
+            profil.device
+        )
+        if dondurulan_katman > 0:
+            for parametre in model.bert.embeddings.parameters():
+                parametre.requires_grad = False
+            for katman in model.bert.encoder.layer[:dondurulan_katman]:
+                for parametre in katman.parameters():
+                    parametre.requires_grad = False
+        optimizer = torch.optim.AdamW(
+            [p for p in model.parameters() if p.requires_grad],
+            lr=config.detection_learning_rate,
+        )
+        if optimizer_yolu.exists():
+            optimizer.load_state_dict(torch.load(optimizer_yolu, weights_only=True))
+        print(f"  devam ediliyor: epoch {baslangic_epoch}, toplam adım {global_adim}")
+
+    def _kaydet(epoch_bitti: int, adim: int, tamamlandi: bool) -> None:
+        """Model, optimizer ve ilerleme durumunu diske yazar."""
+        BERTURK_DIR.mkdir(parents=True, exist_ok=True)
+        model.save_pretrained(str(BERTURK_DIR))
+        tokenizer.save_pretrained(str(BERTURK_DIR))
+        torch.save(optimizer.state_dict(), optimizer_yolu)
+        durum_yolu.write_text(
+            json.dumps(
+                {
+                    "epoch": epoch_bitti,
+                    "global_step": adim,
+                    "total_epochs": config.detection_epochs,
+                    "seed": seed,
+                    "done": tamamlandi,
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+    olcekleyici = (
+        torch.amp.GradScaler("cuda") if (profil.is_cuda and profil.amp) else None
+    )
+
     model.train()
-    for epoch in range(config.detection_epochs):
+    kalan_butce = max_steps if max_steps > 0 else float("inf")
+    for epoch in range(baslangic_epoch, config.detection_epochs):
         toplam_kayip = 0.0
+        adim_sayisi = 0
         epoch_baslangic = time.perf_counter()
         for parti in egitim_yukleyici:
+            if kalan_butce <= 0:
+                # Adım bütçesi doldu: epoch'un ortasındayız. İlerlemeyi
+                # kaydedip çıkıyoruz; bir sonraki çağrı bu epoch'u BAŞTAN
+                # koşar. NEDEN BAŞTAN: parti sırasını yeniden kurmak yerine
+                # epoch'u tekrarlamak, birkaç fazladan adım pahasına çok daha
+                # basit ve hataya kapalı bir devam mantığı verir.
+                _kaydet(epoch, global_adim, tamamlandi=False)
+                print(
+                    f"  adım bütçesi doldu (epoch {epoch + 1} yarıda kaldı, "
+                    f"toplam adım {global_adim}). Devam için aynı komutu "
+                    "tekrar çalıştırın.",
+                    flush=True,
+                )
+                return EgitimRaporu(
+                    backend="berturk",
+                    model_name=config.detection_model,
+                    seed=seed,
+                    train_size=len(x_train),
+                    val_size=len(x_val),
+                    hyperparameters={"durum": "yarim", "global_step": global_adim},
+                    duration_s=round(time.perf_counter() - baslangic, 2),
+                )
+            parti = {k: v.to(profil.device) for k, v in parti.items()}
             optimizer.zero_grad()
-            cikti = model(**parti)
-            cikti.loss.backward()
-            # Gradyan kırpma: küçük veri setinde büyük gradyanlar eğitimi
-            # dengesizleştirebiliyor; 1.0 standart ve güvenli bir sınır.
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            optimizer.step()
+            if olcekleyici is not None:
+                # Karışık hassasiyet: ileri geçiş float16'da yapılır, kayıp
+                # ölçeklenerek geri yayılır. GPU'da belirgin hız ve bellek
+                # kazancı sağlar; sayısal kararlılık ölçekleyiciyle korunur.
+                with torch.autocast(device_type="cuda", dtype=torch.float16):
+                    cikti = model(**parti)
+                olcekleyici.scale(cikti.loss).backward()
+                # Kırpmadan önce ölçek geri alınmalı, yoksa eşik anlamsızlaşır.
+                olcekleyici.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                olcekleyici.step(optimizer)
+                olcekleyici.update()
+            else:
+                cikti = model(**parti)
+                cikti.loss.backward()
+                # Gradyan kırpma: küçük veri setinde büyük gradyanlar eğitimi
+                # dengesizleştirebiliyor; 1.0 standart ve güvenli bir sınır.
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                optimizer.step()
             toplam_kayip += float(cikti.loss)
+            adim_sayisi += 1
+            global_adim += 1
+            kalan_butce -= 1
+            # ARA KAYIT: Süreç beklenmedik biçimde sonlanırsa (ortam kotası,
+            # kapatma) en fazla son birkaç adım kaybolsun. Model kaydetme
+            # birkaç saniye sürüyor; 10 adımda bir yapmak, tekrarlanan işi
+            # kayıt maliyetinin altında tutar.
+            if global_adim % 10 == 0:
+                _kaydet(epoch, global_adim, tamamlandi=False)
+                print(f"    ara kayıt: adım {global_adim}", flush=True)
         print(
             f"  epoch {epoch + 1}/{config.detection_epochs} "
-            f"kayıp={toplam_kayip / max(1, len(egitim_yukleyici)):.4f} "
+            f"kayıp={toplam_kayip / max(1, adim_sayisi):.4f} "
             f"süre={time.perf_counter() - epoch_baslangic:.0f}s",
             flush=True,
         )
+        _kaydet(epoch + 1, global_adim, tamamlandi=(epoch + 1 == config.detection_epochs))
 
     model.eval()
     tahminler: list[int] = []
     with torch.no_grad():
-        for i in range(0, len(x_val), 16):
+        for i in range(0, len(x_val), profil.batch_size):
             parti = tokenizer(
-                x_val[i : i + 16],
+                x_val[i : i + profil.batch_size],
                 padding=True,
                 truncation=True,
                 max_length=config.detection_max_length,
                 return_tensors="pt",
-            )
+            ).to(profil.device)
             tahminler.extend(int(t) for t in model(**parti).logits.argmax(dim=-1))
 
     dogruluk = sum(1 for g, t in zip(y_val, tahminler) if g == t) / len(y_val)
@@ -319,12 +452,15 @@ def egit_berturk(seed: int) -> EgitimRaporu:
         val_size=len(x_val),
         hyperparameters={
             "epochs": config.detection_epochs,
-            "batch_size": config.detection_batch_size,
             "learning_rate": config.detection_learning_rate,
             "max_length": config.detection_max_length,
             "optimizer": "AdamW",
             "grad_clip": 1.0,
-            "frozen_layers": config.detection_frozen_layers,
+            "device": profil.device,
+            "device_name": profil.device_name,
+            "batch_size_used": profil.batch_size,
+            "amp": profil.amp,
+            "frozen_layers": dondurulan_katman,
             "padding": "dinamik (parti ici en uzun)",
             "trainable_params": egitilebilir,
             "total_params": toplam,
@@ -339,6 +475,20 @@ def main() -> None:
     ayristirici = argparse.ArgumentParser(description="YZ tespiti modelini eğitir")
     ayristirici.add_argument("--backend", choices=["tfidf", "berturk"], default="tfidf")
     ayristirici.add_argument("--seed", type=int, default=20260824)
+    ayristirici.add_argument(
+        "--max-steps",
+        type=int,
+        default=0,
+        help=(
+            "Bu çağrıda yapılacak en fazla optimizasyon adımı (0 = sınırsız). "
+            "CPU'da uzun eğitimi parçalara bölmek için; ilerleme kaydedilir."
+        ),
+    )
+    ayristirici.add_argument(
+        "--bastan",
+        action="store_true",
+        help="Kayıtlı eğitim durumunu yok say, temel modelden başla.",
+    )
     ayristirici.add_argument(
         "--seeds",
         type=int,
@@ -367,7 +517,11 @@ def main() -> None:
 
     for tohum in tohumlar:
         print(f"Eğitim başlıyor: {args.backend} (tohum {tohum})")
-        rapor = egit_tfidf(tohum) if args.backend == "tfidf" else egit_berturk(tohum)
+        rapor = (
+            egit_tfidf(tohum)
+            if args.backend == "tfidf"
+            else egit_berturk(tohum, max_steps=args.max_steps, devam=not args.bastan)
+        )
         raporlar.append(rapor)
         print(
             f"  bitti: doğrulama doğruluğu={rapor.val_accuracy} F1={rapor.val_f1} "
@@ -377,6 +531,13 @@ def main() -> None:
     ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
     kayit_yolu = ARTIFACT_DIR / f"training_{args.backend}.json"
 
+    # Yarıda kesilen koşular (adım bütçesi doldu) ortalamaya girmez: onların
+    # doğrulama skoru hiç ölçülmemiştir, 0.0 olarak ortalamayı bozar.
+    tamamlanan = [r for r in raporlar if r.hyperparameters.get("durum") != "yarim"]
+    if not tamamlanan:
+        print("Eğitim yarıda kaldı; devam etmek için aynı komutu tekrar çalıştırın.")
+        return
+    raporlar = tamamlanan
     dogruluklar = [r.val_accuracy for r in raporlar]
     f1ler = [r.val_f1 for r in raporlar]
     ozet = {

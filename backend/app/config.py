@@ -115,15 +115,41 @@ class Settings(BaseSettings):
     #   "tfidf"   -> yalnızca temel çizgi (karşılaştırma satırı)
     #   "none"    -> model yok; sistem çekimser kalır (model_yok)
     detection_backend: Literal["auto", "berturk", "tfidf", "none"] = "auto"
-    # İnce ayar hiperparametreleri — rapor 3.2'ye buradan yazılır.
+    # --- Cihaz seçimi --------------------------------------------------
+    # "auto" -> CUDA varsa GPU, yoksa CPU. Açıkça "cpu"/"cuda" da verilebilir.
+    # Cihaz yalnızca hızı değil, aşağıdaki eğitim ayarlarını da belirler
+    # (bkz. detection_runtime()).
+    detection_device: Literal["auto", "cpu", "cuda"] = "auto"
+
+    # --- İnce ayar hiperparametreleri (rapor 3.2'ye buradan yazılır) ----
+    # İKİ AYRI PROFİL — NEDEN:
+    # CPU'da tam ince ayar bu projede pratik değil: ölçüldü, adım başına ~57
+    # saniye sürüyor ve 3 epoch yaklaşık 2 saat ediyor. Bu yüzden CPU profili
+    # alt katmanları dondurur ve küçük parti kullanır. GPU'da ise böyle bir
+    # kısıt yok; tam ince ayar hem daha hızlı biter hem de daha iyi başarım
+    # verir. Ayarların cihaza göre değişmesi, aynı depoyu iki farklı makinede
+    # ELLE DEĞİŞTİRMEDEN çalıştırabilmek içindir.
     detection_epochs: int = 3
-    detection_batch_size: int = 16
     detection_learning_rate: float = 2e-5
     detection_max_length: int = 192
-    # Dondurulacak alt encoder katmani sayisi (0 = tam ince ayar).
-    # 6/12: gomme + alt yari dondurulur. Olculen gerekce train_detector.py'de:
-    # tam ince ayar bu makinede adim basina ~57 saniye suruyordu.
-    detection_frozen_layers: int = 6
+
+    # CPU profili
+    detection_batch_size: int = 16
+    # Dondurulacak alt encoder katman sayısı (0 = tam ince ayar).
+    # ÖLÇÜLEN (bu makinede, CPU, dinamik doldurma ile):
+    #   0 katman dondurulmuş, sabit 256 doldurma -> ~57 sn/adım
+    #   6 katman dondurulmuş                     -> ~27 sn/adım
+    #   9 katman dondurulmuş                     -> ~17 sn/adım
+    # 714 örneklik bir veri setinde üst 3 katman + sınıflandırıcı görevi
+    # öğrenmeye yeter; alt katmanlar genel dil bilgisini taşır.
+    detection_frozen_layers: int = 9
+
+    # GPU profili — CUDA bulunduğunda bunlar kullanılır.
+    detection_batch_size_gpu: int = 32
+    detection_frozen_layers_gpu: int = 0  # tam ince ayar
+    # Karışık hassasiyet (AMP): GPU'da bellek ve süreyi belirgin düşürür,
+    # başarımı pratikte etkilemez. CPU'da devre dışıdır (kazanç yok).
+    detection_amp: bool = True
 
     # ------------------------------------------------------------------
     # Veri yönetişimi (spec 5.3)
