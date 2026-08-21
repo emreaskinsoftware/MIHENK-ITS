@@ -58,53 +58,84 @@ def turkish_lower(text: str) -> str:
 
 
 class HashingEmbedder:
-    """Bağımlılıksız, deterministik karakter n-gram gömmesi.
+    """Bağımlılıksız, deterministik kelime + karakter n-gram gömmesi.
 
-    Yöntem: metin Türkçe kurallarıyla küçültülür, kelimelere ayrılır, her kelime
-    için 3 ve 4 karakterlik n-gramlar çıkarılır, her n-gram sabit bir hash ile
-    vektörün bir boyutuna eşlenir (hashing trick) ve ağırlığı artırılır. Vektör
-    L2 normalize edilir ki nokta çarpımı doğrudan kosinüs benzerliği versin.
+    Yöntem (hashing trick — sözlük tutmadan sabit boyutlu vektör):
+      1. Metin Türkçe kurallarıyla küçültülür ve kelimelere ayrılır.
+      2. İşlevsel kelimeler (durak kelimeler) atılır: "bir", "için", "ama" gibi
+         kelimeler her metinde geçtiği için benzerliği yapay olarak şişirir.
+      3. Kelime köküne yakın bir parça (ilk 6 karakter) ayrı bir özellik olarak
+         eklenir. NEDEN: Türkçe sondan eklemelidir; "köprünün", "köprüde",
+         "köprüyü" aynı kökü paylaşır ve aynı olayı anlatan gönderilerde farklı
+         eklerle görünür. Kök parçası olmadan bu kelimeler tamamen farklı
+         özelliklere düşer ve aynı olay iki ayrı kümeye ayrılır.
+      4. Uzunluk temelli ağırlık: uzun kelimeler Türkçe'de daha çok içerik
+         taşır (IDF'nin ucuz bir vekili). Gerçek IDF için korpus istatistiği
+         gerekir; akış hızında gönderi tek tek gömüldüğü için korpus yoktur.
+      5. Karakter n-gramları düşük ağırlıkla eklenir: yazım hatası ve çekim
+         farklarına dayanıklılık sağlar.
+      6. Vektör L2 normalize edilir; nokta çarpımı doğrudan kosinüs benzerliği.
 
-    NEDEN HASHING TRICK: Sözlük tutmadan sabit boyutlu vektör üretir; yeni
-    gönderi geldiğinde sözlüğü yeniden kurmak gerekmez (akış hızı kısıtı).
+    SINIRLILIK (rapora girecek): Bu yöntem anlamsal değil, biçimseldir. Eş
+    anlamlı ama farklı yazılan kelimeleri yakalayamaz ("zam" ile "fiyat artışı").
+    Gerçek ölçüm MODEL_KARTI.md'deki e5 modeliyle yapılır.
     """
 
-    name = "hashing-char-ngram"
+    name = "hashing-word-char"
+
+    # Türkçe yüksek frekanslı işlev kelimeleri. Kısa liste bilinçli: agresif
+    # durak kelime ayıklaması kısa gönderilerde metni boşaltır.
+    _STOPWORDS = frozenset(
+        """ve veya ile bir bu şu o da de ki mi mı mu mü için gibi ama fakat ancak
+        çok az daha en her hiç ne nasıl neden kim var yok olan olarak ise değil
+        sonra önce kadar dedi diyor bende bana beni sen ben biz siz onlar""".split()
+    )
 
     def __init__(self, dim: int | None = None) -> None:
-        # Yedek arka uçta boyutu küçük tutuyoruz: 768 boyut seyrek n-gram
-        # sayımıyla doldurulamaz, gereksiz bellek ve gürültü olur.
-        self.dim = dim or 256
+        # 512 boyut: kelime + kök + n-gram özellikleri için 256 dar kalıyordu
+        # (çakışma oranı yükselip alakasız metinleri benzer gösteriyordu).
+        self.dim = dim or 512
 
-    def _ngrams(self, text: str) -> list[str]:
-        parcalar: list[str] = []
+    @staticmethod
+    def _hash_indeks(parca: str, dim: int) -> tuple[int, float]:
+        """Özelliği (indeks, işaret) çiftine eşler."""
+        sayisal = int(hashlib.blake2b(parca.encode("utf-8"), digest_size=8).hexdigest(), 16)
+        # İşaret bitini hash'ten alıyoruz: farklı özelliklerin aynı boyuta
+        # düşmesi durumunda birikimli sapmayı azaltır (signed hashing).
+        isaret = 1.0 if (sayisal >> 63) & 1 else -1.0
+        return sayisal % dim, isaret
+
+    def _ozellikler(self, text: str) -> list[tuple[str, float]]:
+        """Metinden (özellik, ağırlık) çiftleri çıkarır."""
+        ozellikler: list[tuple[str, float]] = []
         for kelime in _TOKEN_RE.findall(turkish_lower(text)):
-            # Kelime sınırlarını işaretle: "spor" kelimesinin başı ile
-            # "raporspor" içindeki "spor" aynı n-gram'a düşmesin.
+            if kelime in self._STOPWORDS or len(kelime) < 2:
+                continue
+            # Uzunluk temelli ağırlık, 1.0 ile 2.0 arasında sınırlandırılır.
+            agirlik = min(2.0, 0.6 + len(kelime) / 6.0)
+            ozellikler.append((f"w:{kelime}", agirlik))
+            if len(kelime) > 5:
+                ozellikler.append((f"k:{kelime[:6]}", agirlik * 1.4))  # kök vekili
             isaretli = f"^{kelime}$"
             for n in _NGRAM_SIZES:
                 if len(isaretli) < n:
-                    parcalar.append(isaretli)
                     continue
-                parcalar.extend(isaretli[i : i + n] for i in range(len(isaretli) - n + 1))
-        return parcalar
+                for i in range(len(isaretli) - n + 1):
+                    ozellikler.append((f"c:{isaretli[i : i + n]}", 0.35))
+        return ozellikler
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         """Metinleri L2-normalize edilmiş vektörlere çevirir."""
         cikti: list[list[float]] = []
         for metin in texts:
             vektor = [0.0] * self.dim
-            for gram in self._ngrams(metin):
-                sayisal = int(hashlib.blake2b(gram.encode("utf-8"), digest_size=8).hexdigest(), 16)
-                indeks = sayisal % self.dim
-                # İşaret bitini hash'ten alıyoruz: farklı n-gramların aynı
-                # boyuta düşmesi durumunda birikimli sapmayı azaltır.
-                isaret = 1.0 if (sayisal >> 63) & 1 else -1.0
-                vektor[indeks] += isaret
+            for parca, agirlik in self._ozellikler(metin):
+                indeks, isaret = self._hash_indeks(parca, self.dim)
+                vektor[indeks] += isaret * agirlik
             norm = math.sqrt(sum(x * x for x in vektor))
             if norm == 0.0:
-                # Boş veya yalnızca noktalama içeren metin: sıfır vektör yerine
-                # sabit bir yön veriyoruz ki kosinüs hesabı tanımsız kalmasın.
+                # Boş veya yalnızca durak kelimelerden oluşan metin: sıfır vektör
+                # yerine sabit bir yön veriyoruz ki kosinüs tanımsız kalmasın.
                 vektor[0] = 1.0
                 norm = 1.0
             cikti.append([x / norm for x in vektor])

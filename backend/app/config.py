@@ -63,10 +63,18 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     # KATMAN 2 — Özetleme (spec 6.2)
     # ------------------------------------------------------------------
-    # Aglomeratif kümelemede cosine mesafe eşiği. 0.45 ≈ 0.55 cosine benzerlik:
+    # Aglomeratif kümelemede kosinüs mesafe eşiği. 0.45 ≈ 0.55 kosinüs benzerlik:
     # çok dilli e5 gömmelerinde aynı olayı anlatan Türkçe gönderiler bu bandın
-    # üstünde kalır, farklı konular ayrışır. KALİBRE.
+    # üstünde kalır, farklı konular ayrışır. KALİBRE (ml/scripts/evaluate.py).
     cluster_distance_threshold: float = 0.45
+    # Yedek (hashing) gömücü için ayrı eşik. NEDEN AYRI: İki gömücünün benzerlik
+    # dağılımı farklıdır; hashing biçimsel benzerlik ölçtüğü için aynı olayı
+    # farklı kelimelerle anlatan gönderilerde benzerlik çok daha düşük çıkar.
+    # Tek eşik kullanmak, yedeğe düşüldüğünde kümelemeyi tamamen durdururdu.
+    # Bu değer sentetik akışta olay-eşleşmesi F1'i en yükseğe çıkaran noktadır
+    # (ölçüm: eval/results/clustering.md). Ölçülen F1 düşüktür (~0.40); yedek
+    # gömücü demo ve test içindir, raporlanan kümeleme metrikleri e5 iledir.
+    cluster_distance_threshold_fallback: float = 0.84
     min_clusters: int = 5
     max_clusters: int = 10
     cluster_representatives: int = 3  # Küme merkezine en yakın kaç gönderi LLM'e gider

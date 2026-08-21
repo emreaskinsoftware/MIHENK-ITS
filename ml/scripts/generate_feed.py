@@ -282,6 +282,30 @@ KISISEL_TASIYICI = [
 ]
 
 
+# Dolgu gönderilerine eklenen varyasyon parçaları.
+# NEDEN GEREKLİ: Şablonlar birebir tekrarlanırsa akışta onlarca ÖZDEŞ metin
+# oluşur. Özdeş metinler kümelemede yapay olarak çok büyük kümeler üretir ve
+# "en büyük N kümeyi al" kuralı gerçek olay kümelerini dışarı iter. Gerçek bir
+# akışta iki gönderi birebir aynı olmaz; veri bunu yansıtmalı, aksi halde
+# kümeleme başarımı yanlış ölçülür.
+VARYASYONLAR = [
+    "", "", "Bilen var mı?", "Yorumlarınızı bekliyorum.", "Neyse.", "Sizde nasıl?",
+    "Bu arada hava da kapalıydı.", "Ekleyeceğim bir şey yok.", "Takipteyim.",
+    "Umarım düzelir.", "Not düşeyim dedim.", "Görüşler farklı olabilir tabii.",
+]
+BASLANGIC_VARYASYONLARI = ["", "", "", "Bugün fark ettim: ", "Kısa bir not: ", "Şunu da yazayım: "]
+
+
+def _varyasyonla(rng: random.Random, metin: str) -> str:
+    """Metne küçük yüzey varyasyonları ekler (birebir tekrarı önlemek için)."""
+    on = rng.choice(BASLANGIC_VARYASYONLARI)
+    arka = rng.choice(VARYASYONLAR)
+    sonuc = f"{on}{metin}"
+    if arka:
+        sonuc = f"{sonuc} {arka}"
+    return sonuc
+
+
 def _sec(rng: random.Random, liste: list[str]) -> str:
     return rng.choice(liste)
 
@@ -538,6 +562,8 @@ def akis_uret(count: int, seed: int) -> list[Post]:
                 if rng.random() < 0.3:
                     metin = f"{metin} {_sec(rng, ['🙂', 'neyse', 'ya', 'valla', ''])}".strip()
             elif kategori == "spor":
+                # Havuz bilinçli olarak geniş: dar bir havuz, akışta yapay
+                # olarak birbirinin aynısı gönderiler üretir (bkz. VARYASYONLAR).
                 metin = rng.choice(
                     [
                         f"{bag['takim1']} maçında ilk yarı çok sönüktü, ikinci yarı toparladılar.",
@@ -545,6 +571,14 @@ def akis_uret(count: int, seed: int) -> list[Post]:
                         f"{bag['takim2']} altyapıdan üç oyuncu çıkardı bu sezon, güzel iş.",
                         f"Hakem kararları tartışılır ama {bag['takim1']} savunması dağınıktı, orası ayrı.",
                         f"Deplasman tribününde yer kalmamış, {bag['takim2']} taraftarı yine doldurdu.",
+                        f"{bag['takim1']} kalecisi bu sezon üçüncü kez ceza sahası dışında hata yaptı.",
+                        f"{bag['sporcu']} sakatlığından döndü ama ilk on birde başlamadı, bence doğru karar.",
+                        f"{bag['takim2']} deplasmanda hep aynı kurguyla oynuyor, rakipler artık okuyor.",
+                        f"Kupa kurası çekildi, {bag['takim1']} ilk turda alt ligden bir takımla eşleşti.",
+                        f"Antrenman görüntülerinde {bag['sporcu']} formda görünüyordu, maçta göremedik.",
+                        f"{bag['takim2']} bilet fiyatlarına zam yaptı, tribün yine de doldu.",
+                        f"Sezon başında kimse {bag['takim1']} için bunu söylemiyordu, tablo değişti.",
+                        f"{bag['sporcu']} röportajda takım içi rekabete değindi, açıklaması sert bulundu.",
                     ]
                 )
             else:
@@ -555,13 +589,21 @@ def akis_uret(count: int, seed: int) -> list[Post]:
                         f"{bag['sehir']}'de pazar günü sokak sağlıklaştırma çalışması varmış, esnaf bilgilendirilmiş mi bilmiyorum.",
                         f"Semt pazarında fiyatlar geçen haftaya göre değişmemiş gibi, ben öyle gördüm.",
                         f"{bag['sehir']} kütüphanesinin çalışma saatleri uzatılmış, sınav dönemi için iyi haber.",
+                        f"{bag['kurum']} çağrı merkezine üç kez ulaşmaya çalıştım, sırada bekletildim.",
+                        f"{bag['sehir']} sahil yolundaki aydınlatmalar iki haftadır yanmıyor.",
+                        f"Mahalle muhtarlığı taşınmış, yeni adresi bulmak epey vakit aldı.",
+                        f"{bag['sehir']}'de geri dönüşüm konteynerleri yenilenmiş, kapaklar artık kapanıyor.",
+                        f"{bag['kurum']} internet sitesi dün akşam saatlerinde açılmıyordu.",
+                        f"{bag['sehir']} otogarında peron numaraları değişmiş, anonsları duymak zor.",
+                        f"Parkta yeni oturma bankları kondu ama gölge yok, öğlen kimse oturamıyor.",
+                        f"{bag['sehir']} merkezindeki kaldırım çalışması bitti, yürümek rahatladı.",
                     ]
                 )
             gonderiler.append(
                 Post(
                     id=_yeni_id(),
                     author_id=_sec(rng, TAKMA_ADLAR),
-                    text=metin,
+                    text=_varyasyonla(rng, metin),
                     created_at=_zaman(),
                     category=kategori,  # type: ignore[arg-type]
                     media=[_medya_uret(rng, f"m{sayac:04d}")] if rng.random() < 0.25 else [],

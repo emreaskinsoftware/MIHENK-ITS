@@ -4,7 +4,7 @@
 
 - Toplam gönderi: **420**
 - Farklı yazar (takma ad): **75**
-- Medya içeren gönderi: **65**
+- Medya içeren gönderi: **60**
 
 ## Kategori dağılımı
 
@@ -18,9 +18,9 @@
 
 | Kova | Token aralığı | Gönderi |
 |---|---|---|
-| K1 | 0-50 | 316 (%75.2) |
-| K2 | 50-100 | 86 (%20.5) |
-| K3 | 100+ | 18 (%4.3) |
+| K1 | 0-50 | 315 (%75.0) |
+| K2 | 50-100 | 85 (%20.2) |
+| K3 | 100+ | 20 (%4.8) |
 
 ## Gömülü tuzaklar (yalnızca değerlendirme için)
 
