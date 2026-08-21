@@ -1,0 +1,801 @@
+{
+  "meta": {
+    "seed": 20260824,
+    "per_category": 12,
+    "note": "Sorular otomatik türetilmiştir; manual_label alanı elle değerlendirme içindir. Ölçüm: ml/scripts/evaluate.py"
+  },
+  "items": [
+    {
+      "id": "f001",
+      "post_id": "p0207",
+      "post_text": "üç kere kontrol ettim, tabela hiç değişmedi, sonra bir baktım araç zaten geçmiş, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı.",
+      "category": "gundem",
+      "question": "Bu gönderide değişmedi ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0207"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f002",
+      "post_id": "p0207",
+      "post_text": "üç kere kontrol ettim, tabela hiç değişmedi, sonra bir baktım araç zaten geçmiş, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı.",
+      "category": "gundem",
+      "question": "Kaç kişi bu durumdan etkilendi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f003",
+      "post_id": "p0215",
+      "post_text": "Kısa bir not: Yaltepe'de pazar günü sokak sağlıklaştırma çalışması varmış, esnaf bilgilendirilmiş mi bilmiyorum. Görüşler farklı olabilir tabii.",
+      "category": "gundem",
+      "question": "bilgilendirilmiş konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0215"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f004",
+      "post_id": "p0215",
+      "post_text": "Kısa bir not: Yaltepe'de pazar günü sokak sağlıklaştırma çalışması varmış, esnaf bilgilendirilmiş mi bilmiyorum. Görüşler farklı olabilir tabii.",
+      "category": "gundem",
+      "question": "Bu kararın yasal dayanağı nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f005",
+      "post_id": "p0084",
+      "post_text": "yerel yönetimlerde dijitalleşme bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. yerel yönetimlerde dijitalleşme hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir. yerel yönetimlerde dijitalleşme sürecinin etkin biçimde yönetilmesi için kurumlar arası eşgüdümün güçlendirilmesi önem taşımaktadır. Bu kapsamda düzenli bilgilendirme toplantıları ve ölçülebilir hedefler belirlenmesi faydalı olacaktır.",
+      "category": "gundem",
+      "question": "değerlendirmeler konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0084"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f006",
+      "post_id": "p0084",
+      "post_text": "yerel yönetimlerde dijitalleşme bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. yerel yönetimlerde dijitalleşme hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir. yerel yönetimlerde dijitalleşme sürecinin etkin biçimde yönetilmesi için kurumlar arası eşgüdümün güçlendirilmesi önem taşımaktadır. Bu kapsamda düzenli bilgilendirme toplantıları ve ölçülebilir hedefler belirlenmesi faydalı olacaktır.",
+      "category": "gundem",
+      "question": "Toplam bütçe kaç milyon lira?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f007",
+      "post_id": "p0064",
+      "post_text": "Bir yetkili bana özel olarak söyledi: sayılar açıklandığı gibi değil. Fazlasını yazamam.",
+      "category": "gundem",
+      "question": "Bu gönderide açıklandığı ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0064"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f008",
+      "post_id": "p0064",
+      "post_text": "Bir yetkili bana özel olarak söyledi: sayılar açıklandığı gibi değil. Fazlasını yazamam.",
+      "category": "gundem",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f009",
+      "post_id": "p0206",
+      "post_text": "Parkta yeni oturma bankları kondu ama gölge yok, öğlen kimse oturamıyor.",
+      "category": "gundem",
+      "question": "oturamıyor konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0206"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f010",
+      "post_id": "p0206",
+      "post_text": "Parkta yeni oturma bankları kondu ama gölge yok, öğlen kimse oturamıyor.",
+      "category": "gundem",
+      "question": "Bakanlık bu konuda ne açıklama yaptı?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f011",
+      "post_id": "p0003",
+      "post_text": "Köprü açılışının ertelenmesi bölge esnafını kızdırdı. Esnaf, kapalı yol yüzünden cirosunun düştüğünü söylüyor. Takipteyiz.",
+      "category": "gundem",
+      "question": "Bu gönderide ertelenmesi ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0003"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f012",
+      "post_id": "p0003",
+      "post_text": "Köprü açılışının ertelenmesi bölge esnafını kızdırdı. Esnaf, kapalı yol yüzünden cirosunun düştüğünü söylüyor. Takipteyiz.",
+      "category": "gundem",
+      "question": "Anket sonuçları ne gösteriyor?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f013",
+      "post_id": "p0219",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu. üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu.",
+      "category": "gundem",
+      "question": "oturuyorum hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0219"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f014",
+      "post_id": "p0219",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu. üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu.",
+      "category": "gundem",
+      "question": "Yarın hava nasıl olacak?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f015",
+      "post_id": "p0109",
+      "post_text": "yerel yönetimlerde dijitalleşme değerlendirilirken uzun vadeli etkiler gözetilmelidir.",
+      "category": "gundem",
+      "question": "Bu gönderide değerlendirilirken ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0109"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f016",
+      "post_id": "p0109",
+      "post_text": "yerel yönetimlerde dijitalleşme değerlendirilirken uzun vadeli etkiler gözetilmelidir.",
+      "category": "gundem",
+      "question": "Bu konuda mahkeme ne karar verdi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f017",
+      "post_id": "p0001",
+      "post_text": "Gümüşova Vadisi'deki yeni köprünün açılışı üçüncü kez ertelendi, Kandıralı Su İdaresi gerekçe olarak hava koşullarını gösterdi.",
+      "category": "gundem",
+      "question": "koşullarını konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0001"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f018",
+      "post_id": "p0001",
+      "post_text": "Gümüşova Vadisi'deki yeni köprünün açılışı üçüncü kez ertelendi, Kandıralı Su İdaresi gerekçe olarak hava koşullarını gösterdi.",
+      "category": "gundem",
+      "question": "Bakanlık bu konuda ne açıklama yaptı?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f019",
+      "post_id": "p0160",
+      "post_text": "Parkta yeni oturma bankları kondu ama gölge yok, öğlen kimse oturamıyor. Umarım düzelir.",
+      "category": "gundem",
+      "question": "oturamıyor hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0160"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f020",
+      "post_id": "p0160",
+      "post_text": "Parkta yeni oturma bankları kondu ama gölge yok, öğlen kimse oturamıyor. Umarım düzelir.",
+      "category": "gundem",
+      "question": "Kaç kişi bu durumdan etkilendi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f021",
+      "post_id": "p0007",
+      "post_text": "Kandıralı Su İdaresi açıklamasında testlerin tamamlanmadığını, güvenlik onayı gelmeden açılış yapılmayacağını belirtti.",
+      "category": "gundem",
+      "question": "Bu gönderide tamamlanmadığını ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0007"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f022",
+      "post_id": "p0007",
+      "post_text": "Kandıralı Su İdaresi açıklamasında testlerin tamamlanmadığını, güvenlik onayı gelmeden açılış yapılmayacağını belirtti.",
+      "category": "gundem",
+      "question": "Kaç kişi bu durumdan etkilendi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f023",
+      "post_id": "p0173",
+      "post_text": "Şunu da yazayım: Bölge Ulaşım Müdürlüğü çağrı merkezine üç kez ulaşmaya çalıştım, sırada bekletildim. Sizde nasıl?",
+      "category": "gundem",
+      "question": "bekletildim konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0173"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f024",
+      "post_id": "p0173",
+      "post_text": "Şunu da yazayım: Bölge Ulaşım Müdürlüğü çağrı merkezine üç kez ulaşmaya çalıştım, sırada bekletildim. Sizde nasıl?",
+      "category": "gundem",
+      "question": "Yarın hava nasıl olacak?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f025",
+      "post_id": "p0266",
+      "post_text": "not: kızmıyorum, sadece iletişim biraz daha iyi olabilirdi diyorum, kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım, üç kere kontrol ettim, tabela hiç değişmedi, sonra bir baktım araç zaten geçmiş. maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. yanımdaki teyze de aynı şeyden şikâyetçiydi, en az yirmi dakika bekledik.",
+      "category": "spor",
+      "question": "şikâyetçiydi hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0266"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f026",
+      "post_id": "p0266",
+      "post_text": "not: kızmıyorum, sadece iletişim biraz daha iyi olabilirdi diyorum, kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım, üç kere kontrol ettim, tabela hiç değişmedi, sonra bir baktım araç zaten geçmiş. maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. yanımdaki teyze de aynı şeyden şikâyetçiydi, en az yirmi dakika bekledik.",
+      "category": "spor",
+      "question": "Yetkililerin telefon numarası nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f027",
+      "post_id": "p0238",
+      "post_text": "Rüzgar Balcı dün akşamki performansıyla konuşuluyor, ben abartıldığını düşünüyorum. Ekleyeceğim bir şey yok.",
+      "category": "spor",
+      "question": "performansıyla hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0238"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f028",
+      "post_id": "p0238",
+      "post_text": "Rüzgar Balcı dün akşamki performansıyla konuşuluyor, ben abartıldığını düşünüyorum. Ekleyeceğim bir şey yok.",
+      "category": "spor",
+      "question": "Toplam bütçe kaç milyon lira?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f029",
+      "post_id": "p0269",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı, dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu, tribün desteği çok iyiydi, son on beş dakika ayaktaydık. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı. geçen sene de yazmıştım aynı şeyi, arşivden buldum gönderiyi, tarih bile benziyor. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı.",
+      "category": "spor",
+      "question": "saatlerinde hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0269"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f030",
+      "post_id": "p0269",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı, dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu, tribün desteği çok iyiydi, son on beş dakika ayaktaydık. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı. geçen sene de yazmıştım aynı şeyi, arşivden buldum gönderiyi, tarih bile benziyor. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı.",
+      "category": "spor",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f031",
+      "post_id": "p0230",
+      "post_text": "sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. en sinir olduğum şey kimseye ulaşamamanız, çağrı merkezi sürekli meşgul. içerisi çok kalabalıktı, konuşurken kendi sesimi duyamadım. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı.",
+      "category": "spor",
+      "question": "ulaşamamanız hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0230"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f032",
+      "post_id": "p0230",
+      "post_text": "sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. en sinir olduğum şey kimseye ulaşamamanız, çağrı merkezi sürekli meşgul. içerisi çok kalabalıktı, konuşurken kendi sesimi duyamadım. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı.",
+      "category": "spor",
+      "question": "Yetkililerin telefon numarası nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f033",
+      "post_id": "p0261",
+      "post_text": "Akçadere Şimşek deplasmanda hep aynı kurguyla oynuyor, rakipler artık okuyor. Yorumlarınızı bekliyorum.",
+      "category": "spor",
+      "question": "yorumlarınızı hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0261"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f034",
+      "post_id": "p0261",
+      "post_text": "Akçadere Şimşek deplasmanda hep aynı kurguyla oynuyor, rakipler artık okuyor. Yorumlarınızı bekliyorum.",
+      "category": "spor",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f035",
+      "post_id": "p0120",
+      "post_text": "su kaynaklarının yönetimi bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. su kaynaklarının yönetimi ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "spor",
+      "question": "Bu gönderide değerlendirildiğinde ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0120"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f036",
+      "post_id": "p0120",
+      "post_text": "su kaynaklarının yönetimi bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. su kaynaklarının yönetimi ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "spor",
+      "question": "Bu kararın yasal dayanağı nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f037",
+      "post_id": "p0107",
+      "post_text": "su kaynaklarının yönetimi ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "spor",
+      "question": "değerlendirildiğinde konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0107"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f038",
+      "post_id": "p0107",
+      "post_text": "su kaynaklarının yönetimi ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "spor",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f039",
+      "post_id": "p0258",
+      "post_text": "Hakem kararları tartışılır ama Yaltepe Fırtına savunması dağınıktı, orası ayrı. Neyse.",
+      "category": "spor",
+      "question": "Bu gönderide tartışılır ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0258"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f040",
+      "post_id": "p0258",
+      "post_text": "Hakem kararları tartışılır ama Yaltepe Fırtına savunması dağınıktı, orası ayrı. Neyse.",
+      "category": "spor",
+      "question": "Bu konuda mahkeme ne karar verdi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f041",
+      "post_id": "p0081",
+      "post_text": "spor kulüplerinin mali yapısı sürecinin etkin biçimde yönetilmesi için kurumlar arası eşgüdümün güçlendirilmesi önem taşımaktadır. Bu kapsamda düzenli bilgilendirme toplantıları ve ölçülebilir hedefler belirlenmesi faydalı olacaktır. spor kulüplerinin mali yapısı bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. spor kulüplerinin mali yapısı hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir.",
+      "category": "spor",
+      "question": "Bu gönderide değerlendirmeler ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0081"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f042",
+      "post_id": "p0081",
+      "post_text": "spor kulüplerinin mali yapısı sürecinin etkin biçimde yönetilmesi için kurumlar arası eşgüdümün güçlendirilmesi önem taşımaktadır. Bu kapsamda düzenli bilgilendirme toplantıları ve ölçülebilir hedefler belirlenmesi faydalı olacaktır. spor kulüplerinin mali yapısı bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. spor kulüplerinin mali yapısı hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir.",
+      "category": "spor",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f043",
+      "post_id": "p0270",
+      "post_text": "Deplasman tribününde yer kalmamış, Akçadere Şimşek taraftarı yine doldurdu. Not düşeyim dedim.",
+      "category": "spor",
+      "question": "tribününde hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0270"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f044",
+      "post_id": "p0270",
+      "post_text": "Deplasman tribününde yer kalmamış, Akçadere Şimşek taraftarı yine doldurdu. Not düşeyim dedim.",
+      "category": "spor",
+      "question": "Anket sonuçları ne gösteriyor?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f045",
+      "post_id": "p0271",
+      "post_text": "Bugün fark ettim: Antrenman görüntülerinde Kerim Ünsal formda görünüyordu, maçta göremedik. Görüşler farklı olabilir tabii.",
+      "category": "spor",
+      "question": "görüntülerinde konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0271"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f046",
+      "post_id": "p0271",
+      "post_text": "Bugün fark ettim: Antrenman görüntülerinde Kerim Ünsal formda görünüyordu, maçta göremedik. Görüşler farklı olabilir tabii.",
+      "category": "spor",
+      "question": "Bu konuda mahkeme ne karar verdi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f047",
+      "post_id": "p0260",
+      "post_text": "yorumcular hakem kararına takıldı ama asıl mesele o değildi bana kalırsa, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu.",
+      "category": "spor",
+      "question": "oturuyorum hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0260"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f048",
+      "post_id": "p0260",
+      "post_text": "yorumcular hakem kararına takıldı ama asıl mesele o değildi bana kalırsa, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu.",
+      "category": "spor",
+      "question": "Geçen yıl aynı dönemde ne olmuştu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f049",
+      "post_id": "p0110",
+      "post_text": "kentsel ulaşım planlaması meselesinde dikkat edilmesi gereken temel husus, kararların veriye dayalı biçimde alınmasıdır. Doğru veri ve düzenli izleme, uygulamanın etkinliğinin ölçülmesine olanak tanır ve gerekli düzeltmelerin zamanında yapılmasını sağlar.",
+      "category": "kisisel",
+      "question": "Bu gönderide düzeltmelerin ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0110"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f050",
+      "post_id": "p0110",
+      "post_text": "kentsel ulaşım planlaması meselesinde dikkat edilmesi gereken temel husus, kararların veriye dayalı biçimde alınmasıdır. Doğru veri ve düzenli izleme, uygulamanın etkinliğinin ölçülmesine olanak tanır ve gerekli düzeltmelerin zamanında yapılmasını sağlar.",
+      "category": "kisisel",
+      "question": "Yetkililerin telefon numarası nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f051",
+      "post_id": "p0297",
+      "post_text": "dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu, orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı. tribün desteği çok iyiydi, son on beş dakika ayaktaydık.",
+      "category": "kisisel",
+      "question": "Bu gönderide ayaktaydık ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0297"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f052",
+      "post_id": "p0297",
+      "post_text": "dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu, orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı. tribün desteği çok iyiydi, son on beş dakika ayaktaydık.",
+      "category": "kisisel",
+      "question": "Bakanlık bu konuda ne açıklama yaptı?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f053",
+      "post_id": "p0339",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı, orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. tribün desteği çok iyiydi, son on beş dakika ayaktaydık. sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı. dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı.",
+      "category": "kisisel",
+      "question": "kazılmıştı konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0339"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f054",
+      "post_id": "p0339",
+      "post_text": "kaleci iki net kurtarış yaptı ama üçüncü golde çıkması hatalıydı bence, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu, maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı, orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. tribün desteği çok iyiydi, son on beş dakika ayaktaydık. sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı. dün akşam yine aynı hikâye, otobüs saatinde gelmedi ve duraktaki tabelada 3 dakika yazıyordu. servis hızlıydı, garson çocuk ilgiliydi, orası ayrı.",
+      "category": "kisisel",
+      "question": "Toplam bütçe kaç milyon lira?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f055",
+      "post_id": "p0382",
+      "post_text": "kargo 3 gündür şubede bekliyor, ben mi gitsem acaba Ekleyeceğim bir şey yok.",
+      "category": "kisisel",
+      "question": "Bu gönderide ekleyeceğim ile ilgili ne var?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0382"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f056",
+      "post_id": "p0382",
+      "post_text": "kargo 3 gündür şubede bekliyor, ben mi gitsem acaba Ekleyeceğim bir şey yok.",
+      "category": "kisisel",
+      "question": "Yetkililerin telefon numarası nedir?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f057",
+      "post_id": "p0327",
+      "post_text": "kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm, en sinir olduğum şey kimseye ulaşamamanız, çağrı merkezi sürekli meşgul. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım.",
+      "category": "kisisel",
+      "question": "ulaşamamanız hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0327"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f058",
+      "post_id": "p0327",
+      "post_text": "kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık, üç yıldır aynı mahallede oturuyorum ve ilk defa böyle bir şey gördüm, en sinir olduğum şey kimseye ulaşamamanız, çağrı merkezi sürekli meşgul. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir. arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım.",
+      "category": "kisisel",
+      "question": "Bakanlık bu konuda ne açıklama yaptı?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f059",
+      "post_id": "p0369",
+      "post_text": "sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı, tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir, içerisi çok kalabalıktı, konuşurken kendi sesimi duyamadım. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı.",
+      "category": "kisisel",
+      "question": "saatlerinde hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0369"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f060",
+      "post_id": "p0369",
+      "post_text": "sabah çıktığımda sokakta kimse yoktu, akşam döndüğümde her yer kazılmıştı, tekrar gider miyim bilmiyorum, belki sabah saatlerinde daha sakindir, içerisi çok kalabalıktı, konuşurken kendi sesimi duyamadım. orta sahada mücadele yoktu, rakip her topu ikinci vuruşta aldı. yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. maçın ilk yarısında top ortada kaldı, ikinci yarıda kanat oyununa dönünce açıldı.",
+      "category": "kisisel",
+      "question": "Yarın hava nasıl olacak?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f061",
+      "post_id": "p0104",
+      "post_text": "spor kulüplerinin mali yapısı hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir.",
+      "category": "kisisel",
+      "question": "değerlendirmeler hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0104"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f062",
+      "post_id": "p0104",
+      "post_text": "spor kulüplerinin mali yapısı hakkında yapılan değerlendirmeler, konunun tek bir bakış açısıyla ele alınamayacağını göstermektedir. Farklı kesimlerin beklentilerinin dengeli biçimde gözetilmesi, ortak bir zeminin oluşmasına yardımcı olabilir.",
+      "category": "kisisel",
+      "question": "Toplam bütçe kaç milyon lira?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f063",
+      "post_id": "p0356",
+      "post_text": "Bugün fark ettim: bugün hava çok güzeldi ama içeride kaldım, kendime kızıyorum Sizde nasıl?",
+      "category": "kisisel",
+      "question": "kızıyorum hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0356"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f064",
+      "post_id": "p0356",
+      "post_text": "Bugün fark ettim: bugün hava çok güzeldi ama içeride kaldım, kendime kızıyorum Sizde nasıl?",
+      "category": "kisisel",
+      "question": "Anket sonuçları ne gösteriyor?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f065",
+      "post_id": "p0090",
+      "post_text": "toplu taşıma güzergâh planlaması bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. toplu taşıma güzergâh planlaması ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "kisisel",
+      "question": "değerlendirildiğinde hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0090"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f066",
+      "post_id": "p0090",
+      "post_text": "toplu taşıma güzergâh planlaması bağlamında öne çıkan başlıklar şunlardır: planlama süreçlerinin şeffaflığı, kaynakların etkin kullanımı ve paydaş katılımının sağlanması. Bu unsurların bir arada ele alınması, sürdürülebilir sonuçlar elde edilmesine katkı sunacaktır. toplu taşıma güzergâh planlaması ile ilgili gelişmeler değerlendirildiğinde, atılan adımların olumlu yönleri kadar geliştirilmeye açık yönleri de olduğu görülmektedir. Uzun vadeli planlama ve etkili iletişim, bu tür süreçlerin başarısı açısından belirleyici olacaktır.",
+      "category": "kisisel",
+      "question": "Dolar kuru bugün kaç lira oldu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f067",
+      "post_id": "p0289",
+      "post_text": "Kısa bir not: annemin yaptığı mercimek çorbasının tarifini soruyorum her seferinde, her seferinde farklı anlatıyor 😄 Umarım düzelir.",
+      "category": "kisisel",
+      "question": "çorbasının konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0289"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f068",
+      "post_id": "p0289",
+      "post_text": "Kısa bir not: annemin yaptığı mercimek çorbasının tarifini soruyorum her seferinde, her seferinde farklı anlatıyor 😄 Umarım düzelir.",
+      "category": "kisisel",
+      "question": "Dolar kuru bugün kaç lira oldu?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f069",
+      "post_id": "p0321",
+      "post_text": "yorumcular hakem kararına takıldı ama asıl mesele o değildi bana kalırsa, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. yanımdaki teyze de aynı şeyden şikâyetçiydi, en az yirmi dakika bekledik. arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık.",
+      "category": "kisisel",
+      "question": "şikâyetçiydi konusunda ne yazılmış?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0321"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f070",
+      "post_id": "p0321",
+      "post_text": "yorumcular hakem kararına takıldı ama asıl mesele o değildi bana kalırsa, yeni açılan kafeye gittik, kahve fena değil ama fiyatlar biraz tuzlu. yanımdaki teyze de aynı şeyden şikâyetçiydi, en az yirmi dakika bekledik. arabayı nereye park edeceğimi bilemedim, iki sokak öteye bırakmak zorunda kaldım. kimse önceden haber vermedi, bir kâğıt asılsaydı hazırlık yapardık.",
+      "category": "kisisel",
+      "question": "Bu konuda mahkeme ne karar verdi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    },
+    {
+      "id": "f071",
+      "post_id": "p0413",
+      "post_text": "iki haftadır ertelediğim koşuya sonunda çıktım. 3 km. abartmıyorum çok zorlandım Yorumlarınızı bekliyorum.",
+      "category": "kisisel",
+      "question": "yorumlarınızı hakkında ne deniyor?",
+      "answerable": true,
+      "expected_source_ids": [
+        "p0413"
+      ],
+      "manual_label": null
+    },
+    {
+      "id": "f072",
+      "post_id": "p0413",
+      "post_text": "iki haftadır ertelediğim koşuya sonunda çıktım. 3 km. abartmıyorum çok zorlandım Yorumlarınızı bekliyorum.",
+      "category": "kisisel",
+      "question": "Bu konuda mahkeme ne karar verdi?",
+      "answerable": false,
+      "expected_source_ids": [],
+      "manual_label": null
+    }
+  ]
+}

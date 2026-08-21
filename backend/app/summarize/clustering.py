@@ -189,6 +189,15 @@ def build_clusters(
         etiket = sorted(sayim.items(), key=lambda t: (-t[1], t[0]))[0][0]
         kumeler.append(Cluster(label=etiket, members=uyeler))
 
-    # Büyükten küçüğe sırala; eşitlikte etiket adına göre (belirlenimcilik).
-    kumeler.sort(key=lambda c: (-c.size, c.label))
+    # SIRALAMA ÖLÇÜTÜ: önce FARKLI YAZAR sayısı, sonra gönderi sayısı,
+    # eşitlikte etiket adı (belirlenimcilik).
+    #
+    # NEDEN YAZAR SAYISI ÖNCE (spec 6.2 "en büyük N" kuralının okunuşu):
+    # Bir konuyu 10 kişi konuşuyorsa o gündemdir; aynı konuda 10 gönderi tek
+    # kişiden geliyorsa o kişinin ısrarıdır. Gönderi sayısına göre sıralamak,
+    # çok paylaşan tek bir hesabın gündemi belirlemesine izin verir — bu hem
+    # çoğulculuğa (İlke 3) aykırıdır hem de manipülasyona açık bir kaldıraçtır.
+    # Yazar çeşitliliğini önce koymak, tek kaynaklı kümeleri bastırma kuralıyla
+    # (service.py) aynı gerekçeye dayanır ve onu tamamlar.
+    kumeler.sort(key=lambda c: (-len(c.distinct_authors), -c.size, c.label))
     return kumeler[: config.max_clusters]

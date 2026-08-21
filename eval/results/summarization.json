@@ -1,0 +1,39 @@
+{
+  "provider": "fake-extractive",
+  "embedder": "hashing-word-char",
+  "posts": 420,
+  "enrichment": {
+    "processed": 420,
+    "llm_calls": 227,
+    "short_post_skips": 193,
+    "llm_call_saving_ratio": 0.4595,
+    "injection_flagged": 6,
+    "duration_s": 2.19
+  },
+  "summarization": {
+    "runs": 9,
+    "sentences": 90,
+    "faithfulness_mean": 0.9344,
+    "faithfulness_ge_080": 1.0,
+    "citation_accuracy": 1.0,
+    "dropped_sentences_mean": 0,
+    "single_source_suppressed": 0,
+    "latency_p50_ms": 3360,
+    "latency_p95_ms": 4910,
+    "cache_hit_ratio": 0.75
+  },
+  "assistant": {
+    "sample_size": 72,
+    "correct_refusal_rate": 0.9722222222222222,
+    "answer_rate_when_answerable": 0.05555555555555555,
+    "over_abstention": 0.9444444444444444,
+    "citation_present_rate": 1.0,
+    "latency_p50_ms": 0.0
+  },
+  "cost": {
+    "enrichment_calls_total": 227,
+    "merge_calls_per_summary": 1,
+    "calls_per_1000_summaries": 1000,
+    "total_calls_this_run": 236
+  }
+}

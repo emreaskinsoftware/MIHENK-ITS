@@ -20,6 +20,7 @@ if str(BACKEND) not in sys.path:
 from app.config import get_settings  # noqa: E402
 from app.llm.provider import reset_provider  # noqa: E402
 from app.models import Post  # noqa: E402
+from app.llm.embedding import reset_embedder  # noqa: E402
 from app.store.cache import reset_cache  # noqa: E402
 from app.store.feed_repo import FeedRepository, reset_feed  # noqa: E402
 
@@ -32,9 +33,14 @@ def temiz_durum(monkeypatch: pytest.MonkeyPatch):
     getirir. Sağlayıcı her testte "fake" olarak sabitlenir.
     """
     monkeypatch.setenv("MIHENK_LLM_PROVIDER", "fake")
+    # Birim testleri gömme modelini indirmez/yüklemez: e5 yüklemesi ~25 saniye
+    # sürüyor ve testlerin hızlı koşması, sık koşulmasının ön şartı.
+    # Gerçek modelle ölçüm ml/scripts/evaluate.py işidir.
+    monkeypatch.setenv("MIHENK_EMBEDDING_BACKEND", "hashing")
     get_settings.cache_clear()
     reset_cache()
     reset_provider()
+    reset_embedder()
     reset_feed()
     yield
     reset_cache()

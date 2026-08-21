@@ -47,6 +47,12 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     embedding_model: str = "intfloat/multilingual-e5-base"
     embedding_dim: int = 768
+    # Hangi gömme arka ucu kullanılsın:
+    #   "auto"    -> e5 kuruluysa e5, değilse deterministik yedek
+    #   "e5"      -> yalnızca e5; kurulu değilse hata (ölçüm koşuları için)
+    #   "hashing" -> yalnızca yedek (testler: model yüklemesi 25 sn sürüyor,
+    #                birim testlerinin buna bağlı olmaması gerekir)
+    embedding_backend: Literal["auto", "e5", "hashing"] = "auto"
 
     # ------------------------------------------------------------------
     # KATMAN 1 — Zenginleştirme (spec 6.1)
@@ -63,18 +69,25 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     # KATMAN 2 — Özetleme (spec 6.2)
     # ------------------------------------------------------------------
-    # Aglomeratif kümelemede kosinüs mesafe eşiği. 0.45 ≈ 0.55 kosinüs benzerlik:
-    # çok dilli e5 gömmelerinde aynı olayı anlatan Türkçe gönderiler bu bandın
-    # üstünde kalır, farklı konular ayrışır. KALİBRE (ml/scripts/evaluate.py).
-    cluster_distance_threshold: float = 0.45
+    # Aglomeratif kümelemede kosinüs mesafe eşiği.
+    #
+    # KALİBRASYON (uydurma değil, ölçüm): Sentetik akışın gündem kategorisinde
+    # eşik 0.01-1.40 arasında taranıp, üretilen kümeler gerçek olay etiketleriyle
+    # (_eval_event_id) karşılaştırıldı. Seçilen değer ARI'yi en yükseğe çıkaran
+    # noktadır: e5-base için ARI 0.250, homojenlik 0.84, bütünlük 0.53.
+    #
+    # BU DENGE BİLİNÇLİ: Yüksek homojenlik + düşük bütünlük, "aynı olay birden
+    # çok kümeye bölünüyor ama farklı olaylar birbirine karışmıyor" demektir.
+    # Bölünme, özette aynı olay hakkında iki cümle üretir — fazlalık, ama
+    # doğru. Birleşme ise iki ayrı olayı tek cümlede birleştirir; bu, kaynağa
+    # bağlanamayan bir iddia üretir ve İlke 1'i çiğner. Hatanın güvenli yönü
+    # bölünmedir, bu yüzden eşik o tarafa ayarlıdır.
+    cluster_distance_threshold: float = 0.13
     # Yedek (hashing) gömücü için ayrı eşik. NEDEN AYRI: İki gömücünün benzerlik
-    # dağılımı farklıdır; hashing biçimsel benzerlik ölçtüğü için aynı olayı
-    # farklı kelimelerle anlatan gönderilerde benzerlik çok daha düşük çıkar.
-    # Tek eşik kullanmak, yedeğe düşüldüğünde kümelemeyi tamamen durdururdu.
-    # Bu değer sentetik akışta olay-eşleşmesi F1'i en yükseğe çıkaran noktadır
-    # (ölçüm: eval/results/clustering.md). Ölçülen F1 düşüktür (~0.40); yedek
-    # gömücü demo ve test içindir, raporlanan kümeleme metrikleri e5 iledir.
-    cluster_distance_threshold_fallback: float = 0.84
+    # dağılımı farklıdır; tek eşik kullanmak yedeğe düşüldüğünde kümelemeyi
+    # ya tamamen durdurur ya da her şeyi tek kümede toplar.
+    # Aynı yöntemle ölçüldü: ARI 0.279, homojenlik 0.84, bütünlük 0.54.
+    cluster_distance_threshold_fallback: float = 0.89
     min_clusters: int = 5
     max_clusters: int = 10
     cluster_representatives: int = 3  # Küme merkezine en yakın kaç gönderi LLM'e gider
@@ -96,6 +109,17 @@ class Settings(BaseSettings):
     abstain_low: float = 0.35  # KALİBRE — bu bandın içi "kararsız" bölgedir
     abstain_high: float = 0.65  # KALİBRE
     detection_model: str = "dbmdz/bert-base-turkish-cased"
+    # Hangi tespit arka ucu kullanılsın:
+    #   "auto"    -> BERTurk varsa o, yoksa TF-IDF temel çizgisi, o da yoksa None
+    #   "berturk" -> yalnızca ince ayarlı encoder (rapor Tablo 4 bununla üretilir)
+    #   "tfidf"   -> yalnızca temel çizgi (karşılaştırma satırı)
+    #   "none"    -> model yok; sistem çekimser kalır (model_yok)
+    detection_backend: Literal["auto", "berturk", "tfidf", "none"] = "auto"
+    # İnce ayar hiperparametreleri — rapor 3.2'ye buradan yazılır.
+    detection_epochs: int = 3
+    detection_batch_size: int = 16
+    detection_learning_rate: float = 2e-5
+    detection_max_length: int = 256
 
     # ------------------------------------------------------------------
     # Veri yönetişimi (spec 5.3)

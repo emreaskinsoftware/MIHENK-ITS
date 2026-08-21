@@ -27,7 +27,7 @@ import math
 import re
 from typing import Protocol
 
-from app.config import config
+from app.config import config, get_settings
 
 # Karakter n-gram uzunluğu. 3-4'lü n-gramlar Türkçe'de kök + ek sınırını
 # makul yakalar; daha kısası gürültü, daha uzunu seyreklik üretir.
@@ -155,7 +155,7 @@ class SentenceTransformerEmbedder:
     def __init__(self, model_name: str | None = None) -> None:
         from sentence_transformers import SentenceTransformer  # yerel içe aktarım: ağır bağımlılık
 
-        self.name = model_name or config.embedding_model
+        self.name = model_name or get_settings().embedding_model
         self._model = SentenceTransformer(self.name)
         self.dim = int(self._model.get_sentence_embedding_dimension())
 
@@ -174,15 +174,26 @@ _embedder: Embedder | None = None
 def get_embedder(force_fallback: bool = False) -> Embedder:
     """Kullanılabilir en iyi gömme arka ucunu döndürür (tekil).
 
-    Sıralama: yapılandırmadaki gerçek model varsa o, yoksa deterministik yedek.
-    Yedeğe düşerken sessiz kalmıyoruz — çağıran taraf `name` alanını ölçüm
-    çıktısına yazar, böylece raporda hangi modelle ölçtüğümüz belli olur.
+    Seçim config.embedding_backend ile yapılır. "auto" modunda e5 kuruluysa o
+    kullanılır, değilse deterministik yedeğe düşülür. Yedeğe düşerken sessiz
+    kalmıyoruz — çağıran taraf `name` alanını ölçüm çıktısına yazar, böylece
+    raporda hangi modelle ölçtüğümüz belli olur.
     """
     global _embedder
+    # Ayarı çağrı anında okuyoruz: modül düzeyindeki `config` nesnesi içe
+    # aktarma anında dondurulur ve testlerin ortam değişkeniyle yaptığı
+    # değişikliği görmez.
+    ayar = get_settings()
     if _embedder is not None and not force_fallback:
         return _embedder
-    if force_fallback:
+    if force_fallback or ayar.embedding_backend == "hashing":
         return HashingEmbedder()
+    if ayar.embedding_backend == "e5":
+        # Açıkça e5 istendi: sessizce yedeğe düşmüyoruz. Ölçüm koşusunda
+        # yanlışlıkla yedekle ölçmek, raporda hangi modelle ölçtüğümüz
+        # sorusuna yanlış cevap vermek demektir (spec 2).
+        _embedder = SentenceTransformerEmbedder()
+        return _embedder
     try:
         _embedder = SentenceTransformerEmbedder()
     except Exception:  # ImportError veya model indirilememesi
@@ -202,3 +213,9 @@ def cosine(a: list[float], b: list[float]) -> float:
     if na == 0.0 or nb == 0.0:
         return 0.0
     return nokta / (na * nb)
+
+
+def reset_embedder() -> None:
+    """Tekil gömücüyü sıfırlar (testler ve arka uç değişimi için)."""
+    global _embedder
+    _embedder = None
