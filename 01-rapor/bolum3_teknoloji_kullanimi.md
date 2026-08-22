@@ -138,6 +138,12 @@ eşikte, **kaç insan metninin haksız yere etiketlendiğini** gösterir. Ürün
 açısından yanlış pozitif, kaçırılan pozitiften daha maliyetlidir; masum bir
 kullanıcıyı damgalamak güveni doğrudan zedeler.
 
+> **Bu tablo bir üst sınırdır, ürün başarımı değildir.** Test kümesi, modelin
+> eğitildiği şablon havuzundan gelir; sınıfları tasarlayan taraf ile ölçen
+> taraf aynıdır. Sistemin şablon paylaşmayan veri üzerindeki davranışı
+> **Tablo 7**'de, gerçek insan metni üzerindeki davranışı **Tablo 8**'dedir.
+> Raporun dayandığı sayılar onlardır.
+
 **Tablo 2 — Çekimserlik davranışı**
 
 | Model | Çekimserlik oranı | Etiketlendiğinde doğruluk |
@@ -207,23 +213,142 @@ Savunma dört katmanlıdır: yapısal ayrım, girdi temizleme, çıktı kısıt�
 yetki kısıtı. Asistanın yazma yetkisi yoktur; ajan yalnızca izin listesindeki
 araçları çağırabilir.
 
+**Tablo 7 — Aktarım testi: şablon paylaşmayan veri** (206 gönderi: 37 yapay, 169 insan)
+
+Tablo 1'in test kümesi tespit modelinin eğitildiği şablon havuzundan gelir.
+Aşağıdaki ölçüm ise sosyal medya akışı üretecinden gelen ve tespit veri
+setiyle **hiçbir şablon paylaşmayan** gönderiler üzerindedir.
+
+| Model | Doğruluk (0,5 eşiği) | AUROC | FPR@95TPR | Çekimserlik |
+|---|---|---|---|---|
+| TF-IDF temel çizgi | 0,709 | 0,965 | 0,361 | %55,3 |
+| BERTurk ince ayar | 0,675 | 0,980 | 0,118 | %54,4 |
+
+Doğruluğun 1,000'den 0,675'e inmesi, Tablo 1'deki sayının ne kadarının
+şablon ezberinden geldiğini gösterir.
+
+**Kullanıcının gördüğü sayı.** Yukarıdaki doğruluk 0,5 eşiğiyle hesaplanır ve
+ürün davranışını yansıtmaz: sistem 0,5 eşiğiyle etiket göstermez, **akış
+dağılımında kalibre edilmiş bantla** gösterir. Akışın yarısı bandı seçmekte,
+diğer yarısı ölçmekte kullanılır; aynı gönderilerde hem eşik seçip hem ölçüm
+yapmak, olmayan bir başarım iddia etmek olurdu.
+
+| Model | Kalibre bant | Etiketlenen | Etiketlendiğinde doğruluk |
+|---|---|---|---|
+| TF-IDF temel çizgi | `[0,92 · 0,83]` | 92/206 | **1,000** |
+| BERTurk ince ayar | `[0,99 · 0,98]` | 94/206 | **1,000** |
+
+**Tohum değişkenliği.** Aynı veri, aynı hiperparametreler, yalnızca rastgelelik
+tohumu değişiyor — 5 tohum. Doğrulama kümesinde bu beş model **1,000 ± 0,000**
+verir; o sayı modelin kararlı olduğunu değil, doğrulama kümesinin doyduğunu
+gösterir. Aktarım kümesinde:
+
+| Metrik | Ortalama ± std | En düşük | En yüksek |
+|---|---|---|---|
+| Doğruluk (0,5 eşiği) | 0,511 ± 0,148 | 0,335 | 0,699 |
+| AUROC | 0,917 ± 0,038 | 0,873 | 0,980 |
+| Etiketlendiğinde doğruluk — sabit bant | 0,586 ± 0,170 | 0,380 | 0,875 |
+| Etiketlendiğinde doğruluk — kalibre bant | **1,000 ± 0,000** | 1,000 | 1,000 |
+| Etiketlenen oran — kalibre bant | 0,304 ± 0,129 | 0,136 | 0,456 |
+
+Son iki satır birlikte okunmalıdır: kalibrasyon, tohumdan gelen salınımı
+**doğruluktan kapsamaya** taşır. Kötü bir tohum artık yanlış etiket üretmek
+yerine daha çok susar. İlke 2'nin istediği takas budur; kullanıcıya verilen
+garanti tohumdan bağımsız hâle gelir, bedeli daha az gönderiye etiket
+gösterilmesidir.
+
+**Tablo 8 — Gerçek insan metni üzerinde tespit** (374 örnek: 174 yapay, 200 insan)
+
+Yukarıdaki her ölçüm, iki sınıfı da bizim ürettiğimiz veri üzerindedir. Bu
+tabloda insan sınıfı **gerçek kişilerin yazdığı metinlerden** gelir:
+`turkish-nlp-suite/vitamins-supplements-reviews` (CC BY-SA 4.0), 2022 derlemi
+— yani dil modelleri yaygınlaşmadan önce yazılmış ürün yorumları. Yapay sınıf
+aynı ürün, aynı yıldız puanı ve aynı uzunluk eşleştirmesiyle üretildi.
+Eşleştirme zorunluydu: iki sınıf farklı konulardan gelseydi model yazarı değil
+**konuyu** öğrenirdi.
+
+| Model | AUROC | FPR@95TPR | Doğruluk (0,5) | F1 (0,5) |
+|---|---|---|---|---|
+| TF-IDF temel çizgi | 0,541 | 0,935 | 0,537 | 0,362 |
+| BERTurk ince ayar | **0,768** | 0,640 | 0,548 | 0,056 |
+
+Bu tablo iki şey söylüyor:
+
+1. **Sentetik değerlendirme başarımı şişiriyor.** AUROC 1,000 → 0,980
+   (aktarım) → 0,768 (gerçek metin). Sentetik veride ölçülen sayının yaklaşık
+   dörtte biri, sınıfları bizim yazmış olmamızdan geliyor.
+2. **Temel çizgi ile ince ayarın sırası ilk kez ayrışıyor.** Sentetik veride
+   TF-IDF ile BERTurk arasında anlamlı fark yoktu (ikisi de 1,000); gerçek
+   metinde TF-IDF **rastgeleye yakın** (0,541), BERTurk ise bilgi taşıyor
+   (0,768). Yani ince ayarın karşılığı ancak gerçek veride görünüyor.
+
+**Üslup bazında kaçış** (yalnızca yapay sınıf, 0,5 eşiği). Yapay metinler beş
+üslupta üretildi; düz "asistan ağzı" bilerek azınlıkta tutuldu, çünkü tespiti
+yalnızca en kolay üslupta ölçmek kendimizi kandırmak olurdu.
+
+| Üslup | n | TF-IDF | BERTurk |
+|---|---|---|---|
+| `asistan` (düz yardımcı dili) | 33 | 0,455 | 0,061 |
+| `dengeli` | 25 | 0,360 | 0,040 |
+| `pazarlama` | 20 | 0,300 | 0,000 |
+| `samimi` | 54 | 0,204 | 0,037 |
+| `hatali` (yazım hatalı) | 42 | 0,190 | **0,000** |
+
+Yazım hatası eklemek tespitten kaçmak için yeterlidir. Bu, tespit modelinin
+tek başına bir savunma olamayacağının doğrudan kanıtıdır.
+
+**Bu dağılım için kalibre edilseydi ne olurdu.** Eşik kümenin bir yarısında
+seçilip diğer yarısında ölçüldü; hedef, etiket gösterildiğinde doğruluk ≥ 0,95.
+
+| Model | Etiketlenen | Etiketlendiğinde doğruluk |
+|---|---|---|
+| TF-IDF temel çizgi | %1,1 | 1,000 |
+| BERTurk ince ayar | %2,1 | 0,750 |
+
+Sistem, gerçek metinde hedef kesinliği tutturmak için gönderilerin **%98'inde
+susmak zorunda kalıyor**. Ürünün bugünkü dürüst konumu budur: yapay zekâ
+metni tespiti bir *sinyal* olarak sunulabilir, bir *hüküm* olarak sunulamaz.
+
 ### Ölçümlerin sınırları
 
 > **Bu bölüm bilinçli olarak yazılmıştır.** Kusursuz sonuçları kayıtsız sunmak,
 > değerlendirmenin ciddiyetine gölge düşürür.
 
-Tablo 1'deki %100 doğruluk ve Tablo 6'daki %100 savunma oranı, **sentetik veri
-üzerinde elde edilmiş üst sınır değerlerdir.** Şablon-ayrık bölme ezberi
-engeller, ancak şablondan üretilmiş metinler gerçek kullanıcı diline kıyasla
-daha türdeştir. Gerçek akış verisinde:
+**Sentetik veride ölçülen başarımın ne kadarı gerçek değildi — ölçüldü.**
+Tablo 1'deki %100 doğruluk, sentetik veri üzerinde elde edilmiş bir üst
+sınırdır. Şablon-ayrık bölme ezberi engeller, ancak şablondan üretilmiş
+metinler gerçek kullanıcı diline kıyasla daha türdeştir. Bu bölüm önceki
+sürümde "gerçek veride başarımın düşmesi beklenmektedir" diyordu; artık
+beklenti değil ölçüm var:
 
-- Tespit başarımının düşmesi,
-- Çekimserlik oranının artması,
-- Enjeksiyon savunmasında görülmemiş saldırı türleriyle karşılaşılması
+| Ölçüm kümesi | BERTurk AUROC | Ne anlama geliyor |
+|---|---|---|
+| Kendi test kümemiz (Tablo 1) | 1,000 | Sınıfları biz yazdık |
+| Şablon paylaşmayan akış (Tablo 7) | 0,980 | Kalem aynı, şablon farklı |
+| Gerçek insan metni (Tablo 8) | **0,768** | İnsan tarafını biz yazmadık |
 
-beklenmektedir. Bu nedenle sistem, yüksek başarıma değil **düşük yanlış
-pozitife ve çekimserliğe** yaslanacak biçimde tasarlanmıştır: model
-yanıldığında zarar, sustuğunda yalnızca eksik bilgi doğar.
+Düşüşün büyük kısmı ikinci adımda değil üçüncüde oluyor: sorun şablon
+ezberi değil, **insan metninin bizim yazdığımızdan farklı olması**.
+
+**Gerçek metin ölçümünün kendi sınırı.** Tablo 8'de insan tarafı gerçektir,
+yapay taraf hâlâ bize aittir; tek bir modelle (Claude Opus 5) üretilmiştir.
+Farklı bir modelin metni farklı sonuç verebilir. Ayrıca alan tektir (ürün
+yorumları), sosyal medya gönderisi değil. Yani Tablo 8, gerçek başarımın
+kendisi değil, sentetik ölçümden **daha yakın bir alt sınırıdır**.
+
+**Enjeksiyon savunması hâlâ sentetiktir.** Tablo 6'daki %100, bizim
+yazdığımız 40 senaryo üzerindedir. Gerçek saldırganların deneyeceği türlerin
+tamamını kapsadığı iddia edilemez; o sayı "bilinen saldırı türlerine karşı
+dayanıklıyız" demektir, "saldırılamaz" demek değildir.
+
+**Bu ölçümlerin ürün tasarımına etkisi.** Sistem, yüksek başarıma değil
+**düşük yanlış pozitife ve çekimserliğe** yaslanacak biçimde tasarlanmıştır:
+model yanıldığında zarar, sustuğunda yalnızca eksik bilgi doğar. Tablo 8'in
+son satırı bunun bedelini de gösteriyor — gerçek metinde hedef kesinliği
+tutturmak, gönderilerin %98'inde susmak demek. Arayüz bu yüzden yapay zekâ
+etiketini yalnızca eşiği geçen gönderide gösterir ve **"insan yazmış" rozetini
+hiç göstermez**: 0,768 AUROC bir metnin yapay olabileceğine işaret etmeye
+yeter, bir metnin insan elinden çıktığını **belgelemeye yetmez**.
 
 Mentörlük sürecinde (2-7 Eylül) ölçümlerin gerçek NSosyal akış örneği üzerinde
 yinelenmesi hedeflenmektedir.
