@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a
           href="#ana-icerik"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50
-                     focus:bg-mavi focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+                     focus:bg-mavi-koyu focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
         >
           Ana içeriğe geç
         </a>

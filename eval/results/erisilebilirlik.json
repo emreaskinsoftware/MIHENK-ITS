@@ -1,0 +1,210 @@
+{
+  "taban": "http://localhost:3000",
+  "sayfalar": [
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "Ana akış + özet paneli",
+      "yol": "/",
+      "ihlaller": [],
+      "gecen": 29,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 200,
+        "bitisNedeni": "adim-siniri",
+        "tamTarandi": false,
+        "odakGorunur": 200,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "Gönderi ayrıntısı",
+      "yol": "/gonderi/ff8dc7b6bfa0",
+      "ihlaller": [],
+      "gecen": 27,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 109,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 109,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "Keşfet",
+      "yol": "/kesfet",
+      "ihlaller": [],
+      "gecen": 28,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 200,
+        "bitisNedeni": "adim-siniri",
+        "tamTarandi": false,
+        "odakGorunur": 200,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "Ayarlar",
+      "yol": "/ayarlar",
+      "ihlaller": [],
+      "gecen": 26,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 37,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 37,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "İçerik üretici",
+      "yol": "/uretici",
+      "ihlaller": [],
+      "gecen": 27,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 25,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 25,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "light",
+      "govdeZemini": "rgb(255, 255, 255)",
+      "sayfa": "TEKNOFEST kayıt",
+      "yol": "/teknofest",
+      "ihlaller": [],
+      "gecen": 26,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 25,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 25,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "Ana akış + özet paneli",
+      "yol": "/",
+      "ihlaller": [],
+      "gecen": 29,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 200,
+        "bitisNedeni": "adim-siniri",
+        "tamTarandi": false,
+        "odakGorunur": 200,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "Gönderi ayrıntısı",
+      "yol": "/gonderi/ff8dc7b6bfa0",
+      "ihlaller": [],
+      "gecen": 27,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 109,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 109,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "Keşfet",
+      "yol": "/kesfet",
+      "ihlaller": [],
+      "gecen": 28,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 200,
+        "bitisNedeni": "adim-siniri",
+        "tamTarandi": false,
+        "odakGorunur": 200,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "Ayarlar",
+      "yol": "/ayarlar",
+      "ihlaller": [],
+      "gecen": 26,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 37,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 37,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "İçerik üretici",
+      "yol": "/uretici",
+      "ihlaller": [],
+      "gecen": 27,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 25,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 25,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    },
+    {
+      "tema": "dark",
+      "govdeZemini": "rgb(10, 14, 21)",
+      "sayfa": "TEKNOFEST kayıt",
+      "yol": "/teknofest",
+      "ihlaller": [],
+      "gecen": 26,
+      "incelenemeyen": 1,
+      "klavye": {
+        "ulasilan": 25,
+        "bitisNedeni": "sayfadan-cikti",
+        "tamTarandi": true,
+        "odakGorunur": 25,
+        "odakGorunmez": 0,
+        "gorunmezOrnekler": []
+      }
+    }
+  ],
+  "kuralOzeti": []
+}

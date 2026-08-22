@@ -58,7 +58,7 @@ export function Sidebar({ yeniGonderi }: { yeniGonderi?: () => void }) {
                       className={aktif ? "text-white" : "text-metin"} />
                 {rozet ? (
                   <span className="absolute -top-1 -right-1 min-w-[20px] h-[20px] px-1 rounded-full
-                                   bg-mavi text-white text-[11px] font-semibold grid place-items-center">
+                                   bg-mavi-koyu text-white text-[11px] font-semibold grid place-items-center">
                     {rozet}
                   </span>
                 ) : null}

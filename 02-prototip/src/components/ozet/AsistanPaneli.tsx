@@ -66,7 +66,7 @@ export function AsistanPaneli({
             <li key={i} className={m.rol === "kullanici" ? "text-right" : ""}>
               <span className={`inline-block rounded-2xl px-3.5 py-2 text-[14px] leading-relaxed max-w-[85%] text-left
                                 ${m.rol === "kullanici"
-                                  ? "bg-mavi text-white"
+                                  ? "bg-mavi-koyu text-white"
                                   : "bg-yukseltilmis"}`}>
                 {m.metin}
               </span>
@@ -91,7 +91,7 @@ export function AsistanPaneli({
                      placeholder:text-metin-sonuk outline-none focus:border-mavi"
         />
         <button type="submit" disabled={!girdi.trim() || yukleniyor} aria-label="Gönder"
-                className="p-2.5 rounded-full bg-mihenk text-white disabled:opacity-40 hover:brightness-110 transition">
+                className="p-2.5 rounded-full bg-mihenk-koyu text-white disabled:opacity-40 hover:brightness-110 transition">
           <Send size={16} />
         </button>
       </form>

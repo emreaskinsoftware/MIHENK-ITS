@@ -83,7 +83,7 @@ function ErisilebilirlikBolumu() {
                 aria-checked={secili}
                 onClick={() => { if (!secili) degistir(); }}
                 className={`flex items-center gap-2.5 rounded-xl px-5 py-3 transition-colors
-                            ${secili ? "bg-mavi text-white" : "bg-kart hover:bg-yukseltilmis"}`}
+                            ${secili ? "bg-mavi-koyu text-white" : "bg-kart hover:bg-yukseltilmis"}`}
               >
                 <Ikon size={18} /> {etiket}
               </button>

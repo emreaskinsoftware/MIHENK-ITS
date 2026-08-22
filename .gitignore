@@ -58,6 +58,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Playwright tarayici ikilileri (npx playwright install ile kurulur)
+02-prototip/test-results/
+
 # Next.js derleme sirasinda otomatik uretilen ajan dosyalari
 02-prototip/AGENTS.md
 02-prototip/CLAUDE.md

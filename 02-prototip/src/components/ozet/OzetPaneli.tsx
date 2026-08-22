@@ -88,7 +88,7 @@ export function OzetPaneli({ kapat }: { kapat: () => void }) {
               onClick={() => setAktif(s.anahtar)}
               className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-medium transition-colors
                           ${secili
-                            ? "bg-mihenk text-white"
+                            ? "bg-mihenk-koyu text-white"
                             : "bg-yukseltilmis text-metin-ikincil hover:text-metin"}`}
             >
               {s.etiket}

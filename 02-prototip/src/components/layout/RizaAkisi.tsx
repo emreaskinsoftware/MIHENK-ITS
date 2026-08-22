@@ -124,7 +124,7 @@ function Secenek({
         type="button" role="checkbox" aria-checked={secili} aria-label={baslik}
         disabled={zorunlu} onClick={degistir}
         className={`w-5 h-5 rounded-md grid place-items-center shrink-0 mt-0.5 transition-colors
-                    ${secili ? "bg-mavi" : "border-2 border-metin-ikincil"}
+                    ${secili ? "bg-mavi-koyu" : "border-2 border-metin-ikincil"}
                     ${zorunlu ? "opacity-60 cursor-not-allowed" : ""}`}
       >
         {secili && <Check size={13} className="text-white" strokeWidth={3} />}
