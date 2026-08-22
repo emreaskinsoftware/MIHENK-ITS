@@ -2,13 +2,13 @@
 
 > `ml/scripts/evaluate.py` tarafından üretilir. Elle düzenlenmez.
 
-Sağlayıcı: `fake-extractive` · Gömme: `hashing-word-char` · Akış: 420 gönderi · Koşu: 9
+Sağlayıcı: `fake-extractive` · Gömme: `intfloat/multilingual-e5-base` · Akış: 420 gönderi · Koşu: 9
 
 ## Atıf ve sadakat
 
 | Metrik | Değer |
 |---|---|
-| Kaynağa sadakat (sözcüksel örtüşme, ortalama) | 0.934 |
+| Kaynağa sadakat (sözcüksel örtüşme, ortalama) | 0.937 |
 | Sadakat ≥ 0.80 olan cümle oranı | 1.000 |
 | Atıf doğruluğu (gösterilen kaynak gerçekten var) | 1.000 |
 | Atıfsız üretim (özet başına silinen cümle, ort.) | 0 |
@@ -21,16 +21,16 @@ Sağlayıcı: `fake-extractive` · Gömme: `hashing-word-char` · Akış: 420 g�
 |---|---|
 | Örneklem büyüklüğü | 72 |
 | Bağlam dışı soruda doğru reddetme | 0.972 |
-| Bağlam içi soruda yanıt verme | 0.056 |
-| Aşırı çekimserlik (yanıtlanabilirken susma) | 0.944 |
+| Bağlam içi soruda yanıt verme | 1.000 |
+| Aşırı çekimserlik (yanıtlanabilirken susma) | 0.000 |
 | Yanıtın kaynak taşıma oranı | 1.000 |
 
 ## Gecikme ve maliyet
 
 | Metrik | Değer |
 |---|---|
-| Özet gecikmesi p50 | 3360 ms |
-| Özet gecikmesi p95 | 4910 ms |
+| Özet gecikmesi p50 | 962 ms |
+| Özet gecikmesi p95 | 1101 ms |
 | Asistan gecikmesi p50 | 0.0 ms |
 | Önbellek isabet oranı | 0.750 |
 | Zenginleştirmede LLM çağrısından tasarruf | 46.0% |
