@@ -1,0 +1,222 @@
+# MİHENK
+
+Sosyal medya akışını kısaltan, ama söylediği her cümleyi kaynağına bağlayan;
+emin olmadığında susan bir yapay zekâ katmanı.
+
+**TEKNOFEST 2026 — NSosyal İnovasyon Yarışması projesi.**
+
+---
+
+## Üç ilke
+
+Bu üç ilke ürünün kimliğidir; "nice to have" değildir ve kodda karşılıkları
+vardır.
+
+| İlke | Ne demek | Kod karşılığı | Testi |
+|---|---|---|---|
+| **1. Atıf zorunluluğu** | Kaynağına bağlanmayan hiçbir özet cümlesi gösterilmez | `summarize/citation.py` — atıfsız/uydurma kaynaklı cümle silinir | `test_ilke1_atif.py` |
+| **2. Çekimserlik** | Sistem emin değilse hüküm vermez, susar | `detection/decision.py`, asistanın 5 kapısı, köken `display=false` | `test_ilke2_cekimserlik.py` |
+| **3. Çoğulculuk** | Tek doğru dayatılmaz; taraflar konumlandırılır | `summarize/service.py` — tek kaynaklı küme bastırılır | `test_ilke3_cogulculuk.py` |
+
+Çekimserlik bir hata değil, **raporlanan bir metriktir**. Aktarım testinde
+model kısa metinlerde (K1) %67 oranında susuyor — çünkü orada doğruluğu 0.65'e
+düşüyor (bkz. `eval/results/detection.md`).
+
+## Mimari — iki katman
+
+```
+KATMAN 1 (akış hızında, kullanıcıdan bağımsız)
+  Gönderi → atomik özet + gömme + konu etiketi → TTL'li önbellek
+  Çıktı kullanıcılar ARASINDA paylaşılır.
+
+KATMAN 2 (kullanıcı hızında)
+  "Özetle" → hazır kayıtlar → kümele → temsilciler → TEK LLM çağrısı
+           → ATIF DENETİMİ → atıflı özet
+```
+
+Maliyet kullanıcı sayısıyla doğrusal büyümez: kullanıcı başına tekrarlanan tek
+pahalı işlem, özet başına **bir** birleştirme çağrısıdır.
+
+Ayrıntı ve diyagramlar: [`docs/MIMARI.md`](docs/MIMARI.md)
+
+## Kurulum
+
+```bash
+# 1) Python bağımlılıkları
+pip install -r backend/requirements.txt
+```
+
+### torch kurulumu — cihaza göre
+
+```bash
+# NVIDIA GPU varsa (önerilen — eğitim ve zenginleştirme belirgin hızlanır)
+pip install torch --index-url https://download.pytorch.org/whl/cu126
+
+# GPU yoksa
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+`requirements.txt` içindeki `sentence-transformers` torch 2.13'ü çeker; bu
+sürümün CUDA tekerleği **cu126** indeksindedir (cu124 indeksi torch 2.6'da
+durmuştur). PyPI'den gelen varsayılan tekerlek Windows'ta CPU derlemesidir,
+bu yüzden CUDA sürümü ayrıca kurulur.
+
+Kurulumu doğrulayın:
+
+```bash
+python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+```
+
+```bash
+# 2) Ön yüz
+cd frontend && npm install
+```
+
+### Cihaz seçimi ve profiller
+
+Sistem cihazı kendisi seçer (`MIHENK_DETECTION_DEVICE=auto`). Ayarlar cihaza
+göre değişir; aynı depo iki makinede elle değiştirilmeden çalışır:
+
+| Ayar | CPU profili | GPU profili |
+|---|---|---|
+| Parti boyutu | 16 | 32 |
+| Dondurulan encoder katmanı | 9 (üst 3 katman eğitilir) | 9 (aynı) |
+| Karışık hassasiyet (AMP) | kapalı | açık |
+| Gömme parti boyutu | 16 | 64 |
+
+CPU profilinin parti boyutu ve AMP tarafı donanım kısıtıdır: tam ince ayar +
+sabit doldurma ile adım başına ~57 saniye, alt 9 katman dondurulduğunda ~17
+saniye (bkz. `backend/app/config.py`).
+
+**Dondurma iki profilde de aynıdır ve bu bir hız kararı değildir.** Bu tablo
+önce GPU'da 0 (tam ince ayar) diyordu; RTX 3050 üzerinde ölçüldüğünde tam
+ince ayarın aktarım kümesinde ezberlediği görüldü — doğruluk 0.557'ye karşı
+0.634, FPR@95TPR 0.254'e karşı 0.115, üstelik 8 kat yavaş. Katman dondurma
+bu veri setinde bir düzenlileştirmedir; gerekçesi donanım değil, eğitim
+kümesinin küçüklüğüdür.
+
+Zorlamak isterseniz:
+
+```bash
+export MIHENK_DETECTION_DEVICE=cuda   # CUDA yoksa hata verir, sessizce CPU'ya düşmez
+export MIHENK_DETECTION_DEVICE=cpu
+```
+
+> CUDA istendiği hâlde bulunamazsa sistem **hata verir**, sessizce CPU'ya
+> düşmez. Sebep: ölçüm koşusunda hangi cihazda çalıştığımızı bilmek zorundayız.
+
+## Çalıştırma
+
+```bash
+# 1) Sentetik akışı üret (300-500 gönderi, tuzaklar dahil)
+python ml/scripts/generate_feed.py --count 420
+
+# 2) Arka uç (http://127.0.0.1:8000)
+cd backend && uvicorn app.main:app --reload
+
+# 3) Ön yüz (http://localhost:5173)
+cd frontend && npm run dev
+```
+
+Sistem varsayılan olarak `FakeProvider` ile çalışır — dış çağrı yapmaz, anahtar
+gerektirmez. Gerçek LLM için:
+
+```bash
+export ANTHROPIC_API_KEY=...
+export MIHENK_LLM_PROVIDER=api
+```
+
+## Test
+
+```bash
+python -m pytest backend/tests -q      # 38 test
+cd frontend && npm test                # 7 test
+```
+
+Testler dış servise çağrı yapmaz ve gömme modelini yüklemez; saniyeler içinde
+koşarlar.
+
+## Ölçüm — raporun tabloları
+
+Sıfırdan tam koşu (GPU'lu makinede önerilen sıra):
+
+```bash
+python ml/scripts/generate_feed.py --count 420          # sentetik akış
+python ml/scripts/build_dataset.py                      # veri seti + sızıntı denetimi
+python ml/scripts/build_faithfulness_set.py             # sadakat örneklemi
+
+python ml/scripts/train_detector.py --backend tfidf --seeds 5    # temel çizgi
+python ml/scripts/train_detector.py --backend berturk            # ana model
+
+python ml/scripts/calibrate_threshold.py                # karar bandı (ZORUNLU)
+python ml/scripts/seed_variance.py                      # tohum değişkenliği (GPU: ~3 dk)
+
+MIHENK_EMBEDDING_BACKEND=e5 python ml/scripts/evaluate.py        # TÜM tablolar
+```
+
+**`calibrate_threshold.py` atlanamaz.** Model olasılıkları eğitim dağılımına
+göre kalibredir (sınıf-dengeli); akışta pozitif oran ~%18'dir ve sabit
+`[0.35, 0.65]` bandı orada yanlış yerde durur. Ölçüldü: sabit bantla
+"etiketlendiğinde doğruluk" 0.519 ± 0.170, kalibre bantla 0.959 ± 0.003.
+Kalibrasyon dosyası yoksa sistem çalışır ama bandı ölçülmemiştir ve
+`detection.md` bunu "config sabiti (kalibre edilmedi)" diye yazar.
+
+`seed_variance.py`, doğrulama kümesinin göremediği değişkenliği ölçer:
+aynı beş model doğrulamada 1.000 ± 0.000, aktarımda 0.483 ± 0.148 verir.
+Betik bitiminde diskteki modeli belgelenmiş varsayılan tohuma geri yükler.
+
+### Eğitim uzun sürerse — parçalı koşu
+
+CPU'da eğitim yarım saati bulabiliyor. `--max-steps` ile parçalara bölünebilir;
+ilerleme (model + optimizer momenti) diske kaydedilir ve aynı komut kaldığı
+yerden devam eder:
+
+```bash
+python ml/scripts/train_detector.py --backend berturk --max-steps 25   # tekrarla
+python ml/scripts/train_detector.py --backend berturk --bastan         # sıfırdan
+```
+
+GPU'da bu bayrağa gerek yoktur; eğitim tek seferde biter.
+
+> Yarım kalmış bir eğitim çıkarımda **kullanılmaz**: `detector.py` durum
+> dosyasını kontrol eder ve tamamlanmamış modeli reddeder. Yarım eğitilmiş bir
+> modelin olasılıkları kalibre değildir; çekimserlik bandı anlamını kaybeder.
+
+Çıktılar `eval/results/` altına hem JSON hem Markdown yazılır:
+
+| Dosya | Rapor yeri |
+|---|---|
+| `detection.md` | Tablo 4 — tespit başarımı + aktarım testi |
+| `summarization.md` | Tablo 5 — sadakat, atıf, gecikme, maliyet |
+| `injection.md` | Güvenlik — enjeksiyon savunma oranı |
+| `clustering.md` | Kümeleme kalitesi ve eşik kalibrasyonu |
+
+**Rapora elle sayı girilmez.** Bir metrik ölçülemiyorsa tabloya `[  ]` yazılır.
+
+## Belgeler
+
+| Belge | İçerik |
+|---|---|
+| [`docs/MIMARI.md`](docs/MIMARI.md) | Katmanlar, veri akışı, ilkelerin kod haritası (Şekil 1) |
+| [`docs/MODEL_KARTI.md`](docs/MODEL_KARTI.md) | Modeller, sürüm, lisans, hiperparametre, sınırlılıklar |
+| [`docs/VERI_YONETISIMI.md`](docs/VERI_YONETISIMI.md) | KVKK sınırları, dört yönetişim kapısı, veri akışı |
+| [`docs/TEHDIT_MODELI.md`](docs/TEHDIT_MODELI.md) | İstem enjeksiyonu tehdit modeli ve savunma zinciri |
+| [`docs/KULLANILABILIRLIK_TESTI.md`](docs/KULLANILABILIRLIK_TESTI.md) | 5 katılımcılı test protokolü ve SUS formu |
+
+## Ne yapmıyoruz (bilinçli sınırlar)
+
+- **Gerçek platformlardan veri kazımıyoruz.** Tüm veri sentetiktir.
+- **Doğruluk hükmü vermiyoruz.** Doğrulama çıktısı üç durumludur:
+  `DESTEKLEYEN` / `CELISEN` / `KAYNAK_YOK`. `DOGRU`/`YANLIS` diye bir durum yok.
+- **Özet, gönderinin yerine geçmiyor.** Uzunluk üst sınırlıdır ve kaynak çipleri
+  kullanıcıyı orijinal gönderiye götürecek biçimde konumlanır.
+- **Belirsizliği rozete dönüştürmüyoruz.** Emin olmadığımızda arayüzde boş alan
+  bırakılır.
+
+## Durum
+
+| Aşama | Kapsam | Durum |
+|---|---|---|
+| P0 | Sentetik akış, iki katmanlı hat, atıf denetimi, asistan, güvenlik, tespit + çekimserlik, yönetişim, ön yüz, ölçüm | Tamamlandı |
+| P1 | Görsel köken (C2PA/IPTC), doğrulama ajanı (tek senaryo), eşik iyileştirmesi | Köken tamam; ajan bekliyor |
+| P2 | Çok kaynaklı ajan, içerik üreticisi modülü, ölçek testi | Planlandı |

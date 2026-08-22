@@ -1,0 +1,627 @@
+===== SAYFA 1 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+  
+ 
+  
+  
+  
+NSOSYAL İNOVASYON YARIŞMASI 
+ 
+  
+  
+  
+   
+GENEL ŞARTNAMESİ 
+  
+  
+  
+2026 
+  
+===== SAYFA 2 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ İÇİNDEKİLER  
+  
+İçindekiler 
+VERSİYONLAR.................................................................................................................................................................... 3 
+1. TANIMLAR................................................................................................................................................................... 4 
+1. YARIŞMA AMACI ..................................................................................................................................................... 5 
+2. YARIŞMA KAPSAMI ................................................................................................................................................ 6 
+İçerik Ekonomisi ...................................................................................................................................................... 6 
+Sosyal Yapay Zekâ .................................................................................................................................................. 7 
+Kullanıcı Katılımı ve Arayüz / Kullanıcı Deneyimi (UI/UX) ....................................................................... 7 
+Örnek Çözüm Alanları ........................................................................................................................................... 7 
+Beklenen Teslimatlar ............................................................................................................................................. 8 
+3. YARIŞMA KATILIM KOŞULLARI........................................................................................................................ 8 
+4. Yarışma Takvimi ve Planlama ............................................................................................................................ 9 
+5. PUANLAMA .............................................................................................................................................................. 11 
+6. DEĞERLENDİRME YAKLAŞIMLARI ................................................................................................................. 12 
+7. YARIŞMA VE DEĞERLENDİRME SÜRECİ .................................................................................................... 12 
+7.1. PROJE TEKNİK RAPOR TESLİM SÜRECİ .............................................................................................. 12 
+7.2. MENTÖRLÜK VE PROJE GELİŞTİRME SÜRECİ ................................................................................. 13 
+7.3. FİNAL SUNUMLARI ..................................................................................................................................... 13 
+8. ÖDÜLLER VE AVANTAJLAR ............................................................................................................................... 14 
+9. İLETİŞİM ..................................................................................................................................................................... 14 
+GENEL KURALLAR .......................................................................................................................................................... 15 
+ETİK KURALLAR ................................................................................................................................................................ 15 
+SORUMLULUK BEYANI ................................................................................................................................................. 15 
+ 
+  
+  
+  
+  
+  
+  
+  
+===== SAYFA 3 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+  
+ 
+ 
+  
+VERSİYONLAR  
+Tablo 1.  Versiyonlar Tablosu  
+VERSİYON  TARİH  Açıklama  
+V1  01.07.2026  İlk Versiyon  
+V2  27.07.2026 İkinci Versiyon 
+V3 17.08.2026 3.YARIŞMA KATILIM 
+KOŞULLARI  
+4.YARIŞMA TAKVİMİ 
+ 
+  
+===== SAYFA 4 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+1. TANIMLAR 
+İşbu şartnamede geçen terimler aşağıdaki anlamları taşır: 
+Tanım Açıklama 
+Yarışma NSosyal İnovasyon yarışmasını ifade eder. 
+Düzenleyici 
+Kurum 2N MEDYA , T3 VAKFI 
+Yarışmacı Yarışmaya takım olarak başvuran katılımcıyı ifade 
+eder. 
+Takım Yarışmaya ortak proje ile başvuran katılımcı grubunu 
+ifade eder. 
+Takım Kaptanı  Takımı yarışma süresince temsil eden yetkili kişiyi 
+ifade eder. 
+Proje Yarışma kapsamında geliştirilen özgün yazılım, sistem, 
+platform veya çözümü ifade eder. 
+Prototip Projenin temel fonksiyonlarını çalışan şekilde gösteren 
+yazılım veya uygulamayı ifade eder. 
+Jüri Projeleri değerlendirmek üzere görevlendirilen uzman 
+kurulunu ifade eder. 
+Mentör Yarışma sürecinde teknik ve metodolojik destek 
+sağlayan uzman kişileri ifade eder. 
+İnovasyon 
+Dikeyi 
+Yarışma, İçerik Ekonomisi, Sosyal Yapay Zekâ ve 
+Kullanıcı Katılımı & Arayüz/Kullanıcı Deneyimi olmak 
+üzere belirlenen çözüm alanlarını kapsamaktadır. 
+İçerik 
+Ekonomisi 
+İçerik üreticilerinin gelir elde etmesini ve içerik üretim 
+süreçlerini destekleyen teknolojileri kapsayan tema. 
+Sosyal Yapay 
+Zekâ 
+Platformu akıllı hâle getiren algoritmalar, toksik içerik 
+yönetimi ve kullanıcı ruh hâline uygun içerik önerilerini 
+kapsayan tema. 
+Kullanıcı 
+Katılımı & 
+Arayüz/Kullanıc
+ı Deneyimi 
+Etkileşimi artıran mekanikler, oyunlaştırma ve yenilikçi 
+arayüz tasarımları üzerine yapılan çalışmaları 
+kapsayan tema. 
+Teslimat Yarışma sonunda sunulacak proje raporu, kaynak kod, 
+sunum dosyası ve çalışan prototipi ifade eder. 
+ 
+ 
+===== SAYFA 5 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+1. YARIŞMA AMACI  
+Dijital teknolojilerin hızla gelişmesiyle birlikte sosyal medya platformları, bireylerin 
+iletişim kurma, bilgiye erişme, içerik üretme ve toplumsal etkileşim süreçlerinin ayrılmaz 
+bir parçası haline gelmiştir. Günümüzde milyarlarca kullanıcı tarafından aktif olarak 
+kullanılan sosyal medya ekosistemi; yapay zekâ teknolojileri, artırılmış gerçeklik, büyük 
+veri analitiği, içerik üretici ekonomisi ve kişiselleştirilmiş kullanıcı deneyimleri gibi birçok 
+yenilikçi teknolojinin gelişimiyle sürekli dönüşmektedir. Bu dönüşüm, yeni nesil sosyal 
+medya platformlarının yalnızca iletişim aracı olmanın ötesine geçerek dijital ekonominin, 
+eğitimin, girişimciliğin ve toplumsal etkileşimin temel yapı taşlarından biri haline 
+gelmesini sağlamaktadır. 
+ 
+Bununla birlikte sosyal medya teknolojilerinin yaygınlaşması; dijital bağımlılık, yanlış bilgi 
+ve dezenformasyonun yayılması, veri güvenliği ve mahremiyet, algoritmik önyargılar, 
+kullanıcı refahının korunması ve içerik üreticilerinin sürdürülebilir gelir modellerine 
+erişimi gibi birçok yeni ihtiyacı da beraberinde getirmiştir. Bu doğrultuda geleceğin sosyal 
+medya platformlarının; güvenilir, şeffaf, etik, erişilebilir ve kullanıcı odaklı bir anlayışla 
+geliştirilmesi büyük önem taşımaktadır. 
+ 
+NSosyal İnovasyon Yarışması , ülkemizin sosyal medya teknolojileri alanındaki Ar -Ge ve 
+inovasyon kapasitesini artırmak, bu alanda nitelikli insan kaynağı yetişmesini 
+desteklemek ve geleceğin dijital platformlarını geliştirecek girişimci bireyleri teşvik etmek 
+amacıyla düzenlenmektedir. Yarışma kapsamında katılımcılardan; yapay zekâ destekli 
+sosyal medya çözümleri, gelişmiş kullanıcı deneyimi uygulamaları, içerik üretici 
+ekonomisini güçlendiren modeller, dijital refahı artıran teknolojiler, güvenli ve etik sosyal 
+medya sistemleri ile toplumsal fayda sağlayan yenilikçi platformlar geliştirmeleri 
+beklenmektedir. 
+ 
+NSosyal İnovasyon Yarışması; yalnızca teknik açıdan başarılı projelerin geliştirilmesini 
+değil, aynı zamanda kullanıcı ihtiyaçları nı merkeze alan, sürdürülebilir iş modellerine 
+sahip, toplumsal etki oluşturan ve küresel ölçekte rekabet edebilecek ürünlerin ortaya 
+çıkmasını hedeflemektedir. Yarışma sayesinde üniversite öğrencileri, girişimciler, 
+yazılım geliştiriciler, araştırmacılar ve teknoloji meraklılarının sosyal medya 
+ekosistemine yönelik özgün fikirler geliştirmeleri, bu fikirleri uygulanabilir projelere 
+dönüştürmeleri ve ülkemizin teknoloji ekosistemine değer katmaları amaçlanmaktadır. 
+Yeni nesil sosyal medya teknolojilerinin g eliştirilmesi sürecinde yapay zekâ, büyük veri, 
+öneri sistemleri, içerik üretim araçları, dijital güvenlik, kişisel veri mahremiyeti ve 
+kullanıcı etkileşimini artıran yenilikçi teknolojilerin ülkemizde geliştirilmesi stratejik 
+önem taşımaktadır. Bu kapsamd a NSosyal İnovasyon Yarışması,  Türkiye'nin sosyal 
+medya teknolojileri alanında yalnızca kullanıcı değil, aynı zamanda teknoloji geliştiren, 
+yenilik üreten ve küresel ölçekte rekabet eden bir ülke olma vizyonuna katkı sunmayı 
+hedeflemektedir. 
+ 
+===== SAYFA 6 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+Yarışmanın temel hedefleri aşağıda sıralanmaktadır: 
+ 
+● Kullanıcıların dijital ortamda yüz yüze bakar gibi etkileşim kurmasını sağlayan 
+yenilikçi sosyal medya çözümlerinin geliştirilmesini teşvik etmek. 
+● Yapay zekâ destekli yeni nesil sosyal medya platformlarının geliştirilmesine katkı 
+sağlamak. 
+● Güvenli, etik, şeffaf ve kullanıcı mahremiyetini ön planda tutan sosyal medya 
+çözümlerinin geliştirilmesini desteklemek. 
+● İçerik üreticilerine sürdürülebilir gelir modelleri sunan yenilikçi sistemlerin 
+geliştirilmesini teşvik etmek. 
+● Üniversite öğrencileri, girişimciler, araştırmacılar ve teknoloji geliştiricilerini 
+sosyal medya ekosisteminde inovatif projeler üretmeye yönlendirmek. 
+● Geliştirilen projelerin ticarileşmesini, ürünleşmesini ve ülkemizin teknoloji 
+girişimciliği ekosistemine kazandırılmasını desteklemek. 
+● Türkiye'nin sosyal medya teknolojileri alanındaki bilgi birikimini artırarak küresel 
+ölçekte rekabet edebilecek teknolojilerin geliştirilmesine katkı sağlamak. 
+● Sosyal medya teknolojileri alanında yeni likçi, özgün ve uygulanabilir çözümler 
+geliştirilmesini teşvik etmek. 
+ 
+2. YARIŞMA KAPSAMI  
+  
+NSosyal İnovasyon Yarışması, sosyal medya teknolojilerinin geleceğine yön verecek 
+yenilikçi fikirlerin geliştirilmesini teşvik etmek amacıyla gerçekleştirilecektir. 
+Yarışma kapsamında geliştirilecek projelerin teknik açıdan uygulanabilir, yenilikçi, 
+kullanıcı odaklı ve toplumsal fayda sağlayan çözümler sunması esastır. Katılımcılar, 
+geliştirdikleri projeyi yalnızca fikir düzeyinde bırakmayıp çalışan bir prototip ile 
+desteklemelidir. 
+Projelerin aşağıda belirtilen alanlarda çözüm üretmesi beklenmektedir. 
+İçerik Ekonomisi 
+İçerik ekonomisi kapsamında, dijital içerik üreticilerinin sürdürülebilir gelir elde 
+edebilmesini sağlayacak yenilikçi ekonomik modellerin geliştirilmesi amaçlanmaktadır. 
+Katılımcılardan; içerik üreticileri, markalar, topluluklar ve kullanıcılar arasında yeni iş 
+birlikleri oluşturan, gelir paylaşımını kolaylaştıran, içerik üretimini teşvik eden ve içerik 
+üreticilerinin platform içerisindeki ekonomik sürdürülebilirliğini destekleyen teknolojik 
+çözümler geliştirmeleri beklenmektedir. 
+===== SAYFA 7 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+Sosyal Yapay Zekâ 
+Sosyal yapay zekâ kapsamında, yapay zekâ teknolojilerinin sosyal medya 
+platformlarında içerik üretimi, moderasyon, öneri sistemleri, arama mekanizmaları ve 
+topluluk yönetimi süreçlerinde etkin biçimde kullanılması hedeflenmektedir. 
+Geliştirilecek çözümlerin kullanıcı ihtiyaçlarına cevap veren, güvenli, etik, ölçülebilir ve 
+uygulanabilir bir yapıda olması beklenmektedir. Yapay zekâ bileşenlerinin platform 
+deneyimini iyileştirmesi, kullanıcıların ihtiyaç duyduğu içeriklere daha kolay ulaşmasını 
+sağlaması ve sosyal medya süreçlerinin daha verimli yönetilmesine katkıda bulunması 
+amaçlanmaktadır. 
+Kullanıcı Katılımı ve Arayüz / Kullanıcı Deneyimi (UI/UX) 
+Kullanıcı katılımı ve kullanıcı deneyimi kapsamında, kullanıcıların platform içerisinde 
+daha verimli, güvenli ve kaliteli zaman geçirmesini sağlayacak yenilikçi arayüz ve 
+etkileşim mekanizmalarının geliştirilmesi amaçlanmaktadır. 
+Projelerin kullanıcı etkileşimini artırması, erişilebilirliği güçlendirmesi, platform 
+kullanımını kolaylaştırması ve farklı kullanıcı ihtiyaçlarına uygun deneyimler sunması 
+beklenmektedir. Kullanıcı akışlarının anlaşılır, erişilebilir ve kullanıcı odaklı biçimde 
+tasarlanması önem taşımaktadır. 
+Örnek Çözüm Alanları 
+• Mikro sponsorluk sistemleri 
+• Yapay zekâ destekli içerik üretimi 
+• İçerik üretici platformları 
+• Dijital ürün satış sistemleri 
+• Bahşiş ve destek mekanizmaları 
+• Premium abonelik modelleri 
+• Gelir paylaşım sistemleri 
+• Marka–içerik üretici eşleştirme platformları 
+• İçerik performans analitiği 
+• Büyük Dil Modelleri (LLM) 
+• Yapay zekâ destekli dijital asistanlar 
+• Akıllı öneri sistemleri 
+• Yapay zekâ destekli içerik moderasyonu 
+• Spam ve bot tespit sistemleri 
+• İçerik özetleme teknolojileri 
+• Duygu analizi 
+• Yapay zekâ destekli topluluk yönetimi 
+• Yapay zekâ tabanlı arama sistemleri 
+• Oyunlaştırma mekanizmaları 
+===== SAYFA 8 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+• Streak sistemleri 
+• Rozet ve ödül mekanizmaları 
+• Adaptif kullanıcı arayüzleri 
+• Mikro animasyonlar 
+• Hareket tabanlı kullanıcı deneyimleri 
+• Kişiselleştirilmiş kullanıcı arayüzleri 
+• Erişilebilirlik çözümleri 
+• Yeni nesil sosyal etkileşim deneyimleri 
+Belirtilen çözüm alanları örnek niteliğinde olup katılımcılar, yarışmanın genel 
+kapsamına uygun farklı ve özgün çözümler de geliştirebilirler. 
+Beklenen Teslimatlar 
+• Teknik rapor 
+• Sunum dosyası 
+• Kullanıcı senaryoları 
+• Çalışan prototip 
+• Kaynak kod 
+• Proje veya demo videosu 
+• İş modeli ve gelir modeli dokümanı 
+• Yapay zekâ mimarisi dokümanı 
+• Veri, model, etik ve performans dokümanı 
+• UI/UX tasarımları 
+• Kullanıcı akışları 
+• Kullanıcı araştırması özeti 
+• Kullanılabilirlik testi sonuçları 
+• Erişilebilirlik değerlendirmesi 
+3. YARIŞMA KATILIM KOŞULLARI  
+● NSosyal İnovasyon Yarışması, ulusal nitelikte olup Türkiye'de veya yurt dışında 
+öğrenim gören lise öğrencilerinin başvurusuna açıktır.  Yarışmaya; ön lisans, 
+lisans, yüksek lisans ve doktora öğrencileri ile mezuniyetlerinin üzerinden en fazla 
+3 yıl geçmiş yeni mezunlar başvurabilir. 
+● Yarışmaya bireysel başvuru kabul edilmemektedir. Başvurular ,en az 2 en fazla 
+5 kişiden oluşacak takımlar  halinde yapılacaktır. Bu sayıya danışman dâhil 
+değildir. 
+● Takımlar, yazılım geliştirme, yapay zekâ, veri bilimi, siber güvenlik, ürün yönetimi, 
+kullanıcı deneyimi (UI/UX), tasarım, girişimcilik veya ilgili diğer di siplinlerden 
+üyelerden oluşabilir. Farklı disiplinlerden oluşturulan ekipler teşvik edilmektedir. 
+● Her takımın bir takım kaptanı bulunması zorunludur. Yarışma sürecine ilişkin tüm 
+resmî bilgilendirmeler takım kaptanına yapılacaktır. Başvuru, rapor teslimi, itiraz 
+süreçleri ve diğer yarışma işlemlerinin takip edilmesinden  takım kaptanı 
+sorumludur. 
+===== SAYFA 9 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+● Takımların en fazla bir (1) danışmanı  olabilir. Danışman takım üyesi olarak 
+eklenemez. Danışman bulunması zorunlu olmayıp, özellikle öğrenci takımlarının 
+ilgili ala nda görev yapan bir akademisyen veya sektör profesyonelinden 
+danışmanlık desteği alması tavsiye edilmektedir. 
+● Danışman, takımın yarışma süreci boyunca teknik ve akademik gelişimine destek 
+olur ve finale kalan takımlarda final süreci boyunca takıma rehberlik eder. 
+● Yarışmaya sunulan projelerin özgün olması zorunludur. Başka kişi veya kurumlara 
+ait çalışmaların kopyası, benzeri veya fikrî hak ihlali oluşturduğu tespit edilen 
+projeler değerlendirme dışı bırakılır. 
+● Daha önce farklı bir yarışmaya katılmış projele r, önemli ölçüde geliştirilmiş veya 
+dönüştürülmüş olmaları şartıyla yarışmaya başvurabilir. Bu durumda katılımcılar, 
+daha önce katıldıkları yarışmaya ilişkin bilgileri teknik raporda belirtmekle 
+yükümlüdür. 
+● Katılımcılar, Her takım, yarışma kapsamında yalnızca bir başvuru yapabilir. Bir 
+takım tarafında n birden fazla başvuru yapılması durumunda ilgili başvurular 
+geçersiz sayılır. 
+● Yarışma kapsamında tüm başvuru, rapor teslimi, değerlendirme sonuçları, itiraz 
+süreçleri ve takım işlemleri KYS (Kurumsal Yönetim Sistemi)  üzerinden 
+yürütülecektir. Takımların yarışma sürecini KYS üzerinden takip etmeleri 
+zorunludur. 
+● Takım üyesi ekleme veya çıkarma işlemleri, yarışma takviminde belirtilen Teknik 
+Rapor Sonuçlarının Duyurulması tarihine kadar  yapılabilir. Bu tarihten sonra 
+takım yapısında değişiklik yapılamaz. 
+● Finale kalan takımlara sağlanacak ulaşım ve konaklama desteği ile festival 
+alanına kabul edilecek kişi sayısı, organizasyon komitesi tarafından ilan edilen 
+esaslar doğrultusunda belirlenir. 
+● Yarışmaya başvuran tüm katılımcılar, yarışma şartnamesinde yer alan hükümleri 
+okumuş ve kabul etmiş sayılır. 
+Başvurular, TEKNOFEST Teknoloji Yarışmaları resmî başvuru sistemi ( KYS) üzerinden, 
+yarışma takviminde ilan edilen tarihler arasında gerçekleştirilecektir. 
+ 
+ 
+ 
+ 
+4.  Yarışma Takvimi ve Planlama 
+Tarih Aşama 
+20 Ağustos 2026 Son Başvuru Tarihi 
+===== SAYFA 10 =====
+ 
+ 
+  
+ 
+ 
+ 
+ 
+24 Ağustos 2026 
+17.00 (TSİ) Teknik Rapor Teslimi 
+2 Eylül 2026   Teknik Rapor Sonuçlarının Duyurulması 
+2 Eylül – 7 Eylül 2026 Mentörlük ve Proje Geliştirme Süreci 
+14 Eylül 2026 17.00 
+(TSİ) Final Sunumlarının Teslimi 
+20 Eylül 2026 Jüri ve Katılımcılara Canlı Sunum 
+30 Eylül - 4 Ekim 2026 TEKNOFEST Şanlıurfa 
+===== SAYFA 11 =====
+ 
+ 
+● Yarışma başvurularının açılması 
+● Başvuru döneminin tamamlanması 
+● Ön değerlendirme süreci 
+● Ön değerlendirme sonuçlarının ilan edilmesi 
+● Teknik rapor teslim süreci 
+● Teknik rapor değerlendirme süreci 
+● Teknik rapor sonuçlarının ilan edilmesi 
+● Eğitim, bilgilendirme ve mentörlük faaliyetleri 
+● Final sunumlarının teslim edilmesi. 
+● Finale kalan takımların ilan edilmesi 
+● Final sunumlarının gerçekleştirilmesi 
+● Projelerin jüri tarafından değerlendirilmesi 
+● Yarışma sonuçlarının ilan edilmesi 
+● Ödül töreni 
+Yarışma sürecinde gerçekleştirilecek rapor teslimleri, sunumlar, değerlendirmeler ve 
+diğer aşamalar, yarışma takviminde belirtilen tarihler doğrultusunda yürütülecektir. 
+Final aşaması kapsamında takımlar, geliştirdikleri projeleri jüri üyelerine sun acak ve 
+gerektiğinde çalışan prototipleri üzerinden canlı demo gerçekleştireceklerdir. Jüri 
+değerlendirmesi sonucunda dereceye giren takımlar belirlenecektir. 
+Yarışmanın gerçekleştirileceği tarih, yer ve uygulama yöntemi (çevrim içi, yüz yüze veya 
+hibrit) TEKNOFEST Yarışmalar Komitesi tarafından belirlenerek ilan edilir. Yarışma 
+takviminde, değerlendirme süreçlerinde veya organizasyon planlamasında gerekli 
+görülmesi halinde değişiklik yapma hakkı TEKNOFEST Yarışmalar Komitesine aittir. 
+  
+5. PUANLAMA  
+Projeler, yarışma kapsamındaki tüm alanları kapsayan ortak değerlendirme kriterleri ve 
+belirlenen sabit ağırlıklar üzerinden bütüncül olarak değerlendirilecektir. 
+ 
+ 
+Değerlendirme Kriteri İçerik 
+Ekonomisi 
+Sosyal Yapay 
+Zekâ 
+Kullanıcı Katılımı ve 
+Arayüz 
+Yenilikçilik ve Özgünlük %20 %20 %20 
+Teknik Yeterlilik ve Uygulanabilirlik %20 %35 %20 
+Problemi Çözme Başarısı %20 %20 %15 
+Kullanıcı Deneyimi (UI/UX) %20 %10 %30 
+Sunum ve Prototip Kalitesi %10 %15 %15 
+İş Modeli ve Sürdürülebilirlik %10 %0 %0 
+===== SAYFA 12 =====
+ 
+ 
+ 
+6.   DEĞERLENDİRME YAKLAŞIMLARI  
+  
+Yarışmaya başvuran projelerin; sosyal medya teknolojileri alanında gerçek bir probleme 
+çözüm üretmesi, kullanıcı ihtiyaçlarını karşılaması ve yenilikçi bir değer ortaya koyması 
+beklenmektedir. Projelerin değerlendirilmesi temel olarak aşağıdaki kriterler 
+çerçevesinde gerçekleştirilecektir: 
+ 
+● Katma Değer ve Yenilikçilik 
+Projenin sunduğu çözümün mevcut sosyal medya uygulamalarından 
+ayrışabilmesi, özgün bir yaklaşım ortaya koyması ve kullanıcılar, içerik üreti cileri 
+veya platform ekosistemi için katma değer üretmesi beklenmektedir. 
+● Teknoloji Kullanımı 
+Proje kapsamında kullanılan yazılım, yapay zekâ, veri analitiği, kullanıcı deneyimi, 
+güvenlik veya diğer teknolojilerin çözümün hedefleriyle uyumlu, etkin ve güçlü bir 
+teknolojik altyapı oluşturacak şekilde kullanılması değerlendirilir. Kullanılan 
+teknolojilerin gelecekteki gelişmelere uyum sağlayabilme potansiyeli de dikkate 
+alınır. 
+● Uygulanabilirlik 
+Proje fikrinin teknik olarak hayata geçirilebilir olması, gerçek kullanıcılar 
+tarafından kullanılabilecek bir ürüne dönüşebilme potansiyeli taşıması ve 
+ölçeklenebilir bir yapıya sahip olması beklenmektedir. 
+ 
+● Yaygın Etki 
+Projenin geniş kullanıcı kitlelerine ulaşabilme potansiyeli, sosyal medya 
+ekosistemine sağlayacağı katkı, toplumsal fayda oluşturma kapasitesi ve dijital 
+yaşam kalitesine olumlu etkisi değerlendirilir. 
+● Sürdürülebilirlik 
+Projenin finansal, teknik ve sosyal açıdan sürdürülebilir bir yapıda planlanması; 
+uzun vadede gelişime açık olması ve değiş en kullanıcı ihtiyaçlarına uyum 
+sağlayabilmesi önemli değerlendirme kriterlerinden biridir. 
+● Kullanıcı Problemi ve Deneyimi 
+Projenin gerçek bir kullanıcı problemini ne ölçüde çözdüğü, kullanıcı deneyimini 
+iyileştirme düzeyi ve kullanıcı odaklı tasarım yaklaşımı değerlendirilir. 
+● Teknik Dokümantasyon ve Prototip Olgunluğu 
+Sunulan teknik raporun yeterliliği, proje dokümantasyonunun kalitesi ve varsa 
+çalışan prototipin işlevsellik düzeyi değerlendirme sürecinde dikkate alınır. 
+ 
+ 
+7. YARIŞMA VE DEĞERLENDİRME SÜRECİ 
+  
+7.1. PROJE TEKNİK RAPOR TESLİM SÜRECİ 
+Ön değerlendirme aşamasını başarıyla tamamlayan takımlar, yarışma takviminde 
+belirtilen tarihler arasında Proje Teknik Raporunu, TEKNOFEST tarafından ilan edilen 
+===== SAYFA 13 =====
+ 
+ 
+güncel rapor şablonuna uygun olarak hazırlayıp TEKNOFEST Yarışma Yönetim Sistemi 
+(KYS) üzerinden yüklemekle yükümlüdür. 
+ 
+Proje Teknik Raporu'nun, belirtilen süre içerisinde, eksiksiz ve doğru şablon kullanılarak 
+sisteme yüklenmesi zorunludur. Belirlenen tarih ve saat sonrasında yapılan yüklemeler 
+ile şablona uygun olmayan, eksik veya hatalı yüklenen raporlar değerlendirmeye alınmaz 
+ve ilgili takımlar yarışmadan elenir. 
+ 
+Yüklenen Proje Teknik Raporları; projenin teknik yeterliliği, sistem mimarisi, yöntem, 
+uygulanabilirlik, yenilikçilik ve diğer değerlendirme kriterleri doğrultusunda jüri 
+tarafından incelenir. Teknik değerlendirme sonucunda başarılı bulunan takımlar bir 
+sonraki aşamaya geçmeye hak kazanır ve sonuçlar yarışma takviminde belirtilen tarihte 
+ilan edilir.  
+7.2. MENTÖRLÜK VE PROJE GELİŞTİRME SÜRECİ  
+  
+Ön değerlendirme aşamasını başarıyla geçen takımlar için mentörlük ve proje geliştirme 
+süreci başlatılır. 
+Bu süreçte takımlar, alanında uzman mentörler ile eşleştirilerek projelerinin teknik, ürün 
+ve kullanıcı deneyimi açısından geliştirilmesine destek sağlanır. 
+Mentörlük süreci kapsamında; 
+● Proje fikrinin olgunlaştırılması  
+● Teknik mimari ve sistem tasarımının geliştirilmesi  
+● Yapay zekâ ve diğer teknolojilerin doğru entegrasyonu  
+● Ürünleştirme ve ölçeklenebilirlik yaklaşımı  
+● Kullanıcı deneyimi ve ürün doğrulama süreçleri  
+gibi alanlarda yönlendirme yapılır. 
+Mentörlük süreci yarışma takviminde belirtilen süre boyunca devam eder ve takımların 
+proje geliştirme süreçlerine aktif katkı sağlanması hedeflenir. 
+    
+7.3.  FİNAL SUNUMLARI 
+Proje Sunum yüklemesini yarışma takviminde belirtilen süre içerisinde başarıyla 
+tamamlamayan takımlar yarışmadan elenir. Yükleme işlemini eksiksiz ve zamanında 
+tamamlayan takımlar ise finalist olmaya hak kazanır. 
+ 
+Finalist takımlar, final aşamasında projelerini jüriye sunmakla yükümlüdür. Final 
+sunumları, yarışma takviminde belirtilen tarih ve saatlerde çevrim içi veya yüz yüze olarak 
+gerçekleştirilebilir. Sunum formatı ile teknik gereklilikler TEKNOFEST tarafından ilan 
+edilir. Takımlar, final aşamasında projelerini sözlü sunum ve gerektiğinde canlı demo ile 
+===== SAYFA 14 =====
+ 
+ 
+jüriye aktarır. Sunum sırasında projenin teknik yapısı, yenilikçilik düzeyi, kullanıcı değeri 
+ve uygulanabilirliği değerlendirilir. Final sunumlarını başarıyla t amamlayan finalist 
+takımlar arasından dereceye girenler belirlenir ve yarışma sonuçları TEKNOFEST yarışma 
+takvimine uygun olarak ilan edilir. 
+ 
+  
+8. ÖDÜLLER VE AVANTAJLAR  
+  
+Yarışma sonucunda dereceye giren takımlar, TEKNOFEST kapsamında düzenlenecek 
+ödül töreninde kamuoyuna ilan edilir. 
+ 
+Yarışma kapsamında geliştirilen projeler, tüm temalar la birlikte değerlendirilerek 
+sıralanır. Değerlendirme sonucunda yarışma genelinde birinci, ikinci ve üçüncü olan 
+takımlar ödüllendirilir. Organizasyon  Komitesi, gerekli gördüğü durumlarda tek bir Özel 
+Ödül verme hakkını saklı tutar. 
+ 
+Ödüller; nakdi destek, teknoloji ürünleri, sertifika, eğitim bursları, girişimcilik ve 
+hızlandırma programlarına katılım hakkı, bulut servis kredileri, mentörlük desteği ve 
+sponsor kurumlar tarafından sağlanacak diğer teşvik unsurlarından oluşabilir. 
+Dereceye giren projeler, TEKNOFEST’in resmî internet sitesi, sosyal medya hesapları ve 
+diğer iletişim kanalları aracılığıyla kamuoyu ile paylaşılabilir. 
+ 
+Organizasyon komitesi, gerekli görülmesi hâlinde başarılı projelerin yatırımcılar, kamu 
+kurumları, özel sek tör temsilcileri, teknoparklar ve girişimcilik ekosistemi aktörleri ile 
+buluşturulmasına yönelik etkinlikler ve iş birlikleri organize edebilir. 
+  
+9. İLETİŞİM  
+  
+Yarışmaya ilişkin tüm resmi  duyurular ve bilgilendirmeler TEKNOFEST tarafından 
+belirlenen iletişim kanalları üzerinden gerçekleştirilecektir. Yarışmacıların güncel 
+duyuruları düzenli olarak takip etmeleri zorunludur. 
+Yarışmacılar aşağıdaki kanallar aracılığıyla bilgilendirilecektir: 
+● TEKNOFEST resmi internet sitesi 
+● T3 KYS (Kurumsal Yönetim Sistemi) 
+● TEKNOFEST resmi sosyal medya hesapları 
+● E-posta bildirimleri 
+● Çevrim içi bilgilendirme toplantıları ve webinarlar 
+● Sıkça Sorulan Sorular (SSS) dokümanları 
+● NSosyal İnovasyon Yarışması Google Groups iletişim kanalı 
+Yarışma kapsamında oluşturulan Google Groups  iletişim kanalı üzerinde n yarışmaya 
+ilişkin duyurular, güncellemeler ve teknik bilgilendirmeler paylaşılacaktır. Her takımdan 
+en az bir (1) üyenin bu gruba katılması ve aktif olarak takip etmesi zorunludur. 
+===== SAYFA 15 =====
+ 
+ 
+Bu grubun düzenli olarak takip edilmemesi sonucunda oluşabilecek bilgi eksikliklerinden 
+ve güncel duyurulara erişim sağlanamamasından TEKNOFEST Yarışmalar Komitesi 
+sorumlu değildir. 
+Yarışmacıların, soru ve taleplerini öncelikli olarak belirtilen resmi iletişim kanalları 
+üzerinden iletmeleri gerekmektedir. Doğru kanallar üzerinden iletilen sorulara daha hızlı 
+ve sağlıklı geri dönüş sağlanabilmesi açısından bu husus önem arz etmektedir. 
+GENEL KURALLAR  
+  
+Yarışma kapsamında genel kurallar dokümanına ulaşmak için tıklayınız.  
+  
+ETİK KURALLAR  
+  
+Yarışma kapsamında etik kurallar dokümanına ulaşmak için tıklayınız.  
+  
+SORUMLULUK BEYANI  
+  
+T3 Vakfı ve TEKNOFEST, yarışmacıların teslim etmiş olduğu herhangi bir üründen veya 
+yarışmacıdan kaynaklanan herhangi bir yaralanma veya hasardan hiçbir şekilde sorumlu 
+değildir. Yarışmacıların 3. kişilere verdiği zararlardan T3 Vakfı ve organizasyon yetki lileri 
+sorumlu değildir. T3 Vakfı ve TEKNOFEST, takımların kendi sistemlerini Türkiye 
+Cumhuriyeti yasaları çerçevesinde hazırlamalarını ve uygulamalarını sağlamaktan 
+sorumlu değildir.  
+ 
+Türkiye Teknoloji Takımı Vakfı işbu şartnamede her türlü değişiklik ya pma hakkını saklı 
+tutar.  
+  
+  
+  
+  
+  
+  
+  
+===== SAYFA 16 =====
+ 
+ 
+ 
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

@@ -1,222 +1,338 @@
-# MİHENK
+<div align="center">
 
-Sosyal medya akışını kısaltan, ama söylediği her cümleyi kaynağına bağlayan;
-emin olmadığında susan bir yapay zekâ katmanı.
+# ITS MİHENK
 
-**TEKNOFEST 2026 — NSosyal İnovasyon Yarışması projesi.**
+**Sosyal medya akışını kısa, dengeli ve doğrulanabilir özetlere dönüştüren yapay zekâ katmanı**
+
+NSosyal İnovasyon Yarışması 2026 · Tematik Alan: **Sosyal Yapay Zekâ**
+
+[Problem](#problem) · [Çözüm](#çözüm) · [Mimari](#mimari) · [Kurulum](#kurulum) · [Depo Düzeni](#depo-düzeni)
+
+</div>
 
 ---
 
-## Üç ilke
+## Proje Adı Nereden Geliyor?
 
-Bu üç ilke ürünün kimliğidir; "nice to have" değildir ve kodda karşılıkları
-vardır.
+**Mihenk taşı**, bir madenin gerçek değerini ortaya çıkarmak için sürtüldüğü taştır.
+MİHENK de aynı işi bilgi için yapar: akışta dolaşan bir iddiayı kaynaklarıyla sınar,
+gerçek değerini görünür kılar.
 
-| İlke | Ne demek | Kod karşılığı | Testi |
+---
+
+## Problem
+
+Türkiye'de sosyal medya, bilgiye erişimin birincil altyapısı hâline geldi. TÜİK 2025
+verilerine göre 16-74 yaş grubunda internet kullanım oranı **%90,9**; ülkede
+**62,3 milyon** sosyal medya kullanıcı kimliği bulunuyor.
+
+Ancak bu erişim genişliği bilgiye dönüşmüyor. Sorun iki eksende birikiyor:
+
+**1. Bilgi aşırı yüklenmesi → kaçınma.**
+Reuters Institute 2026 Dijital Haber Raporu'na göre haberden kaçınma küresel ortalaması
+%42 iken **Türkiye, bu oranın %60'ı aştığı dört ülkeden biri.** Kullanıcı bilgiye
+erişemediği için değil, eriştiği hacmi işleyemediği için gündemden uzaklaşıyor.
+
+**2. Güven erozyonu → doğrulama yükü.**
+Habere duyulan güven %37 ile 2015'ten bu yana en düşük seviyede. Sosyal medya
+üzerinden gelen habere güven ise yalnızca %22. Kullanıcı bir iddiayı sınamak için
+akıştan çıkmak zorunda kalıyor; bu maliyet nedeniyle doğrulama çoğu zaman hiç yapılmıyor.
+
+> Kritik bulgu: Yapay zekâ tarafından üretilen cevaplara duyulan güven de yalnızca **%20**.
+> Bu, bir çözümün sadece "yapay zekâ ile özetlemesinin" yetmediğini; çıktının **kaynak ve
+> güven göstergeleriyle** sunulmasının zorunlu olduğunu gösteriyor. MİHENK'in temel
+> tasarım kararı buradan doğdu.
+
+---
+
+## Çözüm
+
+MİHENK, NSosyal deneyimini simüle eden bir web prototipi üzerinde çalışan bir
+**anlama ve doğrulama katmanıdır.**
+
+### Değişmez tasarım ilkesi
+
+NSosyal kendini **reklamsız, algoritmasız, kronolojik** akış olarak tanımlar.
+MİHENK bu kimliğe karşı değil, üstüne konumlanır:
+
+> **Akış sırası değişmez.** MİHENK sıralamaya dokunmaz; akışın üzerine oturan bir
+> okuma katmanı sunar. Özet, akışın yerine geçmez — akışı okunabilir kılar.
+
+Bu nedenle projede "kişiselleştirilmiş akış", "öneri algoritması" veya "sana özel
+sıralama" gibi kavramlar bilinçli olarak **kullanılmamaktadır.**
+
+### Modüller
+
+| # | Modül | Ne yapar | Katman |
 |---|---|---|---|
-| **1. Atıf zorunluluğu** | Kaynağına bağlanmayan hiçbir özet cümlesi gösterilmez | `summarize/citation.py` — atıfsız/uydurma kaynaklı cümle silinir | `test_ilke1_atif.py` |
-| **2. Çekimserlik** | Sistem emin değilse hüküm vermez, susar | `detection/decision.py`, asistanın 5 kapısı, köken `display=false` | `test_ilke2_cekimserlik.py` |
-| **3. Çoğulculuk** | Tek doğru dayatılmaz; taraflar konumlandırılır | `summarize/service.py` — tek kaynaklı küme bastırılır | `test_ilke3_cogulculuk.py` |
+| 1 | **Kategori bazlı özet** | Ülke gündemi, spor, teknoloji, ekonomi ve kişisel akış için ayrı özetler | Yerel |
+| 2 | **Gönderi bazlı özet** | Tek bir gönderiyi bağlamından kopmadan özetler | Yerel |
+| 3 | **Olay kümeleme** | Aynı olayla ilgili gönderileri gruplar, özetin girdisini hazırlar | Yerel |
+| 4 | **Özet tarafsızlığı** | Özetin hangi çerçeve dağılımından üretildiğini görünür kılar | Yerel |
+| 5 | **Görsel köken denetimi** | Üretim etiketi, içerik kökeni ve görsel bulguları birleştirir | Yerel |
+| 6 | **Ajan tabanlı doğrulama** | İddiayı açık web kaynaklarıyla sınar, kaynak + güven göstergesi sunar | Uzak |
+| 7 | **Akış içi asistan** | Gönderi hakkındaki soruları bağlam içinde yanıtlar | Uzak |
+| 8 | **İçerik üretici paneli** | Anonim etkileşim verisinden konu ve zamanlama önerisi üretir | Yerel |
 
-Çekimserlik bir hata değil, **raporlanan bir metriktir**. Aktarım testinde
-model kısa metinlerde (K1) %67 oranında susuyor — çünkü orada doğruluğu 0.65'e
-düşüyor (bkz. `eval/results/detection.md`).
+---
 
-## Mimari — iki katman
+## Özet Tarafsızlığı — Projenin Ayrışma Noktası
+
+Gündem özeti üreten her sistem örtük bir editoryal karar verir: **aynı olayı hangi
+çerçeveden anlatacağını seçer.** Literatürde algoritmik önyargı olarak tanımlanan bu
+risk, mevcut özetleme çözümlerinde büyük ölçüde ele alınmamaktadır.
+
+MİHENK'in yaklaşımı:
+
+1. Bir olay etrafındaki gönderiler çerçevelerine ayrıştırılır
+   (nötr · destekleyici · eleştirel · soru soran · doğrulanmamış)
+2. Özet, **en çok etkileşim alan** gönderilerden değil, **her çerçeveden en temsili**
+   gönderiden üretilir
+3. Çerçeve dağılımı ve **denge skoru** kullanıcıya açık edilir
+
+Denge skoru, çerçeve dağılımının normalleştirilmiş Shannon entropisidir:
+`1` tam dengeli, `0` tek çerçeve baskın.
+
+---
+
+## Mimari
 
 ```
-KATMAN 1 (akış hızında, kullanıcıdan bağımsız)
-  Gönderi → atomik özet + gömme + konu etiketi → TTL'li önbellek
-  Çıktı kullanıcılar ARASINDA paylaşılır.
-
-KATMAN 2 (kullanıcı hızında)
-  "Özetle" → hazır kayıtlar → kümele → temsilciler → TEK LLM çağrısı
-           → ATIF DENETİMİ → atıflı özet
+┌──────────────────────────────────────────────────────────┐
+│  İSTEMCİ  · Next.js 16 + React 19 + TypeScript + Tailwind│
+│  Akış · Özet paneli · Gönderi detay · Asistan · Üretici  │
+└────────────────────────┬─────────────────────────────────┘
+                         │ REST
+┌────────────────────────▼─────────────────────────────────┐
+│  UYGULAMA KATMANI · Next.js API Routes                   │
+│  /api/ozet · /api/dogrula · /api/asistan                 │
+│  /api/gorsel-denetim                                     │
+└────────┬──────────────────────────────┬──────────────────┘
+         │                              │
+┌────────▼─────────┐        ┌───────────▼──────────────────┐
+│  VERİ KATMANI    │        │  YAPAY ZEKÂ KATMANI          │
+│  Etiketli        │        │                              │
+│  simülasyon      │        │  A) YEREL  (özgün / yerli)   │
+│  · kullanıcı     │        │     · Özetleme modeli        │
+│  · gönderi       │        │     · Olay kümeleme          │
+│  · etkileşim     │        │     · Görsel AI tespiti      │
+│  · olay kümesi   │        │                              │
+│                  │        │  B) UZAK   (agentic)         │
+│                  │        │     · Doğrulama + web arama  │
+│                  │        │     · Asistan soru-cevap     │
+└──────────────────┘        └──────────────────────────────┘
 ```
 
-Maliyet kullanıcı sayısıyla doğrusal büyümez: kullanıcı başına tekrarlanan tek
-pahalı işlem, özet başına **bir** birleştirme çağrısıdır.
+### Neden hibrit?
 
-Ayrıntı ve diyagramlar: [`docs/MIMARI.md`](docs/MIMARI.md)
+Yüksek frekanslı ve dar kapsamlı görevler (özetleme, kümeleme, görsel denetim)
+**yerel** olarak çalıştırılır — düşük birim maliyet ve dış servis bağımsızlığı sağlar,
+yerli bileşen olarak geliştirilir. Güncel dünya bilgisi ve web taraması gerektiren
+görevler (doğrulama) **uzak** modelle yürütülür, çünkü küçük bir yerel model bu görevi
+karşılayamaz.
+
+**Anahtar tanımlı değilse sistem sessizce yerel katmana düşer.** Bu, gösterim sırasında
+ağ veya kota sorununun demoyu kesmemesi için bilinçli bir tasarım kararıdır.
+
+---
+
+## Yerli Bileşenler
+
+| Bileşen | Durum |
+|---|---|
+| **Türkçe özetleme modeli** — Türkçe için ön eğitimli açık kaynaklı temel modelin, proje kapsamında üretilen veri kümesiyle ince ayarlanması | Geliştiriliyor |
+| **Görsel üretim tespit modeli** — yerel olarak çalışan sınıflandırıcı | Geliştiriliyor |
+| **Etiketli Türkçe değerlendirme veri kümesi** — olay kümesi, çerçeve, iddia ve görsel köken etiketleriyle | ✅ Üretildi |
+
+---
+
+## Veri Kümesi
+
+`03-veri/seed_uret.py` betiği, platformu simüle eden **kurgusal** veri üretir.
+Veri gerçek kişi, kurum, marka veya olay içermez.
+
+Verinin ayırt edici yanı **etiketli** olmasıdır — her gönderide dört altın etiket bulunur:
+
+| Etiket | Hangi modülün başarımını ölçer |
+|---|---|
+| `olay_id` | Olay kümeleme doğruluğu — 13 gerçek küme |
+| `cerceve` | Özet tarafsızlığı — çerçeve dağılımı |
+| `gorsel_yapay_uretim` | Görsel AI tespiti — 15 pozitif örnek |
+| `iddia_dogru_mu` | Doğrulama motoru — 46 iddia, 11'i yanlış |
+
+Bu etiketler sayesinde modüllerin başarımı **gerçek ölçümle** raporlanabilmektedir.
+
+Gönderiler rastgele değil, **olay kümeleri** etrafında üretilir: her olayın çevresinde
+farklı çerçevelerden gönderiler bulunur. Böylece kümeleme modülünün bulacağı gerçek
+kümeler, tarafsızlık modülünün dengeleyeceği çoklu çerçeveler ve doğrulama motorunun
+sınayacağı iddialar aynı veriden çıkar.
+
+```bash
+cd 03-veri && python3 seed_uret.py
+```
+
+---
+
+## Etik Çerçeve
+
+Doğruluk hükmü veren bir sistem, hüküm vermediği anı da tanımlamak zorundadır.
+
+- **"Doğrulanamadı" ≠ "Yanlış".** Yeterli kaynak bulunamadığında sistem hüküm vermez.
+  Doğrulama ucu üç sonuçtan birini verir: `DOGRULANDI` · `YANLIS` · `DOGRULANAMADI`.
+- **Görsel denetim olasılık temellidir**, kesin hüküm değildir. Yüksek olasılık bile
+  "bu görsel sahtedir" anlamına gelmez; kullanıcıya uyarı sunulur.
+- **Nihai karar kullanıcınındır.** Sistem karar vermez, karar için gereken bağlamı sunar.
+- **Model halüsinasyonuna karşı**: özet ve asistan yalnızca verilen bağlama dayanır;
+  bağlam dışına çıkması istem düzeyinde kısıtlanmıştır.
+
+### KVKK ve veri mahremiyeti
+
+- Etkileşim sinyalleri kullanıcı rızasıyla toplanır ve **kişisel bilgilerden arındırılarak**
+  toplulaştırılır.
+- Simülasyon verisinde kullanıcı kimliği taşınmaz; yalnızca toplulaştırılabilir segment
+  ve takipçi aralığı tutulur.
+- API anahtarları depoya **hiçbir koşulda** girmez (`.gitignore` ile korunur).
+
+---
 
 ## Kurulum
 
-```bash
-# 1) Python bağımlılıkları
-pip install -r backend/requirements.txt
-```
+### Gereksinimler
+Node.js 20+ · Python 3.10+ (veri üreticisi için)
 
-### torch kurulumu — cihaza göre
+### Prototip
 
 ```bash
-# NVIDIA GPU varsa (önerilen — eğitim ve zenginleştirme belirgin hızlanır)
-pip install torch --index-url https://download.pytorch.org/whl/cu126
-
-# GPU yoksa
-pip install torch --index-url https://download.pytorch.org/whl/cpu
+cd 02-prototip
+npm install
+cp .env.example .env.local   # anahtarınızı girin (opsiyonel)
+npm run dev                  # http://localhost:3000
 ```
 
-`requirements.txt` içindeki `sentence-transformers` torch 2.13'ü çeker; bu
-sürümün CUDA tekerleği **cu126** indeksindedir (cu124 indeksi torch 2.6'da
-durmuştur). PyPI'den gelen varsayılan tekerlek Windows'ta CPU derlemesidir,
-bu yüzden CUDA sürümü ayrıca kurulur.
+**Anahtar olmadan da çalışır.** Doğrulama ve asistan modülleri yerel katmana düşer,
+özet motoru çıkarımsal temel modeli kullanır.
 
-Kurulumu doğrulayın:
+### Yapay zekâ sağlayıcı yapılandırması
 
-```bash
-python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
+`.env.local` içinde:
+
+```env
+YZ_SAGLAYICI=claude          # claude | openai | gemini
+ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-```bash
-# 2) Ön yüz
-cd frontend && npm install
-```
+Sistem üç sağlayıcıyı da destekler; tercih belirtilmezse tanımlı olan ilk anahtarı seçer.
 
-### Cihaz seçimi ve profiller
+---
 
-Sistem cihazı kendisi seçer (`MIHENK_DETECTION_DEVICE=auto`). Ayarlar cihaza
-göre değişir; aynı depo iki makinede elle değiştirilmeden çalışır:
+## API Uçları
 
-| Ayar | CPU profili | GPU profili |
+| Uç | Yöntem | Açıklama |
 |---|---|---|
-| Parti boyutu | 16 | 32 |
-| Dondurulan encoder katmanı | 9 (üst 3 katman eğitilir) | 9 (aynı) |
-| Karışık hassasiyet (AMP) | kapalı | açık |
-| Gömme parti boyutu | 16 | 64 |
+| `/api/ozet` | POST | Kategori, olay, gönderi veya kişisel akış özeti |
+| `/api/dogrula` | POST | Ajan tabanlı iddia doğrulama, kaynak + güven skoru |
+| `/api/asistan` | POST | Gönderi bağlamında soru-cevap |
+| `/api/gorsel-denetim` | POST | Görsel köken ve yapay üretim denetimi |
 
-CPU profilinin parti boyutu ve AMP tarafı donanım kısıtıdır: tam ince ayar +
-sabit doldurma ile adım başına ~57 saniye, alt 9 katman dondurulduğunda ~17
-saniye (bkz. `backend/app/config.py`).
+---
 
-**Dondurma iki profilde de aynıdır ve bu bir hız kararı değildir.** Bu tablo
-önce GPU'da 0 (tam ince ayar) diyordu; RTX 3050 üzerinde ölçüldüğünde tam
-ince ayarın aktarım kümesinde ezberlediği görüldü — doğruluk 0.557'ye karşı
-0.634, FPR@95TPR 0.254'e karşı 0.115, üstelik 8 kat yavaş. Katman dondurma
-bu veri setinde bir düzenlileştirmedir; gerekçesi donanım değil, eğitim
-kümesinin küçüklüğüdür.
+## Depo Düzeni
 
-Zorlamak isterseniz:
+Depo iki ayrı çalışma hattının birleşimidir. Numaralı klasörler **teslim
+düzenini**, numarasız klasörler **çalışan sistemi** taşır.
 
-```bash
-export MIHENK_DETECTION_DEVICE=cuda   # CUDA yoksa hata verir, sessizce CPU'ya düşmez
-export MIHENK_DETECTION_DEVICE=cpu
+```
+MIHENK-ITS/
+│
+├── 01-rapor/            Rapor bölümleri, uyum denetimi, yol planı
+├── 02-prototip/         Next.js arayüz prototipi (NSosyal simülasyonu)
+│   ├── src/app/         Sayfalar + API uçları
+│   ├── src/components/  Arayüz bileşenleri
+│   ├── src/lib/         Veri katmanı, özet motoru, YZ soyutlaması
+│   └── data/            Simülasyon verisi
+├── 03-veri/             Veri üreticisi ve etiketli çıktı
+├── 04-model/            → çalışan kod `backend/` ve `ml/` altındadır
+├── 05-gorseller/        Rapor şemaları ve ekran görüntüleri
+├── 06-kaynak-belgeler/  Şartname ve rapor şablonu
+│
+├── backend/             FastAPI servisi — üç ilkenin uygulandığı yer
+│   └── app/             detection, summarize, assistant, security, governance
+├── ml/                  Veri üretimi, model eğitimi, kalibrasyon betikleri
+├── eval/                Ölçüm çıktıları — raporun tabloları buradan gelir
+├── frontend/            Vite/React referans arayüzü (backend'i doğrudan tüketir)
+└── docs/                Mimari, model kartı, veri yönetişimi, tehdit modeli
 ```
 
-> CUDA istendiği hâlde bulunamazsa sistem **hata verir**, sessizce CPU'ya
-> düşmez. Sebep: ölçüm koşusunda hangi cihazda çalıştığımızı bilmek zorundayız.
+**İki arayüz neden var:** `02-prototip/` jüriye gösterilecek NSosyal
+simülasyonudur — tasarım ve kullanıcı deneyimi orada. `frontend/` ise
+backend'in uçlarını doğrudan tüketen referans arayüzdür; ölçüm ve geliştirme
+sırasında ilkelerin gerçekten uygulandığını göstermek için kullanılır.
+Entegrasyon durumu: [`02-prototip/ENTEGRASYON.md`](02-prototip/ENTEGRASYON.md).
 
-## Çalıştırma
+**Kurulum, çalıştırma ve ölçüm koşusu:**
+[`docs/CALISTIRMA.md`](docs/CALISTIRMA.md)
 
-```bash
-# 1) Sentetik akışı üret (300-500 gönderi, tuzaklar dahil)
-python ml/scripts/generate_feed.py --count 420
+---
 
-# 2) Arka uç (http://127.0.0.1:8000)
-cd backend && uvicorn app.main:app --reload
+## Teknoloji Yığını
 
-# 3) Ön yüz (http://localhost:5173)
-cd frontend && npm run dev
-```
-
-Sistem varsayılan olarak `FakeProvider` ile çalışır — dış çağrı yapmaz, anahtar
-gerektirmez. Gerçek LLM için:
-
-```bash
-export ANTHROPIC_API_KEY=...
-export MIHENK_LLM_PROVIDER=api
-```
-
-## Test
-
-```bash
-python -m pytest backend/tests -q      # 38 test
-cd frontend && npm test                # 7 test
-```
-
-Testler dış servise çağrı yapmaz ve gömme modelini yüklemez; saniyeler içinde
-koşarlar.
-
-## Ölçüm — raporun tabloları
-
-Sıfırdan tam koşu (GPU'lu makinede önerilen sıra):
-
-```bash
-python ml/scripts/generate_feed.py --count 420          # sentetik akış
-python ml/scripts/build_dataset.py                      # veri seti + sızıntı denetimi
-python ml/scripts/build_faithfulness_set.py             # sadakat örneklemi
-
-python ml/scripts/train_detector.py --backend tfidf --seeds 5    # temel çizgi
-python ml/scripts/train_detector.py --backend berturk            # ana model
-
-python ml/scripts/calibrate_threshold.py                # karar bandı (ZORUNLU)
-python ml/scripts/seed_variance.py                      # tohum değişkenliği (GPU: ~3 dk)
-
-MIHENK_EMBEDDING_BACKEND=e5 python ml/scripts/evaluate.py        # TÜM tablolar
-```
-
-**`calibrate_threshold.py` atlanamaz.** Model olasılıkları eğitim dağılımına
-göre kalibredir (sınıf-dengeli); akışta pozitif oran ~%18'dir ve sabit
-`[0.35, 0.65]` bandı orada yanlış yerde durur. Ölçüldü: sabit bantla
-"etiketlendiğinde doğruluk" 0.519 ± 0.170, kalibre bantla 0.959 ± 0.003.
-Kalibrasyon dosyası yoksa sistem çalışır ama bandı ölçülmemiştir ve
-`detection.md` bunu "config sabiti (kalibre edilmedi)" diye yazar.
-
-`seed_variance.py`, doğrulama kümesinin göremediği değişkenliği ölçer:
-aynı beş model doğrulamada 1.000 ± 0.000, aktarımda 0.483 ± 0.148 verir.
-Betik bitiminde diskteki modeli belgelenmiş varsayılan tohuma geri yükler.
-
-### Eğitim uzun sürerse — parçalı koşu
-
-CPU'da eğitim yarım saati bulabiliyor. `--max-steps` ile parçalara bölünebilir;
-ilerleme (model + optimizer momenti) diske kaydedilir ve aynı komut kaldığı
-yerden devam eder:
-
-```bash
-python ml/scripts/train_detector.py --backend berturk --max-steps 25   # tekrarla
-python ml/scripts/train_detector.py --backend berturk --bastan         # sıfırdan
-```
-
-GPU'da bu bayrağa gerek yoktur; eğitim tek seferde biter.
-
-> Yarım kalmış bir eğitim çıkarımda **kullanılmaz**: `detector.py` durum
-> dosyasını kontrol eder ve tamamlanmamış modeli reddeder. Yarım eğitilmiş bir
-> modelin olasılıkları kalibre değildir; çekimserlik bandı anlamını kaybeder.
-
-Çıktılar `eval/results/` altına hem JSON hem Markdown yazılır:
-
-| Dosya | Rapor yeri |
+| Katman | Seçim |
 |---|---|
-| `detection.md` | Tablo 4 — tespit başarımı + aktarım testi |
-| `summarization.md` | Tablo 5 — sadakat, atıf, gecikme, maliyet |
-| `injection.md` | Güvenlik — enjeksiyon savunma oranı |
-| `clustering.md` | Kümeleme kalitesi ve eşik kalibrasyonu |
+| Arayüz | Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 |
+| Backend | Next.js API Routes |
+| Veri | Etiketli JSON simülasyon kümesi |
+| YZ (yerel) | Çıkarımsal özet motoru · Türkçe embedding tabanlı kümeleme |
+| YZ (uzak) | Claude · OpenAI · Gemini (değiştirilebilir sağlayıcı katmanı) |
+| İkonlar | Lucide |
 
-**Rapora elle sayı girilmez.** Bir metrik ölçülemiyorsa tabloya `[  ]` yazılır.
+---
 
-## Belgeler
+## Takım
 
-| Belge | İçerik |
+Değerlendirme esasları gereği takım üyelerinin kişisel bilgileri bu belgede
+paylaşılmamaktadır.
+
+| Rol | Sorumluluk |
 |---|---|
-| [`docs/MIMARI.md`](docs/MIMARI.md) | Katmanlar, veri akışı, ilkelerin kod haritası (Şekil 1) |
-| [`docs/MODEL_KARTI.md`](docs/MODEL_KARTI.md) | Modeller, sürüm, lisans, hiperparametre, sınırlılıklar |
-| [`docs/VERI_YONETISIMI.md`](docs/VERI_YONETISIMI.md) | KVKK sınırları, dört yönetişim kapısı, veri akışı |
-| [`docs/TEHDIT_MODELI.md`](docs/TEHDIT_MODELI.md) | İstem enjeksiyonu tehdit modeli ve savunma zinciri |
-| [`docs/KULLANILABILIRLIK_TESTI.md`](docs/KULLANILABILIRLIK_TESTI.md) | 5 katılımcılı test protokolü ve SUS formu |
+| Takım Kaptanı · Ürün ve Arayüz | UI/UX tasarımı, frontend, simülasyon altyapısı, ürün kurgusu |
+| Yapay Zekâ Geliştirme ve Entegrasyon | Model eğitimi, YZ mimarisi, veri doğrulama, KVKK ve güvenlik |
+| Akademik Danışman | Teknik ve akademik yönlendirme |
 
-## Ne yapmıyoruz (bilinçli sınırlar)
+---
 
-- **Gerçek platformlardan veri kazımıyoruz.** Tüm veri sentetiktir.
-- **Doğruluk hükmü vermiyoruz.** Doğrulama çıktısı üç durumludur:
-  `DESTEKLEYEN` / `CELISEN` / `KAYNAK_YOK`. `DOGRU`/`YANLIS` diye bir durum yok.
-- **Özet, gönderinin yerine geçmiyor.** Uzunluk üst sınırlıdır ve kaynak çipleri
-  kullanıcıyı orijinal gönderiye götürecek biçimde konumlanır.
-- **Belirsizliği rozete dönüştürmüyoruz.** Emin olmadığımızda arayüzde boş alan
-  bırakılır.
+## Yol Haritası
 
-## Durum
+- [x] NSosyal simülasyon kabuğu ve kronolojik akış
+- [x] Kategori bazlı özet paneli
+- [x] Özet tarafsızlığı göstergesi ve denge skoru
+- [x] Etiketli simülasyon veri kümesi
+- [x] Çok sağlayıcılı YZ soyutlaması ve API uçları
+- [ ] Keşfet, Bildirimler, Profil, Topluluklar, Ayarlar ekranları
+- [ ] Açık tema ve mobil görünüm
+- [ ] Asistan ve doğrulama arayüzleri
+- [ ] İçerik üretici paneli
+- [ ] Türkçe özetleme modelinin ince ayarı ve ROUGE değerlendirmesi
+- [ ] Görsel üretim tespit modelinin entegrasyonu
+- [ ] Erişilebilirlik denetimi (WCAG 2.2 AA)
 
-| Aşama | Kapsam | Durum |
-|---|---|---|
-| P0 | Sentetik akış, iki katmanlı hat, atıf denetimi, asistan, güvenlik, tespit + çekimserlik, yönetişim, ön yüz, ölçüm | Tamamlandı |
-| P1 | Görsel köken (C2PA/IPTC), doğrulama ajanı (tek senaryo), eşik iyileştirmesi | Köken tamam; ajan bekliyor |
-| P2 | Çok kaynaklı ajan, içerik üreticisi modülü, ölçek testi | Planlandı |
+---
+
+## Kaynaklar
+
+[1] Türkiye İstatistik Kurumu, *Hanehalkı Bilişim Teknolojileri Kullanım Araştırması 2025*,
+27.08.2025 · https://www.tuik.gov.tr
+
+[2] Kemp, S., *Digital 2026: Turkey*, DataReportal, 2026 ·
+https://datareportal.com/reports/digital-2026-turkey
+
+[3] Reuters Institute for the Study of Journalism, *Digital News Report 2026*,
+University of Oxford, 2026 ·
+https://reutersinstitute.politics.ox.ac.uk/digital-news-report/2026/dnr-executive-summary
+
+---
+
+<div align="center">
+
+**ITS** · NSosyal İnovasyon Yarışması 2026
+
+</div>
