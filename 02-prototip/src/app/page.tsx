@@ -35,7 +35,7 @@ export default function AnaSayfa() {
 
       <div>
         {akis.map((g) => (
-          <GonderiKarti key={g.id} gonderi={g} ozetIste={() => {}} />
+          <GonderiKarti key={g.id} gonderi={g} />
         ))}
       </div>
     </>

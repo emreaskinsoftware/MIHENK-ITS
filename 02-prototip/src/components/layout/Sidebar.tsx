@@ -20,7 +20,7 @@ const MENU = [
   { ad: "TEKNOFEST Kayıt", ikon: ClipboardList, yol: "/teknofest" },
 ];
 
-export function Sidebar() {
+export function Sidebar({ yeniGonderi }: { yeniGonderi?: () => void }) {
   const yol = usePathname();
 
   return (
@@ -65,6 +65,7 @@ export function Sidebar() {
 
       <button
         type="button"
+        onClick={yeniGonderi}
         className="mt-5 gradyan-marka text-white font-semibold rounded-full py-3 px-5
                    flex items-center justify-center gap-2 hover:brightness-110 transition
                    max-xl:px-0"

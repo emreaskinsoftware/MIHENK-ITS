@@ -1,6 +1,9 @@
 "use client";
 
-import { BarChart3, Bookmark, MessageCircle, MoreHorizontal, Quote, Rocket, Share2, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { BarChart3, Bookmark, MessageCircle, MoreHorizontal, Quote, Rocket, Share2, ShieldQuestion, Sparkles } from "lucide-react";
+import { DogrulamaPaneli } from "../ozet/DogrulamaPaneli";
+import { AsistanPaneli } from "../ozet/AsistanPaneli";
 import { Avatar } from "../layout/Avatar";
 import { OnayliRozet } from "../layout/OnayliRozet";
 import { goreliZaman, metniParcala, sayiBicimle } from "@/lib/bicim";
@@ -23,14 +26,31 @@ function Eylem({
   );
 }
 
-export function GonderiKarti({
-  gonderi,
-  ozetIste,
-}: {
-  gonderi: AkisOgesi;
-  ozetIste?: (g: AkisOgesi) => void;
-}) {
+type Panel = "yok" | "ozet" | "dogrula" | "asistan";
+
+export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
+  const [panel, setPanel] = useState<Panel>("yok");
+  const [ozet, setOzet] = useState<string | null>(null);
+  const [ozetYukleniyor, setOzetYukleniyor] = useState(false);
   const { yazar } = gonderi;
+
+  async function ozetle() {
+    if (panel === "ozet") { setPanel("yok"); return; }
+    setPanel("ozet");
+    if (ozet) return;
+    setOzetYukleniyor(true);
+    try {
+      const y = await fetch("/api/ozet", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ tur: "gonderi", gonderiId: gonderi.id }),
+      });
+      const v = await y.json();
+      setOzet(v.ozet);
+    } finally {
+      setOzetYukleniyor(false);
+    }
+  }
   const goruntulenme = gonderi.begeni * 21 + gonderi.yanit_sayisi * 7 + 143;
 
   return (
@@ -81,18 +101,39 @@ export function GonderiKarti({
             <Eylem ikon={BarChart3} sayi={goruntulenme} etiket="Görüntülenme" />
 
             <div className="ml-auto flex items-center gap-1">
-              {ozetIste && (
+              <button
+                type="button" onClick={ozetle}
+                aria-pressed={panel === "ozet"}
+                aria-label="Bu gönderiyi MİHENK ile özetle"
+                className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium
+                           text-mihenk hover:bg-mihenk/10 transition-colors"
+              >
+                <Sparkles size={16} /><span className="max-sm:hidden">Özetle</span>
+              </button>
+
+              {gonderi.dogrulanabilir_iddia && (
                 <button
                   type="button"
-                  onClick={() => ozetIste(gonderi)}
+                  onClick={() => setPanel((p) => (p === "dogrula" ? "yok" : "dogrula"))}
+                  aria-pressed={panel === "dogrula"}
+                  aria-label="Bu gönderideki iddiayı doğrula"
                   className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium
                              text-mihenk hover:bg-mihenk/10 transition-colors"
-                  aria-label="Bu gönderiyi MİHENK ile özetle"
                 >
-                  <Sparkles size={16} />
-                  <span>Özetle</span>
+                  <ShieldQuestion size={16} /><span className="max-sm:hidden">Doğrula</span>
                 </button>
               )}
+
+              <button
+                type="button"
+                onClick={() => setPanel((p) => (p === "asistan" ? "yok" : "asistan"))}
+                aria-pressed={panel === "asistan"}
+                aria-label="Bu gönderi hakkında asistana sor"
+                className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium
+                           text-mihenk hover:bg-mihenk/10 transition-colors"
+              >
+                <MessageCircle size={16} /><span className="max-sm:hidden">Sor</span>
+              </button>
               <button type="button" aria-label="Kaydet"
                       className="p-2 rounded-full text-metin-ikincil hover:text-metin hover:bg-hover">
                 <Bookmark size={17} />
@@ -103,6 +144,26 @@ export function GonderiKarti({
               </button>
             </div>
           </div>
+
+          {panel === "ozet" && (
+            <div className="mt-3 rounded-xl border border-cizgi bg-zemin p-4">
+              <header className="flex items-center gap-2.5 mb-2">
+                <Sparkles size={17} className="text-mihenk shrink-0" />
+                <h3 className="font-semibold text-[14px]">MİHENK Özeti</h3>
+              </header>
+              <p className="text-[14px] leading-relaxed text-metin-ikincil">
+                {ozetYukleniyor ? "Özet hazırlanıyor…" : ozet}
+              </p>
+            </div>
+          )}
+
+          {panel === "dogrula" && (
+            <DogrulamaPaneli gonderi={gonderi} kapat={() => setPanel("yok")} />
+          )}
+
+          {panel === "asistan" && (
+            <AsistanPaneli gonderi={gonderi} kapat={() => setPanel("yok")} />
+          )}
         </div>
       </div>
     </article>

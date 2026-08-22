@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { SagRay } from "@/components/layout/SagRay";
+import { Kabuk } from "@/components/layout/Kabuk";
 import { TemaSaglayici } from "@/components/layout/TemaSaglayici";
 import "./globals.css";
 
@@ -26,13 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Ana içeriğe geç
         </a>
         <TemaSaglayici>
-        <div className="mx-auto flex max-w-[1500px] gap-2">
-          <Sidebar />
-          <main id="ana-icerik" className="flex-1 min-w-0 border-x border-cizgi min-h-screen">
-            {children}
-          </main>
-          <SagRay />
-        </div>
+          <Kabuk>{children}</Kabuk>
         </TemaSaglayici>
       </body>
     </html>
