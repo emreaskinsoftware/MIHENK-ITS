@@ -50,11 +50,16 @@ pip install -r backend/requirements.txt
 
 ```bash
 # NVIDIA GPU varsa (önerilen — eğitim ve zenginleştirme belirgin hızlanır)
-pip install torch --index-url https://download.pytorch.org/whl/cu124
+pip install torch --index-url https://download.pytorch.org/whl/cu126
 
 # GPU yoksa
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
+
+`requirements.txt` içindeki `sentence-transformers` torch 2.13'ü çeker; bu
+sürümün CUDA tekerleği **cu126** indeksindedir (cu124 indeksi torch 2.6'da
+durmuştur). PyPI'den gelen varsayılan tekerlek Windows'ta CPU derlemesidir,
+bu yüzden CUDA sürümü ayrıca kurulur.
 
 Kurulumu doğrulayın:
 
@@ -75,13 +80,20 @@ göre değişir; aynı depo iki makinede elle değiştirilmeden çalışır:
 | Ayar | CPU profili | GPU profili |
 |---|---|---|
 | Parti boyutu | 16 | 32 |
-| Dondurulan encoder katmanı | 9 (üst 3 katman eğitilir) | 0 (tam ince ayar) |
+| Dondurulan encoder katmanı | 9 (üst 3 katman eğitilir) | 9 (aynı) |
 | Karışık hassasiyet (AMP) | kapalı | açık |
 | Gömme parti boyutu | 16 | 64 |
 
-CPU profilinin neden kısıtlı olduğu ölçülmüştür: tam ince ayar + sabit
-doldurma ile adım başına ~57 saniye, alt 9 katman dondurulduğunda ~17 saniye
-(bkz. `backend/app/config.py`). GPU'da bu kısıtlara gerek yoktur.
+CPU profilinin parti boyutu ve AMP tarafı donanım kısıtıdır: tam ince ayar +
+sabit doldurma ile adım başına ~57 saniye, alt 9 katman dondurulduğunda ~17
+saniye (bkz. `backend/app/config.py`).
+
+**Dondurma iki profilde de aynıdır ve bu bir hız kararı değildir.** Bu tablo
+önce GPU'da 0 (tam ince ayar) diyordu; RTX 3050 üzerinde ölçüldüğünde tam
+ince ayarın aktarım kümesinde ezberlediği görüldü — doğruluk 0.557'ye karşı
+0.634, FPR@95TPR 0.254'e karşı 0.115, üstelik 8 kat yavaş. Katman dondurma
+bu veri setinde bir düzenlileştirmedir; gerekçesi donanım değil, eğitim
+kümesinin küçüklüğüdür.
 
 Zorlamak isterseniz:
 
@@ -136,8 +148,22 @@ python ml/scripts/build_faithfulness_set.py             # sadakat örneklemi
 python ml/scripts/train_detector.py --backend tfidf --seeds 5    # temel çizgi
 python ml/scripts/train_detector.py --backend berturk            # ana model
 
+python ml/scripts/calibrate_threshold.py                # karar bandı (ZORUNLU)
+python ml/scripts/seed_variance.py                      # tohum değişkenliği (GPU: ~3 dk)
+
 MIHENK_EMBEDDING_BACKEND=e5 python ml/scripts/evaluate.py        # TÜM tablolar
 ```
+
+**`calibrate_threshold.py` atlanamaz.** Model olasılıkları eğitim dağılımına
+göre kalibredir (sınıf-dengeli); akışta pozitif oran ~%18'dir ve sabit
+`[0.35, 0.65]` bandı orada yanlış yerde durur. Ölçüldü: sabit bantla
+"etiketlendiğinde doğruluk" 0.519 ± 0.170, kalibre bantla 0.959 ± 0.003.
+Kalibrasyon dosyası yoksa sistem çalışır ama bandı ölçülmemiştir ve
+`detection.md` bunu "config sabiti (kalibre edilmedi)" diye yazar.
+
+`seed_variance.py`, doğrulama kümesinin göremediği değişkenliği ölçer:
+aynı beş model doğrulamada 1.000 ± 0.000, aktarımda 0.483 ± 0.148 verir.
+Betik bitiminde diskteki modeli belgelenmiş varsayılan tohuma geri yükler.
 
 ### Eğitim uzun sürerse — parçalı koşu
 
