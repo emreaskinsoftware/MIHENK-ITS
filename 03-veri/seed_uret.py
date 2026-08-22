@@ -20,7 +20,7 @@ from pathlib import Path
 RASTGELE_TOHUM = 42
 random.seed(RASTGELE_TOHUM)
 
-CIKTI = Path(__file__).parent / "veri"
+CIKTI = Path(__file__).parent / "cikti"
 SIMDI = datetime(2026, 8, 19, 12, 0, 0)
 
 KATEGORILER = ["gundem", "spor", "ekonomi", "teknoloji", "kultur", "kisisel"]
@@ -70,47 +70,49 @@ OLAYLAR = [
 
 CERCEVELER = {
     "destekleyici": [
-        "{olay} — uzun zamandır beklenen bir adımdı, emeği geçen herkese teşekkürler.",
-        "{olay} haberine sevindim açıkçası. {kw} konusunda nihayet somut bir şey görüyoruz.",
-        "Bugünün en iyi haberi: {olay}. Bu tür işler daha çok konuşulmalı.",
-        "{olay}. Eleştirenler var ama bence doğru yönde atılmış bir adım.",
+        "{olay}.§§Uzun zamandır beklenen bir adımdı açıkçası. {kw} tarafında yıllardır konuşulup bir türlü somutlaşmayan şey nihayet hayata geçti. Emeği geçen herkese teşekkürler.",
+        "{olay} haberini görünce sevindim.§§Bu tür işlerin daha çok konuşulması lazım. Eleştirenler olacaktır elbette, ama {kw} konusunda atılmış her somut adım kıymetli.",
+        "Bugünün en iyi haberi: {olay}.§§Detayları inceledim, planlama gayet makul görünüyor. {kw} başlığında bu ölçekte bir çalışma görmeyeli çok olmuştu. Umarım devamı gelir.",
+        "{olay}.§§Bazıları temkinli yaklaşıyor, anlıyorum. Ama bence doğru yönde atılmış bir adım. En azından {kw} meselesinde bir şeylerin kıpırdadığını görüyoruz.",
     ],
     "elestirel": [
-        "{olay} deniyor da, {kw} tarafındaki asıl sorun hiç konuşulmuyor.",
-        "{olay} — kulağa hoş geliyor, peki sürdürülebilir mi? Detaylar çok muğlak.",
-        "Herkes {olay} diye paylaşıyor ama kimse maliyetini sormuyor.",
-        "{olay} konusunda temkinliyim. Geçmişte benzer açıklamalar sonuçsuz kalmıştı.",
+        "{olay} deniyor.§§Peki {kw} tarafındaki asıl sorun ne zaman konuşulacak? Görünen kısım güzel de, altyapı sorunları olduğu yerde duruyor. Bunlar çözülmeden atılan her adım yarım kalıyor.",
+        "{olay} — kulağa hoş geliyor.§§Ama sürdürülebilir mi? Açıklamada bütçe kalemleri, zaman planı, sorumlu kurum; hiçbiri net değil. {kw} konusunda geçmişte de benzer duyurular yapılmıştı.",
+        "Herkes {olay} diye paylaşıyor.§§Kimse maliyetini sormuyor. Bu işin faturası kime çıkacak, hangi kaynaktan finanse edilecek? Şeffaflık istemek eleştiri değil, vatandaşlık görevi.",
+        "{olay} konusunda temkinliyim.§§Geçmişte benzer açıklamalar sonuçsuz kalmıştı. {kw} başlığında somut çıktı görmeden sevinmek için erken. Takipte kalmakta fayda var.",
     ],
     "notr": [
-        "{olay}. Açıklamanın tam metni kurumun sitesinde yayımlandı.",
-        "{olay} — konuya dair ilk değerlendirmeler bugün paylaşıldı.",
-        "Gelişme: {olay}. Ayrıntılar netleştikçe paylaşacağım.",
-        "{olay} hakkında bilgi notu: {kw} başlıklarında güncelleme var.",
+        "{olay}.§§Açıklamanın tam metni kurumun resmî sitesinde yayımlandı. {kw} başlığındaki teknik ayrıntılar ekte yer alıyor. İlgilenenler için bağlantıyı paylaşıyorum.",
+        "{olay} — konuya dair ilk değerlendirmeler bugün paylaşıldı.§§Henüz kesinleşmiş bir takvim yok. Sürecin nasıl ilerleyeceği önümüzdeki günlerde netleşecek gibi görünüyor.",
+        "Gelişme: {olay}.§§Konuyla ilgili üç farklı kaynağa baktım, temel bilgiler örtüşüyor. Ayrıntılar netleştikçe buradan paylaşacağım.",
+        "{olay} hakkında bilgi notu.§§{kw} başlıklarında güncelleme var. Rakamlar henüz teyit edilmedi, resmî açıklama beklenebilir.",
     ],
     "soru": [
-        "{olay} diyorlar da bunun {kw} tarafına etkisi ne olacak, bilen var mı?",
-        "{olay} — bu konuda güvenilir bir kaynak paylaşabilecek biri var mı?",
-        "Cidden {olay} mı oldu, yoksa yine yanlış mı okudum?",
-        "{olay} haberini üç farklı yerde üç farklı şekilde gördüm. Hangisi doğru?",
+        "{olay} diyorlar da bunun {kw} tarafına etkisi ne olacak?§§Bilen biri açıklayabilir mi? Konuyla ilgili teknik bir kaynak arıyorum, önerisi olan var mı?",
+        "{olay} — bu konuda güvenilir bir kaynak paylaşabilecek biri var mı?§§Sosyal medyada dolaşan bilgiler birbirini tutmuyor. Resmî bir açıklama gördünüz mü?",
+        "Cidden {olay} mı oldu?§§Üç farklı yerde üç farklı şey okudum. Biri {kw} dedi, diğeri tam tersini yazdı. Hangisi doğru, kafam karıştı.",
+        "{olay} haberini gördüm ama teyit edemedim.§§Kaynağını bulabilen oldu mu? Paylaşmadan önce emin olmak istiyorum.",
     ],
     "yanlis_bilgi": [
-        "{olay}! Kaynak: bir tanıdığım söyledi ama kesin bilgi, yayın.",
-        "{olay} — resmi açıklama gelmeden söylüyorum, rakamlar açıklananın üç katı.",
-        "{olay} olayında kimsenin konuşmadığı bir detay var, hemen kaydedin silinmeden.",
+        "{olay}!§§Kaynak: bir tanıdığım söyledi ama kesin bilgi, yayın. Resmî açıklama gelmeden duyurmuş olayım, sonra 'biz demiştik' demeyin.",
+        "{olay} — resmî açıklama gelmeden söylüyorum, rakamlar açıklananın üç katı.§§İçeriden bilgi aldım. Detayları paylaşamam ama not alın, birkaç güne çıkacak.",
+        "{olay} olayında kimsenin konuşmadığı bir detay var.§§Hemen kaydedin, silinmeden. Bunu görmezden geliyorlar ama gerçek çok farklı. Araştıran anlar.",
     ],
 }
 
 KISISEL_GONDERILER = [
-    "Sabah 6'da kalkıp çalışmaya başlamak gerçekten işe yarıyormuş, üçüncü hafta.",
-    "Bu hafta okuduğum kitabı bitirdim, uzun zamandır bu kadar keyif almamıştım.",
-    "Kahve makinesi bozuldu, sabah rutinim çöktü. Öneriye açığım.",
-    "Yeni bir şeyler öğrenmenin en zor kısmı başlamak değil, ikinci hafta devam etmek.",
-    "Bugün 12 km yürüdüm, telefonun adım sayacı yalan söylemiyorsa.",
-    "Akşam yemeğinde ilk kez denediğim tarif tutmadı ama deneyeceğim yine.",
-    "Uzun süredir ertelediğim işi bugün hallettim, tarifsiz bir rahatlama.",
-    "Şehirde sonbahar başladı sanki, hava bir anda değişti.",
-    "Bir arkadaşımla 4 saat konuştuk, telefona hiç bakmadık. Nadir bir şey artık.",
-    "Notlarımı düzenlemek için üç farklı sistem denedim, en basit olanı kazandı.",
+    "Sabah 6'da kalkıp çalışmaya başlamak gerçekten işe yarıyormuş.§§Üçüncü hafta. İlk günler zordu, şimdi alıştım. Öğle olmadan günün en zor işini bitirmiş oluyorum, geri kalanı bonus gibi geliyor.",
+    "Bu hafta okuduğum kitabı bitirdim.§§Uzun zamandır bu kadar keyif almamıştım. Son bölümü bitirmemek için özellikle yavaşlattım. Öneri isteyen olursa seve seve yazarım.",
+    "Kahve makinesi bozuldu, sabah rutinim çöktü.§§İki gündür dışarıdan alıyorum ama aynı şey değil. Tamir mi ettirsem yenisini mi alsam karar veremedim, öneriye açığım.",
+    "Yeni bir şey öğrenmenin en zor kısmı başlamak değilmiş.§§İkinci hafta devam etmekmiş. Heyecan bitiyor, sonuç henüz görünmüyor, tam da bırakmak istediğin an oluyor. O eşiği geçince rahatlıyor.",
+    "Bugün 12 km yürüdüm.§§Telefonun adım sayacı yalan söylemiyorsa tabii. Bacaklarım öyle diyor zaten. Hava da güzeldi, şehri baştan keşfetmiş gibi oldum.",
+    "Akşam yemeğinde ilk kez denediğim tarif tutmadı.§§Suçu tarifte değil bende arıyorum, ölçüleri göz kararı yaptım. Yine de yenilebilir bir şey çıktı ortaya. Bir daha deneyeceğim.",
+    "Uzun süredir ertelediğim işi bugün hallettim.§§Tarifsiz bir rahatlama. Asıl komik olan, toplam yirmi dakika sürdü. Üç haftadır kafamda taşıdığım yük yirmi dakikalıkmış.",
+    "Şehirde sonbahar başladı sanki.§§Hava bir anda değişti, sabah çıkarken üşüdüm. Yazın bittiğini kabullenmek hep zor oluyor ama bu mevsimi de seviyorum.",
+    "Bir arkadaşımla dört saat konuştuk, telefona hiç bakmadık.§§Nadir bir şey artık. Sonradan fark ettim, ne kadar iyi geldiğini tarif edemem. Daha sık yapmalıyız.",
+    "Notlarımı düzenlemek için üç farklı sistem denedim.§§En basit olanı kazandı. Karmaşık kurgular ilk hafta heyecanlı, ikinci hafta yük oluyor. Basit tutmak gerçekten en zor beceri.",
+    "Yeni projede ilk hafta bitti.§§Öğrenilecek çok şey var ama ekip iyi. Sorularımı çekinmeden sorabildiğim bir yerde olmanın ne kadar fark yarattığını unutmuşum.",
+    "Telefonu odadan çıkarıp uyumayı denedim.§§Bir haftadır yapıyorum. Uykuya dalmam belirgin şekilde hızlandı. Sabah da ilk iş ekrana bakmıyorum, gün daha sakin başlıyor.",
 ]
 
 AD_PARCA_1 = ["yaz", "deniz", "kuzey", "sessiz", "gece", "mavi", "yalın", "uzak",
@@ -168,7 +170,7 @@ def gonderi_uret(kullanicilar):
         for j in range(adet):
             cerceve = random.choice(cerceve_dagilim)
             sablon = random.choice(CERCEVELER[cerceve])
-            metin = sablon.format(olay=baslik, kw=random.choice(kws))
+            metin = sablon.format(olay=baslik, kw=random.choice(kws)).replace("\u00a7\u00a7", "\n\n")
             yazar = random.choice(kullanicilar)
             zaman = olay_ani + timedelta(minutes=random.randint(0, 60 * 40))
             if zaman > SIMDI:
@@ -202,7 +204,7 @@ def gonderi_uret(kullanicilar):
         gonderiler.append({
             "id": _id("k", j),
             "yazar_id": yazar["id"],
-            "metin": random.choice(KISISEL_GONDERILER),
+            "metin": random.choice(KISISEL_GONDERILER).replace("\u00a7\u00a7", "\n\n"),
             "kategori": "kisisel",
             "olay_id": None,
             "olay_basligi": None,

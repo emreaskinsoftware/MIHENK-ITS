@@ -56,14 +56,23 @@ function temsilPuani(g: AkisOgesi): number {
   return Math.log1p(etkilesim) * (0.6 + 0.4 * uzunlukUygunlugu);
 }
 
-/** Gönderi metnini özet cümlesine dönüştürür: olay başlığı tekrarını temizler */
-function cumleyeIndirge(g: AkisOgesi): string {
-  let m = g.metin;
-  if (g.olay_basligi) {
-    m = m.split(g.olay_basligi).join("bu gelişme");
+/**
+ * Gönderi metnini özet cümlesine indirger.
+ * Gönderiler çok paragraflı olduğu için ilk paragraf (asıl iddia) alınır,
+ * yer kalırsa ikinci paragraftan bir cümle eklenerek gerekçe korunur.
+ */
+function cumleyeIndirge(g: AkisOgesi, enFazla = 200): string {
+  const paragraflar = g.metin.split(/\n+/).map((p) => p.trim()).filter(Boolean);
+  let m = paragraflar[0] ?? g.metin;
+
+  if (paragraflar[1] && m.length < enFazla * 0.55) {
+    const ilkCumle = paragraflar[1].split(/(?<=[.!?])\s/)[0];
+    if (ilkCumle) m = `${m} ${ilkCumle}`;
   }
+
+  if (g.olay_basligi) m = m.split(g.olay_basligi).join("bu gelişme");
   m = m.replace(/\s+/g, " ").trim();
-  if (m.length > 180) m = m.slice(0, 177).trimEnd() + "…";
+  if (m.length > enFazla) m = m.slice(0, enFazla - 1).trimEnd() + "…";
   return m;
 }
 

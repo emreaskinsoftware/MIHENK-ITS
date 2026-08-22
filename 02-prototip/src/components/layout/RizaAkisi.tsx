@@ -37,9 +37,9 @@ export function RizaAkisi() {
   if (!gorunur) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 p-4 max-lg:bottom-20"
+    <div className="fixed inset-x-0 bottom-0 z-40 p-4 max-lg:bottom-20 pointer-events-none"
          role="dialog" aria-modal="false" aria-labelledby="riza-baslik">
-      <div className="mx-auto max-w-3xl rounded-2xl border border-cizgi bg-kart shadow-2xl p-5">
+      <div className="mx-auto max-w-3xl rounded-2xl border border-cizgi bg-kart shadow-2xl p-5 pointer-events-auto">
         <div className="flex items-start gap-3">
           <ShieldCheck size={22} className="text-basari shrink-0 mt-0.5" />
           <div className="min-w-0 flex-1">

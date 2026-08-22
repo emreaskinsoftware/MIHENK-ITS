@@ -1,10 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { temaKullan } from "./TemaSaglayici";
 import {
   Bell, Bookmark, Cloud, Compass, Home, MessagesSquare,
-  PenLine, Play, Rocket, SlidersHorizontal, Star, Moon, ClipboardList, LineChart,
+  PenLine, Play, Rocket, SlidersHorizontal, Star, Moon, Sun, ClipboardList, LineChart,
 } from "lucide-react";
 
 const MENU = [
@@ -23,15 +26,17 @@ const MENU = [
 
 export function Sidebar({ yeniGonderi }: { yeniGonderi?: () => void }) {
   const yol = usePathname();
+  const { tema, degistir } = temaKullan();
+  const [medya, setMedya] = useState(false);
 
   return (
-    <aside className="w-[300px] shrink-0 h-screen sticky top-0 flex flex-col px-5 py-6 max-xl:w-[88px]">
+    <aside className="w-[300px] shrink-0 h-screen sticky top-0 flex flex-col px-5 py-6 max-xl:w-[88px] overflow-hidden">
       <Link href="/" className="mb-8 px-3 max-xl:px-0 max-xl:grid max-xl:place-items-center">
         <div className="text-[44px] leading-none font-black gradyan-metin tracking-tight">N</div>
         <div className="text-[10px] tracking-[0.4em] text-metin-sonuk mt-1 max-xl:hidden">BETA</div>
       </Link>
 
-      <nav aria-label="Ana gezinme" className="flex flex-col gap-1">
+      <nav aria-label="Ana gezinme" className="flex flex-col gap-1 overflow-y-auto min-h-0">
         {MENU.map(({ ad, ikon: Ikon, yol: hedef, rozet, pasif }) => {
           const aktif = yol === hedef;
           return (
@@ -75,32 +80,41 @@ export function Sidebar({ yeniGonderi }: { yeniGonderi?: () => void }) {
         <span className="max-xl:hidden">Yeni Gönderi</span>
       </button>
 
-      <div className="mt-auto pt-5 border-t border-cizgi flex flex-col gap-1 max-xl:hidden">
-        <Anahtar ikon={Play} ad="Medya" acik={false} />
-        <Anahtar ikon={Moon} ad="Karanlık mod" acik />
+      <div className="mt-auto pt-4 border-t border-cizgi flex flex-col gap-1 shrink-0 max-xl:hidden">
+        <Anahtar ikon={Play} ad="Medya" acik={medya} degistir={() => setMedya((v) => !v)} />
+        <Anahtar
+          ikon={tema === "koyu" ? Moon : Sun}
+          ad={tema === "koyu" ? "Karanlık mod" : "Aydınlık mod"}
+          acik={tema === "koyu"}
+          degistir={degistir}
+        />
       </div>
     </aside>
   );
 }
 
 function Anahtar({
-  ikon: Ikon, ad, acik,
-}: { ikon: typeof Play; ad: string; acik: boolean }) {
+  ikon: Ikon, ad, acik, degistir,
+}: { ikon: typeof Play; ad: string; acik: boolean; degistir: () => void }) {
   return (
-    <div className="flex items-center gap-4 px-3 py-2.5">
-      <Ikon size={20} strokeWidth={1.9} className="text-metin" />
+    <button
+      type="button"
+      onClick={degistir}
+      role="switch"
+      aria-checked={acik}
+      aria-label={ad}
+      className="w-full flex items-center gap-4 px-3 py-2.5 rounded-xl hover:bg-kart transition-colors text-left"
+    >
+      <Ikon size={20} strokeWidth={1.9} className="text-metin shrink-0" />
       <span className="text-[17px] flex-1">{ad}</span>
       <span
-        role="switch"
-        aria-checked={acik}
-        aria-label={ad}
-        tabIndex={0}
-        className={`w-[46px] h-[26px] rounded-full p-[3px] transition-colors cursor-pointer
+        aria-hidden="true"
+        className={`w-[46px] h-[26px] rounded-full p-[3px] shrink-0 transition-colors
                     ${acik ? "bg-mavi" : "bg-yukseltilmis"}`}
       >
         <span className={`block w-5 h-5 rounded-full bg-white transition-transform
                           ${acik ? "translate-x-5" : ""}`} />
       </span>
-    </div>
+    </button>
   );
 }
