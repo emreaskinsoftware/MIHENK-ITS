@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight, Hash, PenLine, Search } from "lucide-react";
 import { Avatar } from "./Avatar";
 import { populerEtiketler } from "@/lib/veri";
@@ -7,21 +9,30 @@ import { sayiBicimle } from "@/lib/bicim";
 
 export function SagRay() {
   const etiketler = populerEtiketler();
+  const yonlendirici = useRouter();
+  const [sorgu, setSorgu] = useState("");
+
+  function gonder(e: React.FormEvent) {
+    e.preventDefault();
+    if (sorgu.trim().length >= 2) yonlendirici.push(`/ara?q=${encodeURIComponent(sorgu.trim())}`);
+  }
 
   return (
     <aside className="w-[360px] shrink-0 h-screen sticky top-0 py-6 px-5 flex flex-col gap-5 max-lg:hidden">
       <div className="flex items-center gap-3">
-        <div className="flex-1 relative">
+        <form onSubmit={gonder} className="flex-1 relative">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-metin-ikincil" />
           <label htmlFor="arama" className="sr-only">Arama yap</label>
           <input
             id="arama"
+            value={sorgu}
+            onChange={(e) => setSorgu(e.target.value)}
             placeholder="Arama yap"
             className="w-full rounded-full bg-transparent border border-mavi/60 pl-11 pr-4 py-2.5
                        text-[15px] placeholder:text-metin-ikincil outline-none
                        focus:border-mavi"
           />
-        </div>
+        </form>
         <button type="button" className="flex items-center gap-1" aria-label="Hesap menüsü">
           <Avatar ad="mihenk kullanici" boyut={38} />
           <ChevronDown size={16} className="text-metin-ikincil" />

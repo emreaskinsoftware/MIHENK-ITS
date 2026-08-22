@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Hash, Search } from "lucide-react";
 import { UstSekmeler } from "@/components/layout/UstSekmeler";
 import { GonderiKarti } from "@/components/akis/GonderiKarti";
@@ -14,6 +15,8 @@ const SEKMELER = ["Keşfet", "Trendler", "Etiketler", "Haberler", "Senin İçin"
 
 export default function KesfetSayfasi() {
   const [aktif, setAktif] = useState<(typeof SEKMELER)[number]>("Keşfet");
+  const [sorgu, setSorgu] = useState("");
+  const yonlendirici = useRouter();
   const akis = akisGetir();
   const olaylar = olaylariGetir();
 
@@ -22,16 +25,18 @@ export default function KesfetSayfasi() {
       <UstSekmeler sekmeler={SEKMELER} aktif={aktif} degistir={setAktif} />
 
       <div className="px-5 py-4 border-b border-cizgi">
-        <div className="relative">
+        <form onSubmit={(e) => { e.preventDefault(); if (sorgu.trim().length >= 2) yonlendirici.push(`/ara?q=${encodeURIComponent(sorgu.trim())}`); }} className="relative">
           <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-metin-ikincil" />
           <label htmlFor="kesfet-arama" className="sr-only">Etiketleri ve kullanıcıları ara</label>
           <input
             id="kesfet-arama"
+            value={sorgu}
+            onChange={(e) => setSorgu(e.target.value)}
             placeholder="Etiketleri ve kullanıcıları ara..."
             className="w-full rounded-full bg-kart border border-cizgi pl-11 pr-4 py-3
                        text-[15px] placeholder:text-metin-ikincil outline-none focus:border-mavi"
           />
-        </div>
+        </form>
       </div>
 
       {(aktif === "Keşfet" || aktif === "Trendler") && (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { BarChart3, Bookmark, MessageCircle, MoreHorizontal, Quote, Rocket, Share2, ShieldQuestion, Sparkles } from "lucide-react";
 import { DogrulamaPaneli } from "../ozet/DogrulamaPaneli";
 import { AsistanPaneli } from "../ozet/AsistanPaneli";
@@ -14,16 +15,22 @@ import type { AkisOgesi } from "@/lib/tipler";
 
 /** NSosyal eylem çubuğu: yorum · alıntı · beğeni(roket) · görüntülenme */
 function Eylem({
-  ikon: Ikon, sayi, etiket,
-}: { ikon: typeof Rocket; sayi: number; etiket: string }) {
+  ikon: Ikon, sayi, etiket, etkin, tiklandi, renk,
+}: {
+  ikon: typeof Rocket; sayi: number; etiket: string;
+  etkin?: boolean; tiklandi?: () => void; renk?: string;
+}) {
   return (
     <button
       type="button"
+      onClick={tiklandi}
       aria-label={`${etiket}: ${sayi}`}
+      aria-pressed={etkin}
       className="flex items-center gap-2 rounded-full bg-kart hover:bg-hover
-                 px-4 py-2 text-metin-ikincil hover:text-metin transition-colors"
+                 px-4 py-2 transition-colors"
+      style={{ color: etkin && renk ? renk : "var(--color-metin-ikincil)" }}
     >
-      <Ikon size={17} strokeWidth={1.8} />
+      <Ikon size={17} strokeWidth={etkin ? 2.3 : 1.8} fill={etkin && renk ? renk : "none"} />
       <span className="text-[13px] tabular-nums">{sayiBicimle(sayi)}</span>
     </button>
   );
@@ -33,6 +40,9 @@ type Panel = "yok" | "ozet" | "dogrula" | "asistan";
 
 export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
   const [panel, setPanel] = useState<Panel>("yok");
+  const [begenildi, setBegenildi] = useState(false);
+  const [paylasildi, setPaylasildi] = useState(false);
+  const [kaydedildi, setKaydedildi] = useState(false);
   const [ozet, setOzet] = useState<string | null>(null);
   const [ozetYukleniyor, setOzetYukleniyor] = useState(false);
   const { yazar } = gonderi;
@@ -83,6 +93,7 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
             </button>
           </header>
 
+          <Link href={`/gonderi/${gonderi.id}`} className="block">
           <p className="mt-1 text-[15px] leading-[1.5] whitespace-pre-wrap break-words">
             {metniParcala(gonderi.metin).map((p) =>
               p.tur === "metin" ? (
@@ -94,15 +105,21 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
               ),
             )}
           </p>
+          </Link>
 
           {gonderi.gorsel_var && (
             <GorselAlani yapayUretim={gonderi.gorsel_yapay_uretim} />
           )}
 
           <div className="mt-3 flex items-center gap-2 flex-wrap">
-            <Eylem ikon={MessageCircle} sayi={gonderi.yanit_sayisi} etiket="Yanıt" />
-            <Eylem ikon={Quote} sayi={gonderi.yeniden_paylasim} etiket="Alıntı" />
-            <Eylem ikon={Rocket} sayi={gonderi.begeni} etiket="Beğeni" />
+            <Eylem ikon={MessageCircle} sayi={gonderi.yanit_sayisi} etiket="Yanıt"
+                   tiklandi={() => setPanel((p) => (p === "asistan" ? "yok" : "asistan"))} />
+            <Eylem ikon={Quote} sayi={gonderi.yeniden_paylasim + (paylasildi ? 1 : 0)}
+                   etiket="Alıntı" etkin={paylasildi} renk="var(--color-basari)"
+                   tiklandi={() => setPaylasildi((v) => !v)} />
+            <Eylem ikon={Rocket} sayi={gonderi.begeni + (begenildi ? 1 : 0)}
+                   etiket="Beğeni" etkin={begenildi} renk="var(--color-mavi)"
+                   tiklandi={() => setBegenildi((v) => !v)} />
             <Eylem ikon={BarChart3} sayi={goruntulenme} etiket="Görüntülenme" />
 
             <div className="ml-auto flex items-center gap-1">
@@ -139,11 +156,14 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
               >
                 <MessageCircle size={16} /><span className="max-sm:hidden">Sor</span>
               </button>
-              <button type="button" aria-label="Kaydet"
-                      className="p-2 rounded-full text-metin-ikincil hover:text-metin hover:bg-hover">
-                <Bookmark size={17} />
+              <button type="button" aria-label="Kaydet" aria-pressed={kaydedildi}
+                      onClick={() => setKaydedildi((v) => !v)}
+                      className="p-2 rounded-full hover:bg-hover transition-colors"
+                      style={{ color: kaydedildi ? "var(--color-mavi)" : "var(--color-metin-ikincil)" }}>
+                <Bookmark size={17} fill={kaydedildi ? "var(--color-mavi)" : "none"} />
               </button>
               <button type="button" aria-label="Paylaş"
+                      onClick={() => navigator.clipboard?.writeText(`${location.origin}/gonderi/${gonderi.id}`)}
                       className="p-2 rounded-full text-metin-ikincil hover:text-metin hover:bg-hover">
                 <Share2 size={17} />
               </button>
