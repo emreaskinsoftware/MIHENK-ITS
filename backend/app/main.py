@@ -70,11 +70,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Geliştirme sunucusu (Vite) farklı portta çalışıyor.
-# NOT: Üretimde bu liste daraltılır; şu an yalnızca yerel geliştirme adresleri.
+# Geliştirme sunucuları farklı portlarda çalışıyor:
+#   5173 -> frontend/ (Vite referans arayüzü)
+#   3000 -> 02-prototip/ (Next.js jüri prototipi)
+# İki arayüz de aynı servisi tüketiyor; ikisi de listede olmak zorunda.
+# Liste AÇIKÇA yazılıdır, joker (*) kullanılmaz: joker origin, tarayıcının
+# aynı-köken korumasını tamamen kaldırır ve üretime sızarsa herhangi bir
+# sitenin bu servise kullanıcı adına istek atmasına izin verir.
+# NOT: Üretimde bu liste gerçek alan adıyla değiştirilir.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
@@ -116,6 +127,18 @@ class AskRequest(BaseModel):
 
     post_id: str
     question: str | None = None
+
+
+class DetectRequest(BaseModel):
+    """Serbest metin tespit isteği (kimliksiz).
+
+    Uzunluk sınırı kasıtlıdır: tespit modeli `detection_max_length` jetonda
+    kırpıyor, bunun çok üstündeki bir gövde yalnızca ağ ve bellek harcar.
+    Alt sınır yok — kısa metin hata değildir, karar katmanı zaten
+    `metin_cok_kisa` gerekçesiyle çekimser kalır.
+    """
+
+    text: str = Field(min_length=1, max_length=10000)
 
 
 class AppealRequest(BaseModel):
@@ -230,6 +253,29 @@ def tespit(post_id: str) -> DetectionResult:
     if post is None:
         raise HTTPException(status_code=404, detail="Gönderi bulunamadı.")
     return detect(post.text)
+
+
+@app.post("/api/tespit", response_model=DetectionResult)
+def tespit_metin(istek: DetectRequest = Body(...)) -> DetectionResult:
+    """Serbest metin için YZ sinyali — kimlik gerektirmez.
+
+    NEDEN KİMLİKSİZ BİR UÇ GEREKTİ: `/api/tespit/{post_id}` yalnızca bu
+    servisin kendi akışındaki gönderileri tanır (`p0411` gibi). Arayüz
+    prototipi (`02-prototip/`) kendi simülasyon veri kümesiyle çalışıyor ve
+    kimlikleri farklı (`6713e74b02d6` gibi); kimliğe dayalı uç oradan
+    çağrılamaz. Ayrıca kullanıcının HENÜZ PAYLAŞMADIĞI bir taslağı (içerik
+    üretici panelindeki metin) tespit etmenin başka yolu yok — o metnin
+    tanımı gereği kimliği yoktur.
+
+    Çekimserlik kuralları aynen uygulanır: karar `detect()` üzerinden geçer,
+    yani uzunluk eşiği, kalibre edilmiş bant ve model yokluğu burada da
+    geçerlidir. `label=None` dönerse arayüz HİÇBİR ROZET göstermemelidir
+    (spec 6.9).
+
+    Metin saklanmaz: istek gövdesi yanıtla birlikte düşer. Kalıcı kayıt
+    tutmak, saklama sınırı ilkesine (spec 5.3) aykırı olurdu.
+    """
+    return detect(istek.text)
 
 
 @app.get("/api/koken/{post_id}")

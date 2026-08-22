@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { gonderiGetir } from "@/lib/veri";
 import { uret } from "@/lib/yz/saglayici";
+import { GUVENLIK_BASLIGI, guvenilmeyeniSar } from "@/lib/yz/guvenlik";
 
 /**
  * Vercel serverless süre sınırı.
@@ -20,6 +21,8 @@ export const runtime = "nodejs";
  * sistem hüküm vermez; nihai karar kullanıcınındır.
  */
 const SISTEM = `Sen MİHENK'in doğrulama ajanısın. Bir iddiayı açık web kaynaklarıyla sınarsın.
+
+${GUVENLIK_BASLIGI}
 
 Adımlar:
 1. İddiadaki sınanabilir olguyu ayır (sayı, tarih, isim, olay).
@@ -54,17 +57,28 @@ export async function POST(istek: Request) {
 
   const yz = await uret({
     sistem: SISTEM,
-    kullanici: `Şu iddiayı doğrula:\n\n"${sinanacak}"`,
+    // İddia metni gönderiden gelir, yani güvenilmeyen girdidir.
+    kullanici: `Şu iddiayı doğrula:\n\n${guvenilmeyeniSar(sinanacak, "IDDIA")}`,
     webAramasi: true,
     enFazlaJeton: 700,
   });
 
   // Sağlayıcı yoksa: simülasyon verisinin altın etiketi üzerinden yanıt üret.
   // Bu bir tahmin değil, veri kümesinin bilinen doğruluk değeridir.
+  //
+  // GÜVEN SKORU BURADA ÜRETİLMEZ (düzeltildi): Önceki sürüm `guven: 92`
+  // yazıyordu. O sayı hiçbir yerde ölçülmemişti — ne bir modelin çıktısıydı
+  // ne de bir doğrulama koşusunun sonucu. Ekranda %92'lik bir güven çubuğu
+  // çizdiriyordu ve bu, projenin "ölçülmemiş sayı raporlanmaz" ilkesinin
+  // (spec 2) doğrudan ihlaliydi.
+  //
+  // Altın etiket zaten kesin bilgidir; ona bir "güven yüzdesi" iliştirmek
+  // hem gereksiz hem yanıltıcıdır. `guven: 0` gönderiliyor, çünkü arayüz
+  // sıfırda çubuğu hiç çizmiyor (bkz. DogrulamaPaneli, `guven > 0` koşulu).
   if (!yz.metin) {
     return NextResponse.json({
       sonuc: altinEtiket === false ? "YANLIS" : altinEtiket === true ? "DOGRULANDI" : "DOGRULANAMADI",
-      guven: altinEtiket === null ? 0 : 92,
+      guven: 0,
       aciklama:
         altinEtiket === null
           ? "Bu içerikte sınanabilir bir olgu iddiası tespit edilemedi. Doğrulanamamış olması, iddianın yanlış olduğu anlamına gelmez."
@@ -73,7 +87,14 @@ export async function POST(istek: Request) {
             : "İddia, simülasyon veri kümesindeki referans kaynaklarla çelişmektedir.",
       kaynaklar: [],
       saglayici: "yerel",
-      not: "Dış model anahtarı tanımlı değil; sonuç etiketli simülasyon verisinden üretildi.",
+      // Bu uyarı arayüzde GÖRÜNÜR (DogrulamaPaneli, `sonuc.not`). Jüri
+      // demosunda anahtar tanımlı olmadığı için varsayılan yol budur;
+      // gösterilen sonucun bir doğrulama koşusu DEĞİL, veri kümesinin cevap
+      // anahtarı olduğu saklanmamalıdır.
+      not:
+        "Dış model anahtarı tanımlı değil. Bu sonuç bir doğrulama koşusundan " +
+        "değil, simülasyon veri kümesinin bilinen etiketinden gelmektedir; " +
+        "sistemin doğrulama başarımını göstermez.",
       iddia: sinanacak,
     });
   }

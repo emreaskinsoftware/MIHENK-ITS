@@ -6,11 +6,31 @@ import { MinusCircle } from "lucide-react";
  * Sistem hüküm vermediğinde bunu bir HATA gibi değil, bilinçli bir karar
  * olarak sunar. "Doğrulanamadı", "yanlış" demek değildir.
  */
+// Anahtarlar backend'in DÖNDÜRDÜĞÜ gerekçe kodlarıdır.
+// Kaynak: backend/app/detection/decision.py (tespit) ve
+//         backend/app/assistant/service.py (asistanın beş kapısı).
+//
+// DÜZELTİLDİ: Önceki sürümde anahtarlar İngilizceydi (short_text,
+// low_confidence...). Backend hiçbir zaman o kodları döndürmüyor, dolayısıyla
+// eşleşme hiç tutmuyor ve her çekimserlik genel yedek metne düşüyordu —
+// yani kullanıcı sistemin NEDEN sustuğunu hiç öğrenemiyordu. Gerekçeyi
+// göstermek çekimserliğin ürün değerinin yarısıdır.
 const GEREKCE_METNI: Record<string, string> = {
-  low_confidence: "Model yeterli güven düzeyine ulaşamadı.",
-  short_text: "Metin, güvenilir bir değerlendirme için fazla kısa.",
-  insufficient_sources: "Yeterli bağımsız kaynak bulunamadı.",
-  out_of_scope: "Bu içerik değerlendirme kapsamı dışında.",
+  // --- tespit (detection/decision.py) ---
+  metin_cok_kisa:
+    "Metin, güvenilir bir değerlendirme için fazla kısa. Kısa metinlerde üslup sinyali yok denecek kadar azdır.",
+  belirsiz:
+    "Model kararsız kaldı. Belirsizlik bandına düşen bir olasılık için hüküm verilmez.",
+  model_yok: "Tespit modeli yüklü değil; sinyal üretilmiyor.",
+  // --- asistan (assistant/service.py) ---
+  baglamda_yok:
+    "Sorunun cevabı bu gönderide ve alıntı zincirinde bulunamadı. Asistan bağlam dışına çıkmaz.",
+  enjeksiyon_supheli:
+    "Soru, sistemin talimatlarını değiştirmeye yönelik bir kalıp taşıyor; yanıtlanmadı.",
+  cikti_kisiti:
+    "Üretilen yanıt çıktı denetiminden geçemedi (bağlantı, komut veya talimat taşıyordu).",
+  atifsiz:
+    "Yanıtın dayandığı kaynak doğrulanamadı. Kaynağa bağlanamayan bir cevap gösterilmez (İlke 1).",
 };
 
 export function CekimserlikRozeti({

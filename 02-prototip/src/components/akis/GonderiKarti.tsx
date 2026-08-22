@@ -11,6 +11,7 @@ import { goreliZaman, metniParcala, sayiBicimle } from "@/lib/bicim";
 import { hesapRiskiHesapla } from "@/lib/analiz/hesapRiski";
 import { akisGetir } from "@/lib/veri";
 import { RiskRozeti } from "./RiskRozeti";
+import { YzSinyali } from "./YzSinyali";
 import type { AkisOgesi } from "@/lib/tipler";
 
 /** NSosyal eylem çubuğu: yorum · alıntı · beğeni(roket) · görüntülenme */
@@ -84,6 +85,10 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
               {goreliZaman(gonderi.zaman)}
             </time>
             <RiskRozeti risk={risk} />
+            {/* YZ metin sinyali — backend'den gelir. Sistem çekimser kaldığında
+                ya da backend erişilemediğinde bu bileşen HİÇBİR ŞEY çizmez;
+                boş alan "insan yazımı" değil, "hüküm yok" demektir. */}
+            <YzSinyali metin={gonderi.metin} />
             <button
               type="button"
               aria-label="Gönderi menüsü"

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { kategoriOzetle, kisiselOzetle, olayOzetle } from "@/lib/ozet/cikarimsal";
 import { akisGetir, gonderiGetir, olayKumesiGetir } from "@/lib/veri";
 import { uret } from "@/lib/yz/saglayici";
+import { GUVENLIK_BASLIGI, gonderileriSar, guvenilmeyeniSar } from "@/lib/yz/guvenlik";
 import type { Kategori } from "@/lib/tipler";
 
 /**
@@ -14,6 +15,8 @@ export const runtime = "nodejs";
 
 
 const SISTEM = `Sen MİHENK'sin: Türkçe sosyal medya akışını özetleyen bir okuma katmanı.
+
+${GUVENLIK_BASLIGI}
 
 Kurallar:
 - Yalnızca sana verilen gönderilere dayan. Dışarıdan bilgi ekleme.
@@ -34,7 +37,9 @@ export async function POST(istek: Request) {
 
     const yz = await uret({
       sistem: SISTEM,
-      kullanici: `Şu gönderiyi tek cümlede özetle:\n\n"${g.metin}"`,
+      // Gönderi metni GÜVENİLMEYEN girdidir (üçüncü kişi yazar). Tırnak içine
+      // koymak koruma sağlamaz; sınırlayıcı bloğa sarılır.
+      kullanici: `Şu gönderiyi tek cümlede özetle:\n\n${guvenilmeyeniSar(g.metin, `GONDERI:${g.id}`)}`,
       enFazlaJeton: 200,
     });
     // Yerel geri düşüş: metni kesmek yerine ilk paragrafı (asıl iddiayı) al
@@ -70,9 +75,13 @@ export async function POST(istek: Request) {
     const yerel = olayOzetle(olayId, gonderiler[0].olay_basligi!, gonderiler[0].kategori, gonderiler);
 
     // Modele çerçeve etiketleriyle birlikte veriyoruz ki dengeyi koruyabilsin
-    const girdi = gonderiler
-      .map((g) => `[${g.cerceve}] ${g.metin}`)
-      .join("\n");
+    // Her gönderi ayrı ayrı sarmalanır ve çerçeve etiketi blok ETİKETİNE
+    // taşınır, veri bölgesine değil. Etiketi veri içine yazsaydık saldırgan
+    // kendi gönderisine sahte bir çerçeve etiketi uydurabilir ve denge
+    // hesabını çarpıtabilirdi.
+    const girdi = gonderileriSar(
+      gonderiler.map((g) => ({ id: g.id, metin: g.metin, etiket: g.cerceve })),
+    );
 
     const yz = await uret({
       sistem: SISTEM,

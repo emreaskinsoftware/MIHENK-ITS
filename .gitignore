@@ -57,3 +57,7 @@ ml/data/real_eval/dataset.jsonl
 Thumbs.db
 .vscode/
 .idea/
+
+# Next.js derleme sirasinda otomatik uretilen ajan dosyalari
+02-prototip/AGENTS.md
+02-prototip/CLAUDE.md
