@@ -26,7 +26,12 @@ def length_bucket(token_sayisi: int) -> LengthBucket:
     return "K3"
 
 
-def karar_ver(metin: str, olasilik: float | None) -> DetectionResult:
+def karar_ver(
+    metin: str,
+    olasilik: float | None,
+    *,
+    bant: tuple[float | None, float | None] | None = None,
+) -> DetectionResult:
     """YZ üretimi sinyalini çekimserlik kurallarıyla birlikte değerlendirir.
 
     NEDEN ÇEKİMSERLİK: Kısa Türkçe metinlerde tespit başarımı hızla düşer.
@@ -37,6 +42,10 @@ def karar_ver(metin: str, olasilik: float | None) -> DetectionResult:
     Args:
         metin: Değerlendirilecek gönderi metni.
         olasilik: Modelin "yapay zekâ ürünü" olasılığı [0,1]. Model yoksa None.
+        bant: (alt, üst) karar eşikleri. Verilmezse `config` içindeki sabit
+            bant kullanılır. Kalibre edilmiş bandı `detection/calibration.py`
+            üretir; bir uç None ise O YÖNDE HİÇ ETİKET GÖSTERİLMEZ (hedef
+            kesinliği sağlayan eşik bulunamamıştır).
 
     Returns:
         DetectionResult — `label=None` ve `abstained=True` ise arayüzde hiçbir
@@ -72,7 +81,14 @@ def karar_ver(metin: str, olasilik: float | None) -> DetectionResult:
     #    Bant genişliği ölçümle kalibre edilir: bandı genişletmek çekimserlik
     #    oranını artırır ama yanlış pozitifi düşürür. Bu takas raporda
     #    açıkça gösterilir (FPR@95TPR ve çekimserlik oranı birlikte).
-    if config.abstain_low <= olasilik <= config.abstain_high:
+    alt, ust = bant if bant is not None else (config.abstain_low, config.abstain_high)
+    ust_gecti = ust is not None and olasilik > ust
+    alt_gecti = alt is not None and olasilik < alt
+
+    # İki eşik de geçilmişse (kalibrasyon bandı çakışmışsa: alt > üst) hangi
+    # yönde olduğumuzu söyleyemeyiz — çekimser kalıyoruz. Sabit bantta bu
+    # durum oluşmaz; kalibre bantta iki uç birbirini geçebilir.
+    if (not ust_gecti and not alt_gecti) or (ust_gecti and alt_gecti):
         return DetectionResult(
             label=None,
             confidence=olasilik,
@@ -82,7 +98,7 @@ def karar_ver(metin: str, olasilik: float | None) -> DetectionResult:
             length_bucket=kova,
         )
 
-    etiket = "yz_olasi" if olasilik > config.abstain_high else "insan_olasi"
+    etiket = "yz_olasi" if ust_gecti else "insan_olasi"
     return DetectionResult(
         label=etiket,
         confidence=olasilik,

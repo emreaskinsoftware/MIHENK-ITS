@@ -31,6 +31,7 @@ import yaml
 
 from app.assistant import ask
 from app.config import config, get_settings
+from app.detection.calibration import aktif_bant, kalibrasyon_bolmesi
 from app.detection.decision import karar_ver
 from app.detection.detector import BerturkDetector, TfidfDetector
 from app.enrichment import enrich_feed
@@ -133,6 +134,10 @@ class TespitSonucu:
     accuracy_when_labeled: float
     labeled_count: int
     total: int
+    # Bu koşuda kullanılan karar bandı. Modele göre değişebildiği için
+    # sonuçla birlikte taşınır: hangi bantla ölçüldüğü bilinmeyen bir
+    # çekimserlik oranı yorumlanamaz.
+    band: tuple[float | None, float | None] = (None, None)
 
 
 def _test_verisi() -> tuple[list[str], list[int], list[str]]:
@@ -150,8 +155,20 @@ def _test_verisi() -> tuple[list[str], list[int], list[str]]:
     return metinler, etiketler, kovalar
 
 
-def _model_olc(ad: str, model, metinler, etiketler, kovalar) -> TespitSonucu:
-    """Bir modeli test kümesinde ölçer ve çekimserlik etkisini ayrıştırır."""
+def _model_olc(
+    ad: str, model, metinler, etiketler, kovalar, *, kalibre_bant: bool
+) -> TespitSonucu:
+    """Bir modeli bir kümede ölçer ve çekimserlik etkisini ayrıştırır.
+
+    kalibre_bant: Kalibre edilmiş bant KULLANILSIN MI. Bant, kalibre edildiği
+        DAĞILIMA aittir; başka bir dağılıma taşınamaz. Kalibrasyon akışta
+        yapılır (pozitif oran ~0.18), tespit test kümesi ise sınıf-dengelidir
+        (~0.54). Kalibre bandı test kümesine uygulamak ölçüldü ve TF-IDF'in
+        "etiketlendiğinde doğruluk" değerini 1.000'den 0.533'e düşürdü —
+        model kötüleştiği için değil, bant o dağılıma ait olmadığı için.
+        Bu yüzden test kümesi config bandıyla, aktarım kümesi kalibre bantla
+        ölçülür ve tabloda hangisinin kullanıldığı yazılır.
+    """
     skorlar = model.predict_proba(metinler)
     tahminler = [1 if s >= 0.5 else 0 for s in skorlar]
     dogruluk = sum(1 for g, t in zip(etiketler, tahminler) if g == t) / len(etiketler)
@@ -169,7 +186,15 @@ def _model_olc(ad: str, model, metinler, etiketler, kovalar) -> TespitSonucu:
         )
 
     # --- Çekimserlik kurallarını uygula (İlke 2) ---
-    kararlar = [karar_ver(m, s) for m, s in zip(metinler, skorlar)]
+    # Bant modele göre gelir: her modelin olasılık ölçeği farklıdır, tek sabit
+    # bant ikisine birden uymaz. Kalibrasyon dosyası yoksa config'teki sabit
+    # bant kullanılır (bkz. app/detection/calibration.py).
+    bant = (
+        aktif_bant(model.name)
+        if kalibre_bant
+        else (config.abstain_low, config.abstain_high)
+    )
+    kararlar = [karar_ver(m, s, bant=bant) for m, s in zip(metinler, skorlar)]
     cekimser = [k.abstained for k in kararlar]
     cekimserlik_orani = sum(cekimser) / len(kararlar)
     cekimser_kova: dict[str, float] = {}
@@ -195,7 +220,54 @@ def _model_olc(ad: str, model, metinler, etiketler, kovalar) -> TespitSonucu:
         accuracy_when_labeled=dogru_etiketli / len(etiketlenen) if etiketlenen else float("nan"),
         labeled_count=len(etiketlenen),
         total=len(metinler),
+        band=bant,
     )
+
+
+def _tohum_degiskenligi_bolumu() -> list[str]:
+    """`seed_variance.py` çıktısını rapora basar; dosya yoksa boş döner.
+
+    Bu bölüm elle yazılmaz: sayılar ölçüm dosyasından okunur. Dosya yoksa
+    bölüm hiç görünmez — ölçülmemiş bir kararlılık iddiası üretmemek için.
+    """
+    yol = REPO_ROOT / "ml" / "artifacts" / "seed_variance_berturk.json"
+    if not yol.exists():
+        return []
+    veri = json.loads(yol.read_text(encoding="utf-8"))
+    o = veri["summary"]
+
+    def _sat(ad: str, d: dict) -> str:
+        return f"| {ad} | {d['mean']:.3f} ± {d['std']:.3f} | {d['min']:.3f} | {d['max']:.3f} |"
+
+    return [
+        "## Tohum değişkenliği — doğrulama kümesinin göremediği şey",
+        "",
+        f"`ml/scripts/seed_variance.py` ile {len(veri['seeds'])} tohumda ölçüldü "
+        f"(aynı veri, aynı hiperparametreler, yalnızca tohum değişiyor; "
+        f"ölçüm yarısı {veri['holdout_size']} gönderi).",
+        "",
+        "Doğrulama kümesinde bu beş model **1.000 ± 0.000** verir. O sayı modelin",
+        "kararlı olduğunu değil, doğrulama kümesinin doyduğunu gösterir:",
+        "",
+        "| Metrik (aktarım) | Ortalama ± std | En düşük | En yüksek |",
+        "|---|---|---|---|",
+        _sat("Doğruluk (0.5 eşiği)", o["transfer_accuracy_at_0.5"]),
+        _sat("AUROC", o["transfer_auroc"]),
+        _sat("Etiketlendiğinde doğruluk — sabit bant", o["fixed_band_accuracy_when_labeled"]),
+        _sat("Etiketlendiğinde doğruluk — kalibre bant", o["calibrated_band_accuracy_when_labeled"]),
+        _sat("Etiketlenen oran — kalibre bant", o["calibrated_band_labeled_rate"]),
+        "",
+        "Son iki satır birlikte okunur: kalibrasyon, tohumdan gelen salınımı",
+        "DOĞRULUKTAN KAPSAMA taşır. Kötü bir tohum artık yanlış etiket üretmek",
+        "yerine daha çok susar — İlke 2'nin istediği takas budur. Kullanıcıya",
+        "verilen garanti (\"etiket gösterildiğinde doğruluk\") tohumdan bağımsız",
+        "hâle gelir; bedeli, o modelde daha az gönderiye etiket gösterilmesidir.",
+        "",
+        "Model seçimi aktarım başarımına BAKILARAK yapılmaz: diskteki model",
+        f"belgelenmiş varsayılan tohuma (`{veri['seeds'][0]}`) aittir. Ölçtüğümüz",
+        "kümede tohum seçseydik, rapor edilen sayı modelin değil seçimin başarımı olurdu.",
+        "",
+    ]
 
 
 def _aktarim_verisi(depo: FeedRepository) -> tuple[list[str], list[int], list[str]]:
@@ -212,6 +284,13 @@ def _aktarim_verisi(depo: FeedRepository) -> tuple[list[str], list[int], list[st
     olarak yüksek çıkar (ölçtük: doğrulama doğruluğu 0.99). Aktarım testi
     "başka birinin yazdığı kalıplarda ne oluyor" sorusunu sorar ve rapora
     girecek asıl sayı budur.
+
+    YALNIZCA ÖLÇÜM YARISI DÖNER — NEDEN: Karar bandı da bu akıştan kalibre
+    ediliyor (`calibrate_threshold.py`). Bandı akışın bir yarısında seçip
+    sonucu akışın tamamında ölçseydik, çekimserlik ve "etiketlendiğinde
+    doğruluk" sayıları kendi eğitim verisine bakmış olurdu. Bölme
+    `app/detection/calibration.kalibrasyon_bolmesi` içinde tek yerde
+    tanımlıdır; iki betik de aynı bölmeyi kullanır.
     """
     metinler, etiketler, kovalar = [], [], []
     for post in depo.posts:
@@ -220,7 +299,17 @@ def _aktarim_verisi(depo: FeedRepository) -> tuple[list[str], list[int], list[st
         metinler.append(post.text)
         etiketler.append(1 if post.eval_is_ai_generated else 0)
         kovalar.append(post.eval_length_bucket or "K1")
-    return metinler, etiketler, kovalar
+
+    # Aynı bölmeyi kalibrasyon betiği de kullanır; metin+kova birlikte
+    # taşınıyor ki bölme sonrası kova bilgisi kaymasın.
+    _, (olcum_ogeleri, olcum_etiketleri) = kalibrasyon_bolmesi(
+        list(zip(metinler, kovalar)), etiketler
+    )
+    return (
+        [m for m, _ in olcum_ogeleri],
+        olcum_etiketleri,
+        [k for _, k in olcum_ogeleri],
+    )
 
 
 def tespit_olc(depo: FeedRepository | None = None) -> None:
@@ -236,9 +325,15 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
         except Exception as hata:
             print(f"  {ad}: model yok ({hata.__class__.__name__}) — tabloda {OLCULEMEDI}")
             continue
-        sonuclar.append(_model_olc(ad, model, metinler, etiketler, kovalar))
+        # Test kümesi eğitim dağılımından gelir -> config bandı.
+        sonuclar.append(
+            _model_olc(ad, model, metinler, etiketler, kovalar, kalibre_bant=False)
+        )
         if aktarim is not None:
-            aktarim_sonuclari.append(_model_olc(ad, model, *aktarim))
+            # Aktarım kümesi dağıtım dağılımıdır -> kalibre bant.
+            aktarim_sonuclari.append(
+                _model_olc(ad, model, *aktarim, kalibre_bant=True)
+            )
 
     if not sonuclar:
         print("  hiçbir tespit modeli yüklenemedi; detection.md yazılmadı")
@@ -285,7 +380,11 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
         "## Çekimserlik (İlke 2)",
         "",
         f"Eşikler: `min_detection_tokens={config.min_detection_tokens}`, "
-        f"belirsizlik bandı `[{config.abstain_low}, {config.abstain_high}]`.",
+        f"belirsizlik bandı `[{config.abstain_low}, {config.abstain_high}]` (config sabiti).",
+        "",
+        "Bu tabloda **kalibre bant kullanılmaz**: kalibrasyon akış dağılımında",
+        "yapılır, bu test kümesi ise eğitim dağılımından gelir ve sınıf-dengelidir.",
+        "Bandı ait olmadığı dağılıma taşımak ölçümü bozar (bkz. aktarım tablosu).",
         "",
         "| Model | Çekimserlik oranı | K1 | K2 | K3 | Etiketlenen örnek | Etiketlendiğinde doğruluk |",
         "|---|---|---|---|---|---|---|",
@@ -318,6 +417,10 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
             f"Aktarım kümesi: **{len(aktarim[0])}** gönderi "  # type: ignore[index]
             f"(YZ {sum(aktarim[1])}, insan {len(aktarim[1]) - sum(aktarim[1])}).",  # type: ignore[index]
             "",
+            "Bu, akışın **ölçüm yarısıdır**. Diğer yarı karar bandını kalibre",
+            "etmekte kullanılır ve bu tabloya hiç girmez; aynı gönderilerde hem",
+            "eşik seçip hem ölçüm yapmak, olmayan bir başarım iddia etmek olurdu.",
+            "",
             "| Model | Doğruluk | F1 | AUROC | FPR@95TPR | K1 | K2 | K3 | Çekimserlik |",
             "|---|---|---|---|---|---|---|---|---|",
         ]
@@ -328,7 +431,33 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
                 f"| {_s(s.bucket_accuracy['K2'])} | {_s(s.bucket_accuracy['K3'])} "
                 f"| {_yuzde(s.abstain_rate)} |"
             )
-        satirlar.append("")
+        satirlar += [
+            "",
+            "### Kullanıcının gördüğü sayı",
+            "",
+            "Yukarıdaki `Doğruluk` sütunu 0.5 eşiğiyle hesaplanır ve ürün",
+            "davranışını YANSITMAZ: sistem 0.5 eşiğiyle etiket göstermez,",
+            "kalibre edilmiş bantla gösterir. Kullanıcıya verilen garanti budur:",
+            "",
+            "| Model | Kullanılan bant | Kaynağı | Etiketlenen | Etiketlendiğinde doğruluk |",
+            "|---|---|---|---|---|",
+            *[
+                f"| {s.model} | `[{s.band[0]}, {s.band[1]}]` | "
+                + (
+                    "akışın kalibrasyon yarısında ölçüldü"
+                    if tuple(s.band) != (config.abstain_low, config.abstain_high)
+                    else "**config sabiti — kalibre edilmedi**"
+                )
+                + f" | {s.labeled_count}/{s.total} | **{_s(s.accuracy_when_labeled)}** |"
+                for s in aktarim_sonuclari
+            ],
+            "",
+            "Bandın bir ucu `None` ise o yönde hiç etiket gösterilmez: hedef",
+            "kesinliği (0.95) sağlayan bir eşik bulunamamıştır ve uydurma bir",
+            "eşik koymaktansa susmak İlke 2'nin gereğidir.",
+            "",
+        ]
+        satirlar += _tohum_degiskenligi_bolumu()
 
     satirlar += [
         "## Sınırlılık",
@@ -340,6 +469,23 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
         "beklenecek başarım, aktarım satırından da düşük olacaktır; model kararı",
         "her durumda çekimserlik kurallarıyla (İlke 2) sınırlanır.",
         "",
+        "**\"Etiketlendiğinde doğruluk = 1.000\" nasıl okunmalı:** Bu sayı ~200",
+        "gönderilik bir ölçüm yarısında, etiketlenen ~90 örnek üzerinden gelir.",
+        "Hedef kesinlik 0.95 iken gözlenen 1.000, eşik aramasının tutucu",
+        "davrandığını ve örneklemin küçük olduğunu gösterir; \"sistem hiç",
+        "yanılmıyor\" demek DEĞİLDİR. Daha büyük bir ölçüm kümesinde bu sayının",
+        "hedefe (0.95) doğru inmesi beklenir. Güven aralığı verilmiyor çünkü",
+        "kalibrasyon ve ölçüm tek bir bölmeden geliyor.",
+        "",
+        "**Kalibrasyonun görünmeyen maliyeti:** Bant, akıştan ETİKETLİ VERİ ile",
+        "seçilir. Gerçek bir dağıtımda bu, üretim dağılımından etiketli örnek",
+        "toplamak demektir; bedava değildir ve dağılım kaydıkça tekrarlanır.",
+        "",
+        "**Olasılıklar sıkışık:** BERTurk'ün kalibre bandı `[0.99, 0.98]`",
+        "civarına oturuyor — model neredeyse her gönderiye 1'e yakın olasılık",
+        "veriyor. Eşik kaydırmak bunu işler hâle getiriyor ama asıl çözüm",
+        "olasılık kalibrasyonudur (sıcaklık/Platt ölçekleme). Ölçülmedi.",
+        "",
     ]
     _yaz(
         "detection",
@@ -348,8 +494,10 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
             "positive": sum(etiketler),
             "thresholds": {
                 "min_detection_tokens": config.min_detection_tokens,
-                "abstain_low": config.abstain_low,
-                "abstain_high": config.abstain_high,
+                # Config sabitleri yalnızca YEDEKTİR; her modelin fiilen
+                # kullandığı bant `models[].band` altındadır.
+                "config_fallback_abstain_low": config.abstain_low,
+                "config_fallback_abstain_high": config.abstain_high,
             },
             "models": [s.__dict__ for s in sonuclar],
             "transfer": [s.__dict__ for s in aktarim_sonuclari],
