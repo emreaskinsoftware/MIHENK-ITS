@@ -57,6 +57,50 @@ function temsilPuani(g: AkisOgesi): number {
 }
 
 /**
+ * Olay başlığının özet içindeki tekrarını kısaltır.
+ *
+ * Başlık, özetin ilk cümlesinde zaten yazılıyor (`parcalar[0]`). Her çerçeve
+ * satırında yeniden görünmesi özeti şişiriyordu.
+ *
+ * --- DÜZELTİLEN HATA -----------------------------------------------------
+ * Önceki sürüm tek satırdı:
+ *
+ *     if (g.olay_basligi) m = m.split(g.olay_basligi).join("bu gelişme");
+ *
+ * Başlığın geçtiği HER yeri koşulsuz değiştiriyordu. Gönderinin ilk paragrafı
+ * başlığın kendisi olduğunda geriye yalnızca işaret zamiri kalıyor ve ekranda
+ *
+ *     "Aktarılana göre: bu gelişme."
+ *
+ * yazıyordu — kullanıcıya hiçbir şey anlatmayan, sistemi bozuk gösteren bir
+ * cümle. Jüri demosunda gözle görülen ilk şey buydu.
+ *
+ * Yeni kural iki adımlı:
+ *   1. Başlık başlı başına bir cümleyse (arkasından nokta ya da metin sonu
+ *      geliyorsa) o cümle tamamen ÇIKARILIR — yerine zamir konmaz.
+ *   2. Başlık cümlenin içine gömülüyse ("... açıldı haberini görünce
+ *      sevindim") tekrar işaret zamiriyle kısaltılır; orada zamir doğru okunur.
+ * Her iki adımda da geriye anlamlı metin kalmıyorsa metne HİÇ DOKUNULMAZ:
+ * başlığı tekrar etmek, boş bir cümle göstermekten iyidir.
+ */
+function baslikTekrariniKisalt(metin: string, baslik: string): string {
+  const kacisli = baslik.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // Adım 1 — başlık tek başına bir cümle mi? Noktalama ZORUNLU: aksi hâlde
+  // "…açıldı haberini görünce sevindim" cümlesinin başı da kırpılır ve cümle
+  // küçük harfle, yüklemsiz başlardı.
+  const tamCumle = new RegExp(`^\\s*${kacisli}\\s*(?:[.!?]|$)\\s*`);
+  const kirpilmis = metin.replace(tamCumle, "").trim();
+  const kalan = kirpilmis.length >= 20 ? kirpilmis : metin;
+
+  // Adım 2 — metnin içinde hâlâ geçiyorsa tekrarı zamirle kısalt.
+  const parcalar = kalan.split(baslik);
+  if (parcalar.length < 2) return kalan;
+  const bilgi = parcalar.join(" ").replace(/\s+/g, " ").trim();
+  return bilgi.length >= 20 ? parcalar.join("bu gelişme") : kalan;
+}
+
+/**
  * Gönderi metnini özet cümlesine indirger.
  * Gönderiler çok paragraflı olduğu için ilk paragraf (asıl iddia) alınır,
  * yer kalırsa ikinci paragraftan bir cümle eklenerek gerekçe korunur.
@@ -70,7 +114,7 @@ function cumleyeIndirge(g: AkisOgesi, enFazla = 200): string {
     if (ilkCumle) m = `${m} ${ilkCumle}`;
   }
 
-  if (g.olay_basligi) m = m.split(g.olay_basligi).join("bu gelişme");
+  if (g.olay_basligi) m = baslikTekrariniKisalt(m, g.olay_basligi);
   m = m.replace(/\s+/g, " ").trim();
   if (m.length > enFazla) m = m.slice(0, enFazla - 1).trimEnd() + "…";
   return m;

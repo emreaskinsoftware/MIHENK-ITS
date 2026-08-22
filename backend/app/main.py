@@ -32,7 +32,7 @@ from app.models import AssistantResponse, DetectionResult, SummaryResponse
 from app.provenance import check_media
 from app.store.cache import get_cache
 from app.store.feed_repo import load_feed
-from app.summarize import summarize
+from app.summarize import summarize, summarize_texts
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -120,6 +120,39 @@ class SummarizeRequest(BaseModel):
     # cihazında tutulur; sunucu tarafında kalıcı okuma geçmişi saklamak, saklama
     # sınırı ilkesine (spec 5.3) aykırı olurdu.
     unread_post_ids: list[str] | None = None
+
+
+class HamGonderi(BaseModel):
+    """Depoda bulunmayan, istemcinin kendi akışından gelen tek gönderi.
+
+    `author_id` ZORUNLUDUR ve boş geçilemez: çoğulculuk denetimi (İlke 3)
+    kümedeki FARKLI YAZAR sayısını sayar. Hepsi aynı sabit değeri taşısaydı her
+    küme tek kaynaklı görünür ve özet hiç üretilmezdi; boş bırakılıp istemci
+    tarafında uydurulsaydı da tam tersi olur, tek kişinin iddiası çok sesli
+    gibi görünürdü.
+    """
+
+    id: str = Field(min_length=1, max_length=64)
+    author_id: str = Field(min_length=1, max_length=64)
+    text: str = Field(min_length=1, max_length=10000)
+
+
+class MetinOzetRequest(BaseModel):
+    """Kimliksiz atıflı özet isteği.
+
+    `posts` üst sınırı kasıtlıdır. Bu uçta gönderiler istek anında SENKRON
+    zenginleştirilir; kümeleme de O(N²) mesafe matrisi kurar. Sınırsız bir
+    liste, tek istekle hem gecikmeyi hem LLM çağrı sayısını kullanıcı başına
+    büyütürdü; KATMAN 1/KATMAN 2 ayrımı tam olarak bunu önlemek için var.
+
+    `category` serbest metindir çünkü istemcinin kategori kümesi backend'in üç
+    değerli kümesinden geniş. Çoğulculuk kuralı bu alandan TÜRETİLİR, istek
+    gövdesinden okunmaz (bkz. summarize.adhoc.cogulculuk_gerekli_mi).
+    """
+
+    user_id: str = "demo"
+    category: str = Field(min_length=1, max_length=32)
+    posts: list[HamGonderi] = Field(min_length=1, max_length=80)
 
 
 class AskRequest(BaseModel):
@@ -225,6 +258,28 @@ def ozetle(istek: SummarizeRequest = Body(...)) -> SummaryResponse:
         len(yanit.sentences),
         yanit.dropped_sentence_count,
         len(hata_ayikla.suppressed_single_author_labels),
+    )
+    return yanit
+
+
+@app.post("/api/ozetle/metinler", response_model=SummaryResponse)
+def ozetle_metinler(istek: MetinOzetRequest = Body(...)) -> SummaryResponse:
+    """Gövdede gelen gönderilerden atıflı özet üretir — depo gerektirmez.
+
+    NEDEN AYRI UÇ: `/api/ozetle` gönderi kimliklerini backend'in kendi
+    deposunda arar. Next.js arayüzü kendi simülasyon akışıyla çalıştığı için o
+    uçtan hiçbir zaman sonuç alamıyordu ve ekranda atıfsız bir yerel özet
+    gösteriyordu. Bu uç, aynı özetleme ve atıf denetimi hattını (İlke 1)
+    kimliği depoda olmayan metinlere açar.
+
+    Boş `sentences` bir HATA DEĞİLDİR: bütün cümleler atıf denetiminden düştüyse
+    ya da bütün kümeler tek kaynaklıysa sistem susar (İlke 2/3). Sayaçlar
+    yanıtta durur, istemci sessizliğin gerekçesini gösterebilir.
+    """
+    yanit = summarize_texts(
+        istek.category,
+        [(g.id, g.author_id, g.text) for g in istek.posts],
+        user_id=istek.user_id,
     )
     return yanit
 

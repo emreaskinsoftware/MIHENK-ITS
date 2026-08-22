@@ -17,8 +17,13 @@ echo "NEXT_PUBLIC_MIHENK_API=http://localhost:8000" >> .env.local
 npm run dev
 ```
 
-Backend ayakta değilse arayüz **yerel çıkarımsal motora düşer** ve çalışmaya
-devam eder. Gösterim hiçbir koşulda kesilmez.
+Backend'e **erişilemezse** arayüz yerel çıkarımsal motora düşer ve çalışmaya
+devam eder; düştüğünü ekranda yazar ("bu metin atıf içermez"). Gösterim hiçbir
+koşulda kesilmez.
+
+Backend **erişilebilir ama çekimser kaldıysa** yerel motora DÜŞÜLMEZ.
+Sistemin sustuğu an (İlke 2) yerel bir metinle doldurulursa, ilkeli sessizlik
+ekranda hiç görünmez ve ürünün en ayırt edici davranışı gizlenmiş olur.
 
 ## Uç nokta eşlemesi
 
@@ -26,11 +31,20 @@ devam eder. Gösterim hiçbir koşulda kesilmez.
 |---|---|---|
 | `GET /api/saglik` | Bağlantı denetimi | `mihenkApi.saglik()` |
 | `GET /api/akis` | Ana akış | *(şimdilik yerel veri)* |
-| `POST /api/ozetle` | MİHENK Özet paneli | `mihenkApi.ozetle()` |
+| `POST /api/ozetle` | *(backend'in kendi akışı için — bu arayüzden çağrılmaz)* | `mihenkApi.ozetle()` |
+| `POST /api/ozetle/metinler` | MİHENK Özet paneli — atıflı özet | `mihenkApi.ozetleMetinler()` |
 | `POST /api/sor` | Asistan paneli | `mihenkApi.sor()` |
-| `GET /api/tespit/{id}` | Doğrulama paneli | `mihenkApi.tespit()` |
+| `POST /api/tespit` | Gönderi kartındaki YZ sinyali rozeti | `mihenkApi.tespitMetin()` |
+| `GET /api/tespit/{id}` | *(backend'in kendi akışı için)* | `mihenkApi.tespit()` |
 | `GET /api/koken/{id}` | Görsel köken rozeti | `mihenkApi.koken()` |
 | `POST /api/itiraz` | İtiraz akışı | `mihenkApi.itiraz()` |
+
+**Neden iki ayrı özet ve tespit ucu var:** Bu prototip kendi simülasyon veri
+kümesiyle çalışıyor ve gönderi kimlikleri backend'in deposundakilerle
+uyuşmuyor (`ebfc698985c6` ↔ `p0411`). Kimliğe dayalı uçlar buradan çağrılırsa
+her istek boş sonuç ya da 404 döner. `metinler` / `tespit` uçları metni
+gövdede alır ve AYNI servis kodundan geçirir; arayüzün gördüğü davranış,
+`ml/scripts/evaluate.py`'nin ölçtüğü davranışla aynı kalır.
 
 ## Üç ilkenin arayüzdeki karşılığı
 

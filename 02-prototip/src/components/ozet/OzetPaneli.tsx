@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { AlertTriangle, ChevronDown, FileText, Sparkles, Users, X } from "lucide-react";
+import { AtifliOzetBolumu } from "./AtifliOzetBolumu";
 import { DengeCubugu } from "./DengeCubugu";
 import { kategoriOzetle, kisiselOzetle, type OlayOzeti } from "@/lib/ozet/cikarimsal";
-import { akisGetir } from "@/lib/veri";
+import { akisGetir, kategoriyeGoreGetir } from "@/lib/veri";
 import type { Kategori } from "@/lib/tipler";
 
 const SEKMELER: { anahtar: Kategori | "kisisel_akis"; etiket: string }[] = [
@@ -18,11 +19,36 @@ const SEKMELER: { anahtar: Kategori | "kisisel_akis"; etiket: string }[] = [
 export function OzetPaneli({ kapat }: { kapat: () => void }) {
   const [aktif, setAktif] = useState<(typeof SEKMELER)[number]["anahtar"]>("gundem");
 
+  /**
+   * Sekme içeriği.
+   *
+   * `useMemo` yalnızca hesabı ucuzlatmak için değil, KİMLİK KARARLILIĞI için de
+   * gerekli: `gonderiler` dizisi `AtifliOzetBolumu` içindeki `useEffect`'in
+   * bağımlılığı. Her render'da yeni bir dizi üretilseydi bileşen sonsuz döngüye
+   * girip aynı özeti tekrar tekrar isterdi.
+   */
   const icerik = useMemo(() => {
     if (aktif === "kisisel_akis") {
-      return { tur: "kisisel" as const, metin: kisiselOzetle(akisGetir()) };
+      return {
+        tur: "kisisel" as const,
+        // Backend'in kategori adı; çoğulculuk kuralı burada aranmaz çünkü
+        // kişisel akış gündem değildir (bkz. summarize/adhoc.py).
+        kategori: "kisisel",
+        gonderiler: kategoriyeGoreGetir("kisisel"),
+        yerelOzet: kisiselOzetle(akisGetir()),
+      };
     }
-    return { tur: "kategori" as const, veri: kategoriOzetle(aktif) };
+    const veri = kategoriOzetle(aktif);
+    return {
+      tur: "kategori" as const,
+      kategori: aktif,
+      gonderiler: kategoriyeGoreGetir(aktif),
+      // Servise erişilemezse gösterilecek yerel temel: en çok gönderi alan
+      // olayın çıkarımsal özeti. Atıf taşımaz; bileşen bunu açıkça yazar.
+      yerelOzet:
+        veri.olaylar[0]?.ozet ?? "Bu kategoride özetlenecek yeterli gönderi yok.",
+      veri,
+    };
   }, [aktif]);
 
   return (
@@ -72,15 +98,31 @@ export function OzetPaneli({ kapat }: { kapat: () => void }) {
       </div>
 
       <div className="px-5 pb-5 flex flex-col gap-3">
-        {icerik.tur === "kisisel" ? (
-          <p className="text-[15px] leading-relaxed text-metin">{icerik.metin}</p>
-        ) : icerik.veri.olaylar.length === 0 ? (
-          <p className="text-[15px] text-metin-ikincil">
-            Bu kategoride özetlenecek yeterli gönderi yok.
-          </p>
-        ) : (
-          icerik.veri.olaylar.map((o) => <OlayKarti key={o.olayId} ozet={o} />)
-        )}
+        {/*
+          Atıflı özet en üstte: bu, ürünün ana iddiasının (İlke 1) kullanıcıya
+          göründüğü yerdir. Cümleler backend'in atıf denetiminden geçmiştir;
+          yanındaki rozet, o cümlenin dayandığı gönderilere götürür.
+        */}
+        <AtifliOzetBolumu
+          kategori={icerik.kategori}
+          gonderiler={icerik.gonderiler}
+          yerelOzet={icerik.yerelOzet}
+        />
+
+        {/*
+          Altındaki olay kartları YEREL olarak hesaplanır ve atıflı özetin
+          yerini almaz; çerçeve dağılımını ve denge skorunu gösterirler
+          (İlke 3'ün görünür yüzü). İkisi farklı soruları yanıtlar: özet "ne
+          oldu", denge çubuğu "kaç farklı açıdan anlatıldı".
+        */}
+        {icerik.tur === "kategori" &&
+          (icerik.veri.olaylar.length === 0 ? (
+            <p className="text-[15px] text-metin-ikincil">
+              Bu kategoride ayrıştırılabilen bir olay kümesi yok.
+            </p>
+          ) : (
+            icerik.veri.olaylar.map((o) => <OlayKarti key={o.olayId} ozet={o} />)
+          ))}
       </div>
     </section>
   );

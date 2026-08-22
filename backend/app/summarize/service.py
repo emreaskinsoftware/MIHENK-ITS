@@ -94,6 +94,8 @@ def summarize(
     user_id: str,
     category: str,
     unread_post_ids: list[str],
+    *,
+    pluralism_required: bool | None = None,
 ) -> tuple[SummaryResponse, SummaryDebug]:
     """Okunmamış gönderilerden atıflı özet üretir.
 
@@ -101,6 +103,16 @@ def summarize(
         user_id: Özet isteyen kullanıcı (önbellek anahtarı ve loglama için).
         category: "gundem" | "spor" | "kisisel".
         unread_post_ids: Kullanıcının okumadığı gönderi ID'leri.
+        pluralism_required: İlke 3'ün bu çağrıda uygulanıp uygulanmayacağı.
+            None (varsayılan) ise kural kategoriden türetilir ve davranış
+            değişmez. Açıkça verildiğinde ÇAĞIRAN sorumludur.
+
+            NEDEN GEÇERSİZ KILINABİLİR: `adhoc.summarize_texts`, kendi kategori
+            kümesi olan bir istemciye hizmet ediyor ve orada çoğulculuk kuralı
+            yalnızca "gundem" için değil, kişisel akış DIŞINDAKİ her kategori
+            için geçerli — yani kuralı gevşetmek için değil, GENİŞLETMEK için
+            kullanılıyor. Bu bayrak HTTP gövdesinden okunmaz; okunsaydı çağıran
+            tek bir alanla İlke 3'ü kapatabilirdi.
 
     Returns:
         (SummaryResponse, SummaryDebug)
@@ -137,7 +149,9 @@ def summarize(
 
     # --- Adım 2: kümele ---
     kumeler = build_clusters(hazir)
-    cogulculuk_gerekli = category == "gundem"
+    cogulculuk_gerekli = (
+        category == "gundem" if pluralism_required is None else pluralism_required
+    )
     secilen_kumeler, bastirilan = _kume_secimi(kumeler, pluralism_required=cogulculuk_gerekli)
 
     if not secilen_kumeler:
@@ -196,6 +210,7 @@ def summarize(
         skipped_post_count=atlanan,
         latency_ms=gecikme,
         cache_hit_ratio=round(oran, 4),
+        provider=getattr(saglayici, "name", "bilinmiyor"),
     )
     hata_ayikla = SummaryDebug(
         clusters=secilen_kumeler,

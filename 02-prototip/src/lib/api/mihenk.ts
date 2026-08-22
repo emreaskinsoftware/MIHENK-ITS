@@ -41,6 +41,23 @@ export interface OzetYaniti {
   skipped_post_count: number;
   latency_ms: number;
   cache_hit_ratio: number;
+  /**
+   * Birleştirme çağrısını yapan sağlayıcı. "fake-" ile başlıyorsa metin bir dil
+   * modelinden DEĞİL, yerel çıkarımsal yedekten gelmiştir ve arayüz bunu yazar.
+   */
+  provider: string;
+}
+
+/** `/api/ozetle/metinler` gövdesindeki tek gönderi — alan adları backend'deki hâliyle */
+export interface HamGonderi {
+  id: string;
+  /**
+   * Yazar kimliği. Çoğulculuk denetiminin (İlke 3) girdisi: backend, bir
+   * kümedeki FARKLI yazar sayısını buradan sayar ve tek kaynaklı kümeyi
+   * bastırır. Sabit bir değer göndermek denetimi anlamsız kılar.
+   */
+  author_id: string;
+  text: string;
 }
 
 export interface TespitSonucu {
@@ -120,6 +137,25 @@ export const mihenkApi = {
         category: kategori,
         unread_post_ids: okunmamisIdler ?? null,
       }),
+    }),
+
+  /**
+   * Bu arayüzün KENDİ gönderilerinden atıflı özet — kimlik gerektirmez.
+   *
+   * NEDEN AYRI UÇ: `ozetle` yukarıdaki uç, gönderi kimliklerini backend'in
+   * kendi deposunda arar. Bu prototipin simülasyon akışı orada yok
+   * (`ebfc698985c6` ↔ `p0411`), dolayısıyla o uç buradan her zaman boş özet
+   * döndürürdü. Bu uç, metinleri gövdede alıp aynı atıf denetimi hattından
+   * geçirir; ekranda gösterilen atıflar gerçekten denetlenmiş atıflardır.
+   *
+   * Boş `sentences` bir hata DEĞİLDİR: sistem çekimser kalmış olabilir
+   * (İlke 2) ya da tüm kümeler tek kaynaklı çıkmış olabilir (İlke 3).
+   * Sayaç alanları bu sessizliğin gerekçesini taşır; arayüz onu gösterir.
+   */
+  ozetleMetinler: (kategori: string, gonderiler: HamGonderi[], kullaniciId = "demo") =>
+    istek<OzetYaniti>("/api/ozetle/metinler", {
+      method: "POST",
+      body: JSON.stringify({ user_id: kullaniciId, category: kategori, posts: gonderiler }),
     }),
 
   /** Gönderi bağlamında soru-cevap. `gonderiId` ZORUNLUDUR (backend şeması). */
