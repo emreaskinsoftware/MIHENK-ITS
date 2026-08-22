@@ -60,7 +60,7 @@ export default function UreticiSayfasi() {
             <div className="flex items-end gap-[3px] h-24" role="img"
                  aria-label="Saatlere göre etkileşim yoğunluğu grafiği">
               {yogunluk.map((v, saat) => (
-                <div key={saat} className="flex-1 flex flex-col items-center gap-1">
+                <div key={saat} className="flex-1 h-full flex flex-col justify-end items-center gap-1">
                   <div className="w-full rounded-t transition-all"
                        style={{
                          height: `${Math.max(4, (v / enYogun) * 100)}%`,
