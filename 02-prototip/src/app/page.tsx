@@ -10,20 +10,22 @@ import { akisGetir } from "@/lib/veri";
 
 export default function AnaSayfa() {
   const [ozetAcik, setOzetAcik] = useState(true);
+  const [sekme, setSekme] = useState<"akis" | "medya">("akis");
   const akis = akisGetir(30);
 
   return (
     <>
       <div className="sticky top-0 z-20 bg-zemin/80 backdrop-blur-md border-b border-cizgi">
         <div role="tablist" aria-label="Akış görünümü" className="flex">
-          <button role="tab" aria-selected="true"
-                  className="flex-1 py-4 font-semibold relative text-metin">
+          <button role="tab" aria-selected={sekme === "akis"} onClick={() => setSekme("akis")}
+                  className={`flex-1 py-4 relative ${sekme === "akis" ? "font-semibold text-metin" : "font-medium text-metin-ikincil hover:text-metin"}`}>
             Akış
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[3px] rounded-full bg-mavi" />
+            {sekme === "akis" && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[3px] rounded-full bg-mavi" />}
           </button>
-          <button role="tab" aria-selected="false"
-                  className="flex-1 py-4 font-medium text-metin-ikincil hover:text-metin">
+          <button role="tab" aria-selected={sekme === "medya"} onClick={() => setSekme("medya")}
+                  className={`flex-1 py-4 relative ${sekme === "medya" ? "font-semibold text-metin" : "font-medium text-metin-ikincil hover:text-metin"}`}>
             Medya
+            {sekme === "medya" && <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[3px] rounded-full bg-mavi" />}
           </button>
         </div>
       </div>
@@ -36,9 +38,9 @@ export default function AnaSayfa() {
         : <OzetTetikleyici ac={() => setOzetAcik(true)} />}
 
       <div>
-        {akis.map((g) => (
-          <GonderiKarti key={g.id} gonderi={g} />
-        ))}
+        {akis
+          .filter((g) => (sekme === "medya" ? g.gorsel_var : true))
+          .map((g) => <GonderiKarti key={g.id} gonderi={g} />)}
       </div>
     </>
   );
