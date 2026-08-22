@@ -5,6 +5,7 @@ import { Sidebar } from "./Sidebar";
 import { SagRay } from "./SagRay";
 import { MobilGezinme } from "./MobilGezinme";
 import { GonderiModali } from "../akis/GonderiModali";
+import { RizaAkisi } from "./RizaAkisi";
 
 export function Kabuk({ children }: { children: React.ReactNode }) {
   const [modal, setModal] = useState(false);
@@ -22,6 +23,7 @@ export function Kabuk({ children }: { children: React.ReactNode }) {
         <SagRay />
       </div>
       {modal && <GonderiModali kapat={() => setModal(false)} />}
+      <RizaAkisi />
     </>
   );
 }

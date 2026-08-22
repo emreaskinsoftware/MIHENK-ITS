@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Olusturucu } from "@/components/akis/Olusturucu";
+import { HikayeSeridi } from "@/components/akis/HikayeSeridi";
 import { GonderiKarti } from "@/components/akis/GonderiKarti";
 import { OzetPaneli } from "@/components/ozet/OzetPaneli";
 import { OzetTetikleyici } from "@/components/ozet/OzetTetikleyici";
@@ -28,6 +29,7 @@ export default function AnaSayfa() {
       </div>
 
       <Olusturucu />
+      <HikayeSeridi />
 
       {ozetAcik
         ? <OzetPaneli kapat={() => setOzetAcik(false)} />

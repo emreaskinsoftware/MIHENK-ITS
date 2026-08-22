@@ -7,6 +7,9 @@ import { AsistanPaneli } from "../ozet/AsistanPaneli";
 import { Avatar } from "../layout/Avatar";
 import { OnayliRozet } from "../layout/OnayliRozet";
 import { goreliZaman, metniParcala, sayiBicimle } from "@/lib/bicim";
+import { hesapRiskiHesapla } from "@/lib/analiz/hesapRiski";
+import { akisGetir } from "@/lib/veri";
+import { RiskRozeti } from "./RiskRozeti";
 import type { AkisOgesi } from "@/lib/tipler";
 
 /** NSosyal eylem çubuğu: yorum · alıntı · beğeni(roket) · görüntülenme */
@@ -33,6 +36,7 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
   const [ozet, setOzet] = useState<string | null>(null);
   const [ozetYukleniyor, setOzetYukleniyor] = useState(false);
   const { yazar } = gonderi;
+  const risk = hesapRiskiHesapla(yazar, akisGetir().filter((g) => g.yazar_id === yazar.id));
 
   async function ozetle() {
     if (panel === "ozet") { setPanel("yok"); return; }
@@ -69,6 +73,7 @@ export function GonderiKarti({ gonderi }: { gonderi: AkisOgesi }) {
             <time dateTime={gonderi.zaman} className="text-metin-ikincil shrink-0">
               {goreliZaman(gonderi.zaman)}
             </time>
+            <RiskRozeti risk={risk} />
             <button
               type="button"
               aria-label="Gönderi menüsü"
