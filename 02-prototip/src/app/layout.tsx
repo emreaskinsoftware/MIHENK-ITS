@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { SagRay } from "@/components/layout/SagRay";
+import { TemaSaglayici } from "@/components/layout/TemaSaglayici";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Ana içeriğe geç
         </a>
+        <TemaSaglayici>
         <div className="mx-auto flex max-w-[1500px] gap-2">
           <Sidebar />
           <main id="ana-icerik" className="flex-1 min-w-0 border-x border-cizgi min-h-screen">
@@ -31,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
           <SagRay />
         </div>
+        </TemaSaglayici>
       </body>
     </html>
   );
