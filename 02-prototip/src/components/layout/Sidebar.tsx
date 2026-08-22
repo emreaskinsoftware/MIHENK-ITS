@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell, Bookmark, Cloud, Compass, Home, MessagesSquare,
-  PenLine, Play, Rocket, SlidersHorizontal, Star, Moon, ClipboardList,
+  PenLine, Play, Rocket, SlidersHorizontal, Star, Moon, ClipboardList, LineChart,
 } from "lucide-react";
 
 const MENU = [
@@ -16,6 +16,7 @@ const MENU = [
   { ad: "Topluluklar", ikon: Star, yol: "/topluluklar" },
   { ad: "Kaydedilenler", ikon: Bookmark, yol: "/kaydedilenler" },
   { ad: "Beğeniler", ikon: Rocket, yol: "/begeniler" },
+  { ad: "İçerik Üretici", ikon: LineChart, yol: "/uretici" },
   { ad: "Ayarlar", ikon: SlidersHorizontal, yol: "/ayarlar" },
   { ad: "TEKNOFEST Kayıt", ikon: ClipboardList, yol: "/teknofest" },
 ];
