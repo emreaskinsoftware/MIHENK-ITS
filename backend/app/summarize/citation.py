@@ -100,7 +100,12 @@ def audit_citations(raw_output: str, allowed_ids: set[str]) -> AuditReport:
         if not isinstance(ham_cumle, dict):
             rapor.dropped_empty_text += 1
             continue
-        metin = str(ham_cumle.get("text", "")).strip()
+        # Boşluk normalleştirme bir çıktı kısıtıdır (spec 6.2 adım 6 ile aynı
+        # aile): model, cümlenin ORTASINA satır sonu koyabiliyor ve arayüz onu
+        # kırık bir paragraf gibi çiziyordu ("...bilgi notu.\n\nkısıtlama
+        # başlıklarında..."). Atıf hâlâ geçerli olduğu için cümleyi düşürmek
+        # aşırı tepki olurdu; biçim düzeltilir, içeriğe dokunulmaz.
+        metin = " ".join(str(ham_cumle.get("text", "")).split())
         kaynaklar = ham_cumle.get("source_post_ids") or []
         if not isinstance(kaynaklar, list):
             kaynaklar = []
