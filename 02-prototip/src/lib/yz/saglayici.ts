@@ -12,7 +12,7 @@
  * sorununun gösterimi kesmemesi için bilinçli bir tasarım kararıdır.
  */
 
-export type SaglayiciAdi = "claude" | "openai" | "gemini" | "yerel";
+export type SaglayiciAdi = "claude" | "openai" | "azure" | "gemini" | "yerel";
 
 export interface UretimIstegi {
   sistem: string;
@@ -31,6 +31,7 @@ export interface UretimYaniti {
 const VARSAYILAN_MODEL: Record<Exclude<SaglayiciAdi, "yerel">, string> = {
   claude: "claude-sonnet-5",
   openai: "gpt-4o",
+  azure: "gpt-4o-mini",
   gemini: "gemini-2.0-flash",
 };
 
@@ -38,10 +39,12 @@ export function etkinSaglayici(): SaglayiciAdi {
   const tercih = process.env.YZ_SAGLAYICI as SaglayiciAdi | undefined;
   if (tercih === "claude" && process.env.ANTHROPIC_API_KEY) return "claude";
   if (tercih === "openai" && process.env.OPENAI_API_KEY) return "openai";
+  if (tercih === "azure" && process.env.AZURE_OPENAI_API_KEY) return "azure";
   if (tercih === "gemini" && process.env.GEMINI_API_KEY) return "gemini";
   // Tercih belirtilmemişse tanımlı olan ilk anahtarı kullan
   if (process.env.ANTHROPIC_API_KEY) return "claude";
   if (process.env.OPENAI_API_KEY) return "openai";
+  if (process.env.AZURE_OPENAI_API_KEY) return "azure";
   if (process.env.GEMINI_API_KEY) return "gemini";
   return "yerel";
 }
@@ -52,6 +55,7 @@ export async function uret(istek: UretimIstegi): Promise<UretimYaniti> {
     switch (saglayici) {
       case "claude": return await claudeIle(istek);
       case "openai": return await openaiIle(istek);
+      case "azure": return await azureIle(istek);
       case "gemini": return await geminiIle(istek);
       default: return { metin: "", saglayici: "yerel" };
     }
@@ -140,6 +144,49 @@ async function openaiIle(istek: UretimIstegi): Promise<UretimYaniti> {
   if (!yanit.ok) throw new Error(`OpenAI ${yanit.status}: ${await yanit.text()}`);
   const veri = await yanit.json();
   return { metin: veri.choices?.[0]?.message?.content ?? "", saglayici: "openai" };
+}
+
+/**
+ * Azure OpenAI Service.
+ *
+ * OpenAI'dan üç noktada ayrılır ve bu yüzden ayrı bir işlev gerektirir:
+ *   1. URL, kaynağa özel endpoint + deployment adı üzerinden kurulur
+ *   2. Kimlik doğrulama "api-key" başlığıyla yapılır ("Authorization: Bearer" değil)
+ *   3. Model adı yerine DEPLOYMENT adı kullanılır
+ */
+async function azureIle(istek: UretimIstegi): Promise<UretimYaniti> {
+  const endpoint = process.env.AZURE_OPENAI_ENDPOINT?.replace(/\/$/, "");
+  const dagitim = process.env.AZURE_OPENAI_DEPLOYMENT || VARSAYILAN_MODEL.azure;
+  const surum = process.env.AZURE_OPENAI_API_VERSION || "2024-10-21";
+
+  if (!endpoint) throw new Error("AZURE_OPENAI_ENDPOINT tanımlı değil");
+
+  const yanit = await fetch(
+    `${endpoint}/openai/deployments/${dagitim}/chat/completions?api-version=${surum}`,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "api-key": process.env.AZURE_OPENAI_API_KEY!,
+      },
+      body: JSON.stringify({
+        max_tokens: istek.enFazlaJeton ?? 1024,
+        messages: [
+          { role: "system", content: istek.sistem },
+          { role: "user", content: istek.kullanici },
+        ],
+      }),
+    },
+  );
+  if (!yanit.ok) throw new Error(`Azure ${yanit.status}: ${await yanit.text()}`);
+  const veri = await yanit.json();
+  return {
+    metin: veri.choices?.[0]?.message?.content ?? "",
+    saglayici: "azure",
+    jetonKullanimi: veri.usage
+      ? { girdi: veri.usage.prompt_tokens, cikti: veri.usage.completion_tokens }
+      : undefined,
+  };
 }
 
 async function geminiIle(istek: UretimIstegi): Promise<UretimYaniti> {
