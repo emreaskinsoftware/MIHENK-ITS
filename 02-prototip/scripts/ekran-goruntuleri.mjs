@@ -30,12 +30,16 @@ const OLCULER = {
   mobil: { width: 390, height: 844 },
 };
 
-function gonderiSec() {
+/**
+ * Ekran görüntüsünde kullanılacak gönderiyi seçer.
+ *
+ * Görseli VE doğrulanabilir iddiası olan bir gönderi aranır: rapora girecek
+ * kare, en çok bileşeni aynı anda gösterendir (YZ sinyali, görsel köken,
+ * doğrulama paneli). Bulunamazsa ilk gönderiye düşülür.
+ */
+function zenginGonderiSec() {
   const g = JSON.parse(readFileSync(join(BURASI, "..", "data", "gonderiler.json"), "utf-8"));
-  return {
-    zengin: g.find((x) => x.gorsel_var && x.dogrulanabilir_iddia) ?? g[0],
-    olayli: g.find((x) => x.olay_id) ?? g[0],
-  };
+  return g.find((x) => x.gorsel_var && x.dogrulanabilir_iddia) ?? g[0];
 }
 
 /**
@@ -58,7 +62,7 @@ async function rizaKapat(sayfa) {
 
 async function main() {
   mkdirSync(CIKTI, { recursive: true });
-  const { zengin } = gonderiSec();
+  const zengin = zenginGonderiSec();
   const tarayici = await chromium.launch();
 
   /**

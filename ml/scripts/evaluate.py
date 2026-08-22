@@ -343,7 +343,7 @@ def tespit_olc(depo: FeedRepository | None = None) -> None:
         return OLCULEMEDI if x != x else f"{x:.3f}"  # NaN kontrolü
 
     satirlar = [
-        "# Tablo 4 — YZ Metin Tespiti",
+        "# YZ Metin Tespiti",
         "",
         "> `ml/scripts/evaluate.py` tarafından üretilir. Elle düzenlenmez.",
         "",
@@ -664,7 +664,7 @@ def ozetleme_olc(depo: FeedRepository, tekrar: int = 3) -> None:
 
     a = asistan_metrikleri
     satirlar = [
-        "# Tablo 5 — Özetleme ve Asistan",
+        "# Özetleme ve Asistan",
         "",
         "> `ml/scripts/evaluate.py` tarafından üretilir. Elle düzenlenmez.",
         "",
@@ -718,7 +718,8 @@ def ozetleme_olc(depo: FeedRepository, tekrar: int = 3) -> None:
         "",
         "Sadakat, sözcüksel örtüşme vekiliyle ölçülmüştür (NLI modeli veya insan",
         "değerlendirmesi değil). Düşük örtüşme kesin olarak sadakatsizliği gösterir;",
-        "yüksek örtüşme sadakati garanti etmez. İnsan değerlendirmesi Tablo 7'dedir.",
+        "yüksek örtüşme sadakati garanti etmez. İnsan değerlendirmesi kullanılabilirlik "
+        "testine aittir (docs/KULLANILABILIRLIK_TESTI.md).",
         "",
     ]
     if veri["provider"].startswith("fake"):

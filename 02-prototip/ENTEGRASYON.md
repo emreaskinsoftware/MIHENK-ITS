@@ -13,9 +13,14 @@ uvicorn app.main:app --reload --port 8000
 
 # 2) Arayüz (bu depo)
 cd MIHENK/02-prototip
-echo "NEXT_PUBLIC_MIHENK_API=http://localhost:8000" >> .env.local
+echo "NEXT_PUBLIC_MIHENK_API=http://127.0.0.1:8000" >> .env.local
 npm run dev
 ```
+
+Adres `127.0.0.1`, `localhost` değil: uvicorn yalnızca IPv4 geri döngüsüne
+bağlanıyor ve Windows'ta `localhost` önce IPv6'ya çözüldüğü için her istek
+gereksiz bir düşüş bedeli ödüyordu (tarayıcıda ölçülen fark: ~600 ms'ye karşı
+~55 ms). Ayrıntı: `src/lib/api/mihenk.ts`.
 
 Backend'e **erişilemezse** arayüz yerel çıkarımsal motora düşer ve çalışmaya
 devam eder; düştüğünü ekranda yazar ("bu metin atıf içermez"). Gösterim hiçbir

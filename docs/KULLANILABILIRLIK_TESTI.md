@@ -1,6 +1,6 @@
 # Kullanılabilirlik Testi — Protokol ve Formlar
 
-> Raporun **Tablo 7**'sinin kaynağıdır. Bu test elle yapılır; `evaluate.py`
+> Raporun **Tablo 10**'unun kaynağıdır. Bu test elle yapılır; `evaluate.py`
 > üretmez (spec 7). Sonuçlar bu belgenin 6. bölümüne yazılır.
 >
 > **Sonuç bölümü şu an boştur ve `[  ]` içerir. Test yapılmadan doldurulmaz.**
@@ -128,7 +128,7 @@ tutulur:
 
 **Tamamlanan katılımcı: 0/5** — eksik katılımcı var; aşağıdaki ortalamalar yalnızca tamamlananlar üzerindendir.
 
-### Tablo 7 — Görev süresi ve kavrama
+### Tablo 10 — Görev süresi ve kavrama
 
 | Katılımcı | Elle okuma (sn) | Özetle okuma (sn) | Kazanç | Kavrama (elle) | Kavrama (özet) | SUS |
 |---|---|---|---|---|---|---|

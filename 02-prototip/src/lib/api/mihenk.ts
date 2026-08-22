@@ -19,7 +19,28 @@
  * `durum` alanı yalnızca gerçekten ulaşılamadığında "erisilemedi" olur.
  */
 
-const TABAN = process.env.NEXT_PUBLIC_MIHENK_API ?? "http://localhost:8000";
+/**
+ * Backend adresi.
+ *
+ * VARSAYILAN `127.0.0.1`, `localhost` DEĞİL — ölçülmüş bir sebeple.
+ * Uvicorn varsayılan olarak yalnızca IPv4 geri döngüsüne (127.0.0.1) bağlanır.
+ * Windows'ta `localhost` adı önce IPv6'ya (`::1`) çözülür, o bağlantı
+ * reddedilir ve istemci IPv4'e düşer. Bu düşüş bedava değil:
+ *
+ *   | Adres            | Tarayıcı        | Sunucunun kendi ölçümü |
+ *   |------------------|-----------------|------------------------|
+ *   | localhost:8000   | 607 / 950 / 54 ms | 46 ms                |
+ *   | 127.0.0.1:8000   | 64 / 55 / 50 ms   | 35 ms                |
+ *
+ * Sunucu tarafı aynı; fark tamamen ad çözümlemesinde. Kullanıcı "Özetle"
+ * dediğinde ilk isteklerde yarım saniyeyi aşan, üstelik tutarsız bir gecikme
+ * oluşuyordu. Alternatif çözüm (uvicorn'u `--host ::` ile çift yığına bağlamak)
+ * servisi ağa açardı; istemci varsayılanını düzeltmek hem daha güvenli hem
+ * daha basit.
+ *
+ * `NEXT_PUBLIC_MIHENK_API` ile geçersiz kılınabilir (dağıtımda gerçek alan adı).
+ */
+const TABAN = process.env.NEXT_PUBLIC_MIHENK_API ?? "http://127.0.0.1:8000";
 
 /** İstek zaman aşımı. Tespit modeli ilk çağrıda GPU'ya yüklenebilir. */
 const ZAMAN_ASIMI_MS = 20_000;

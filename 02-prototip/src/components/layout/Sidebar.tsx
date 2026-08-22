@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { temaKullan } from "./TemaSaglayici";
+import { useTema } from "./TemaSaglayici";
 import {
   Bell, Bookmark, Cloud, Compass, Home, MessagesSquare,
   PenLine, Play, Rocket, SlidersHorizontal, Star, Moon, Sun, ClipboardList, LineChart,
@@ -26,7 +26,7 @@ const MENU = [
 
 export function Sidebar({ yeniGonderi }: { yeniGonderi?: () => void }) {
   const yol = usePathname();
-  const { tema, degistir } = temaKullan();
+  const { tema, degistir } = useTema();
   const [medya, setMedya] = useState(false);
 
   return (

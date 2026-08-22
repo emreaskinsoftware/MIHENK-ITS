@@ -6,7 +6,7 @@ import {
   ShieldCheck, Sun, Type, UserCheck, UserCog,
 } from "lucide-react";
 import { SayfaBasligi } from "@/components/layout/SayfaBasligi";
-import { temaKullan } from "@/components/layout/TemaSaglayici";
+import { useTema } from "@/components/layout/TemaSaglayici";
 
 const BOLUMLER = [
   { ad: "Hesap Ayarları", ikon: UserCog },
@@ -58,7 +58,7 @@ export default function AyarlarSayfasi() {
  * maddesinin somut karşılığı.
  */
 function ErisilebilirlikBolumu() {
-  const { tema, degistir } = temaKullan();
+  const { tema, degistir } = useTema();
   const [yaziBoyutu, setYaziBoyutu] = useState(100);
   const [yuksekKontrast, setYuksekKontrast] = useState(false);
   const [hareketAzalt, setHareketAzalt] = useState(false);

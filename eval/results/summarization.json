@@ -8,7 +8,7 @@
     "short_post_skips": 193,
     "llm_call_saving_ratio": 0.4595,
     "injection_flagged": 6,
-    "duration_s": 5.55
+    "duration_s": 4.35
   },
   "summarization": {
     "runs": 9,
@@ -18,8 +18,8 @@
     "citation_accuracy": 1.0,
     "dropped_sentences_mean": 0,
     "single_source_suppressed": 0,
-    "latency_p50_ms": 962,
-    "latency_p95_ms": 1101,
+    "latency_p50_ms": 534,
+    "latency_p95_ms": 767,
     "cache_hit_ratio": 0.75
   },
   "assistant": {

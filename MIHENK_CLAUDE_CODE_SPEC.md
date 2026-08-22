@@ -468,14 +468,14 @@ Markdown tablo olarak yazılır. Rapora elle sayı girilmez, buradan kopyalanır
 
 Üretmesi gereken metrikler:
 
-**Tespit modeli (rapor Tablo 4):**
+**Tespit modeli (rapor Tablo 1-2, aktarım Tablo 7, gerçek metin Tablo 8):**
 - Accuracy, F1, AUROC
 - **FPR@95TPR** ← en kritik metrik, yanlış pozitif maliyetini gösterir
 - Uzunluk kovası bazında ayrı doğruluk (K1 / K2 / K3)
 - Çekimserlik oranı
 - Farklı rastgele tohumlarla tekrarlı çalıştırma → ortalama ± standart sapma
 
-**Özetleme ve asistan (rapor Tablo 5):**
+**Özetleme ve asistan (rapor Tablo 4-5):**
 - Kaynağa sadakat oranı (örneklem üzerinde, `eval/faithfulness_set.json`)
 - Atıf doğruluğu (gösterilen kaynak gerçekten ilgili mi)
 - `dropped_sentence_count` ortalaması (atıfsız üretim sıklığı)
@@ -487,7 +487,7 @@ Markdown tablo olarak yazılır. Rapora elle sayı girilmez, buradan kopyalanır
 **Güvenlik:**
 - İstem enjeksiyonu savunma oranı (senaryo sayısı ve başarı)
 
-**Kullanılabilirlik (elle toplanır, script değil — rapor Tablo 7):**
+**Kullanılabilirlik (elle toplanır, script değil — rapor Tablo 10):**
 - 5 katılımcı, görev süresi (el ile okuma vs. özet ile), kavrama doğruluğu, SUS skoru
 
 ---
@@ -578,12 +578,12 @@ Kodun ürettiği çıktılar doğrudan rapor bölümlerine gider:
 | GitHub repo linki + commit geçmişi | 3.1 — sürüm kontrolü (2 puan) |
 | Veri seti örnek sayısı ve dağılımı | 3.1 — veri setleri |
 | Eğitim hiperparametreleri | 3.2 — model eğitimi |
-| `eval/results/detection.md` | 3.2 — Tablo 4 |
-| `eval/results/summarization.md` | 3.2 — Tablo 5 |
+| `eval/results/detection.md` | 3.2 — Tablo 1, 2, 7 |
+| `eval/results/summarization.md` | 3.2 — Tablo 4, 5 |
 | Enjeksiyon savunma oranı | 3.1 — güvenlik |
 | Ekran görüntüleri + akış diyagramları | 3.3 — Şekil 3+ |
-| Kullanılabilirlik testi | 3.3 — Tablo 7 |
+| Kullanılabilirlik testi | 3.3 — Tablo 10 |
 | Maliyet hesabı | 4.1 ve 6.2 |
 
 Bir metrik tabloda `[  ]` olarak kaldıysa o puan alınamaz. Öncelik sırası:
-**Tablo 4 > enjeksiyon oranı > Tablo 5 > Tablo 7.**
+**Tespit (Tablo 1, 7, 8) > enjeksiyon oranı > özetleme (Tablo 4-5) > kullanılabilirlik (Tablo 10).**

@@ -26,6 +26,18 @@ export function RizaAkisi() {
   const [rizalar, setRizalar] = useState<Rizalar>(VARSAYILAN);
 
   useEffect(() => {
+    // Rıza bandının görünürlüğü localStorage'dan okunur ve bu ancak ilk
+    // boyamadan SONRA yapılabilir: sunucu localStorage'ı göremez, render
+    // sırasında okumak hidrasyon uyumsuzluğu doğurur.
+    //
+    // React'in `set-state-in-effect` kuralı burada bilinçli olarak
+    // bastırılıyor. Kuralın uyardığı şey (zincirleme render) gerçek, ama
+    // alternatifi daha kötü: bandı sunucuda da render edip sonra gizlemek,
+    // rızasını çoktan vermiş kullanıcıya her sayfa yüklemesinde bandın bir
+    // kare görünmesi demek olurdu. Tema tercihinde aynı sorun bir <head>
+    // betiğiyle çözüldü (bkz. TemaSaglayici) çünkü orada değişen şey tek bir
+    // öznitelik; burada değişen bir React ağacı, aynı yöntem uygulanamaz.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!localStorage.getItem(ANAHTAR)) setGorunur(true);
   }, []);
 

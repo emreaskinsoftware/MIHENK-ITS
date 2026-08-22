@@ -8,7 +8,7 @@ import {
   Moon, PenLine, Play, Rocket, Search, SlidersHorizontal, Star, Sun, X, ClipboardList,
 } from "lucide-react";
 import { Avatar } from "./Avatar";
-import { temaKullan } from "./TemaSaglayici";
+import { useTema } from "./TemaSaglayici";
 
 const ALT_SEKME = [
   { ad: "Ana Sayfa", ikon: Home, yol: "/" },
@@ -31,7 +31,7 @@ const CEKMECE = [
 export function MobilGezinme({ yeniGonderi }: { yeniGonderi: () => void }) {
   const [cekmece, setCekmece] = useState(false);
   const yol = usePathname();
-  const { tema, degistir } = temaKullan();
+  const { tema, degistir } = useTema();
 
   return (
     <>

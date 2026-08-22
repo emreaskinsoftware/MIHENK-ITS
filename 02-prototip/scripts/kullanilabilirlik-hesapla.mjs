@@ -103,8 +103,8 @@ const satirlar = katilimcilar.map((k) => {
 
 const tamamlanan = satirlar.filter((s) => s.sus !== null || s.elleSure !== null).length;
 
-// --- Tablo 7 ----------------------------------------------------------------
-const tablo7 = satirlar
+// --- Katılımcı tablosu ----------------------------------------------------------------
+const katilimciTablosu = satirlar
   .map(
     (s) =>
       `| ${s.kod} | ${h(s.elleSure)} | ${h(s.ozetSure)} | ${
@@ -177,11 +177,11 @@ const bolum = `## 6. Sonuçlar
     : ""
 }
 ${dengeUyarisi ? `\n> ⚠️ ${dengeUyarisi}\n` : ""}
-### Tablo 7 — Görev süresi ve kavrama
+### Tablo 10 — Görev süresi ve kavrama
 
 | Katılımcı | Elle okuma (sn) | Özetle okuma (sn) | Kazanç | Kavrama (elle) | Kavrama (özet) | SUS |
 |---|---|---|---|---|---|---|
-${tablo7}
+${katilimciTablosu}
 ${ortSatir}
 
 **Kavrama sütunları birlikte okunmalıdır.** Hız, doğruluk pahasına gelmemeli:

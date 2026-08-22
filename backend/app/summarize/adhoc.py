@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import hashlib
 import logging
+import time
 from datetime import datetime, timezone
 
 from app.enrichment import enrich_feed
@@ -137,7 +138,9 @@ def summarize_texts(
         )
 
     # --- Adım 2: zenginleştir (önbellekte varsa çağrı yapılmaz) ---
+    zenginlestirme_baslangic = time.perf_counter()
     istatistik = enrich_feed(ham_gonderiler)
+    zenginlestirme_ms = int((time.perf_counter() - zenginlestirme_baslangic) * 1000)
 
     # --- Adım 3: mevcut KATMAN 2 hattını olduğu gibi çalıştır ---
     yanit, hata_ayikla = summarize(
@@ -148,17 +151,32 @@ def summarize_texts(
     )
 
     # --- Adım 4: kimlikleri çağıranın uzayına geri çevir ---
-    # Eşlemede olmayan bir kimlik kalırsa onu ATIYORUZ: kullanıcıya
+    #
+    # Eşlemede olmayan bir kimlik kalırsa cümle DÜŞÜRÜLÜR: kullanıcıya
     # çözemediğimiz bir kaynağı göstermek, atıfı doğrulanamaz kılar (İlke 1).
+    #
+    # Bu dalın normalde ERİŞİLMEZ olması beklenir: `citation.audit` yalnızca
+    # izin listesindeki kimlikleri geçiriyor, o liste de `idler`den geliyor ve
+    # `idler`in tamamı `esleme` içinde. Yani buraya düşmek bir veri hatası
+    # değil, bizim bir hatamızdır — sessizce yutulmaz, uyarı basılır ve
+    # düşen cümle sayacına eklenir. Sayaç yalan söylerse ölçüm de söyler.
     cevrilmis = []
+    cozulemeyen = 0
     for cumle in yanit.sentences:
         kaynaklar = [esleme[k] for k in cumle.source_post_ids if k in esleme]
         if not kaynaklar:
+            cozulemeyen += 1
+            logger.warning(
+                "Çözülemeyen kaynak kimliği, cümle düşürüldü: %r (kaynaklar=%s)",
+                cumle.text[:60],
+                cumle.source_post_ids,
+            )
             continue
         cevrilmis.append(cumle.model_copy(update={"source_post_ids": kaynaklar}))
 
     logger.info(
-        "Dış özet: kategori=%s gönderi=%s llm=%s küme=%s cümle=%s silinen=%s bastırılan=%s",
+        "Dış özet: kategori=%s gönderi=%s llm=%s küme=%s cümle=%s silinen=%s "
+        "bastırılan=%s zenginleştirme=%sms toplam=%sms",
         category,
         len(idler),
         istatistik.llm_calls,
@@ -166,5 +184,29 @@ def summarize_texts(
         len(cevrilmis),
         yanit.dropped_sentence_count,
         len(hata_ayikla.suppressed_single_author_labels),
+        zenginlestirme_ms,
+        zenginlestirme_ms + yanit.latency_ms,
     )
-    return yanit.model_copy(update={"sentences": cevrilmis})
+
+    # --- Adım 5: ölçüm alanlarını BU YOLA göre düzelt ---
+    #
+    # NEDEN: `summarize()` yalnızca kendi süresini ölçer, çünkü kendi
+    # bağlamında (`/api/ozetle`) zenginleştirme çok önce, akış hızında
+    # yapılmıştır. BU yolda ise zenginleştirme istek anında ve senkron
+    # yapılıyor ve toplam sürenin neredeyse tamamını o kaplıyor:
+    # ölçümde 5 ms raporlanırken isteğin kendisi 2.446 ms sürüyordu.
+    # 500 kat sapan bir gecikme sayısı, raporlanabilir olmaktan çıkar.
+    #
+    # `cache_hit_ratio` ise bu yolda ANLAMSIZ: gönderileri özetlemeden hemen
+    # önce zenginleştirdiğimiz için önbellek yapı gereği %100 isabet eder.
+    # Ölçtüğü bir şey yok; 1.0 yazmak, olmayan bir başarımı raporlamaktır.
+    # Alan şemadan kaldırılamaz (aynı model iki uçta da dönüyor), bu yüzden
+    # 0.0 verilir ve uç noktanın belgesinde neden olduğu yazılıdır.
+    return yanit.model_copy(
+        update={
+            "sentences": cevrilmis,
+            "latency_ms": zenginlestirme_ms + yanit.latency_ms,
+            "cache_hit_ratio": 0.0,
+            "dropped_sentence_count": yanit.dropped_sentence_count + cozulemeyen,
+        }
+    )

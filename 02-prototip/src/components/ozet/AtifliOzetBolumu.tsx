@@ -42,9 +42,18 @@ import type { AkisOgesi } from "@/lib/tipler";
  */
 const EN_FAZLA_GONDERI = 60;
 
-type Durum =
-  | { asama: "yukleniyor" }
-  | { asama: "bitti"; sonuc: Sonuc<OzetYaniti> };
+/**
+ * Gelen sonuç, HANGİ kategori için istendiğiyle birlikte saklanır.
+ *
+ * NEDEN BİRLİKTE: "yükleniyor" durumu ayrı bir state değil, `sonuc.kategori`
+ * ile o anki `kategori` uyuşmuyorsa TÜRETİLİR. İlk sürüm sekme değişince
+ * effect içinden senkron `setDurum({asama:"yukleniyor"})` çağırıyordu; bu,
+ * React'in `set-state-in-effect` kuralını çiğniyor ve her sekme değişiminde
+ * gereksiz bir zincirleme render doğuruyordu. Türetilmiş durumda o çağrıya
+ * gerek kalmıyor: yeni kategori istenir istenmez eski sonuç zaten "bu
+ * kategoriye ait değil" olur.
+ */
+type Kayit = { kategori: string; sonuc: Sonuc<OzetYaniti> };
 
 export function AtifliOzetBolumu({
   kategori,
@@ -58,34 +67,35 @@ export function AtifliOzetBolumu({
   /** Backend'e erişilemezse gösterilecek yerel (atıfsız) temel özet. */
   yerelOzet: string;
 }) {
-  const [durum, setDurum] = useState<Durum>({ asama: "yukleniyor" });
+  const [kayit, setKayit] = useState<Kayit | null>(null);
+
+  // Gönderi yoksa istek atılmaz. Bu bir yükleme durumu değil, bilinen bir
+  // sonuçtur ve aşağıda yerel yedek gösterilir.
+  const govde: HamGonderi[] = gonderiler
+    .slice(0, EN_FAZLA_GONDERI)
+    .map((g) => ({ id: g.id, author_id: g.yazar_id, text: g.metin }));
+  const gonderiYok = govde.length === 0;
 
   useEffect(() => {
+    if (gonderiYok) return;
     // Kategori değişince eski isteğin geç gelen yanıtı yeni sekmenin üstüne
     // yazmasın: iptal bayrağı olmadan kullanıcı "Spor" sekmesinde "Gündem"
     // özetini görebilir.
     let gecerli = true;
-    setDurum({ asama: "yukleniyor" });
-
-    const govde: HamGonderi[] = gonderiler
-      .slice(0, EN_FAZLA_GONDERI)
-      .map((g) => ({ id: g.id, author_id: g.yazar_id, text: g.metin }));
-
-    if (!govde.length) {
-      setDurum({ asama: "bitti", sonuc: { durum: "erisilemedi" } });
-      return;
-    }
-
     mihenkApi.ozetleMetinler(kategori, govde).then((sonuc) => {
-      if (gecerli) setDurum({ asama: "bitti", sonuc });
+      if (gecerli) setKayit({ kategori, sonuc });
     });
-
     return () => {
       gecerli = false;
     };
-  }, [kategori, gonderiler]);
+    // `govde` her render'da yeniden kurulan bir dizidir; bağımlılığa
+    // konulursa sonsuz döngü olur. İçeriği tamamen `gonderiler`den türediği
+    // için asıl bağımlılık odur.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kategori, gonderiler, gonderiYok]);
 
-  if (durum.asama === "yukleniyor") {
+  // Sonuç bu kategoriye ait değilse hâlâ bekliyoruz.
+  if (!gonderiYok && kayit?.kategori !== kategori) {
     return (
       <div className="flex items-center gap-2 rounded-xl bg-zemin border border-cizgi p-4
                       text-[13px] text-metin-ikincil">
@@ -95,7 +105,10 @@ export function AtifliOzetBolumu({
     );
   }
 
-  const { sonuc } = durum;
+  // Gönderi yoksa istek hiç atılmadı; yerel yedek gösterilir.
+  const sonuc: Sonuc<OzetYaniti> = gonderiYok
+    ? { durum: "erisilemedi" }
+    : kayit!.sonuc;
 
   // --- Durum 3: servise erişilemedi -> yerel temel, ne olduğu söylenerek ---
   if (sonuc.durum === "erisilemedi") {
