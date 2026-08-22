@@ -125,10 +125,16 @@ class Settings(BaseSettings):
     # İKİ AYRI PROFİL — NEDEN:
     # CPU'da tam ince ayar bu projede pratik değil: ölçüldü, adım başına ~57
     # saniye sürüyor ve 3 epoch yaklaşık 2 saat ediyor. Bu yüzden CPU profili
-    # alt katmanları dondurur ve küçük parti kullanır. GPU'da ise böyle bir
-    # kısıt yok; tam ince ayar hem daha hızlı biter hem de daha iyi başarım
-    # verir. Ayarların cihaza göre değişmesi, aynı depoyu iki farklı makinede
-    # ELLE DEĞİŞTİRMEDEN çalıştırabilmek içindir.
+    # alt katmanları dondurur ve küçük parti kullanır. Ayarların cihaza göre
+    # değişmesi, aynı depoyu iki farklı makinede ELLE DEĞİŞTİRMEDEN
+    # çalıştırabilmek içindir.
+    #
+    # DÜZELTME (RTX 3050 üzerinde ölçüldü): Bu blok önce "GPU'da kısıt yok,
+    # tam ince ayar daha iyi başarım verir" diyordu. ÖLÇÜM BUNU YALANLADI.
+    # Katman dondurma yalnızca bir hız kısıtı değil, bir DÜZENLİLEŞTİRMEDİR;
+    # sayılar `detection_frozen_layers_gpu` altında. Parti boyutu ve AMP
+    # cihaza bağlı kalır (donanım kısıtı), dondurma ise artık iki profilde de
+    # aynıdır çünkü gerekçesi donanım değil, veri setinin küçüklüğüdür.
     detection_epochs: int = 3
     detection_learning_rate: float = 2e-5
     detection_max_length: int = 192
@@ -146,7 +152,17 @@ class Settings(BaseSettings):
 
     # GPU profili — CUDA bulunduğunda bunlar kullanılır.
     detection_batch_size_gpu: int = 32
-    detection_frozen_layers_gpu: int = 0  # tam ince ayar
+    # ÖLÇÜLEN (RTX 3050 Laptop, aynı tohum, aynı veri, aktarım kümesi = 413
+    # akış gönderisi; kendi test kümesi ikisinde de 1.000 olduğu için ayırt
+    # etmiyor). Tam ince ayar, eğitim şablonlarına ezberliyor:
+    #
+    #   dondurulan   aktarım   F1      AUROC   FPR@95TPR   K2      süre
+    #   0 (tam)      0.557     0.450   0.939   0.254       0.306   229 sn
+    #   9            0.634     0.498   0.973   0.115       0.859    28 sn
+    #
+    # K1 dışında her metrikte dondurma kazanıyor ve 8 kat hızlı bitiyor.
+    # Bu yüzden GPU profili de CPU ile aynı sayıyı kullanır.
+    detection_frozen_layers_gpu: int = 9
     # Karışık hassasiyet (AMP): GPU'da bellek ve süreyi belirgin düşürür,
     # başarımı pratikte etkilemez. CPU'da devre dışıdır (kazanç yok).
     detection_amp: bool = True
