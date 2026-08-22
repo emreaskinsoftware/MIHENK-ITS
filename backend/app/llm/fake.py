@@ -34,10 +34,29 @@ _CLUSTER_RE = re.compile(r"^### KUME:\s*(.+)$")
 _TASK_RE = re.compile(r"^GOREV:\s*(\w+)", re.MULTILINE)
 
 # Anlam taşımayan kelimeler: asistanın örtüşme skorunda gürültü yapmasınlar.
+#
+# İKİNCİ GRUP — SORU ÇERÇEVESİ KELİMELERİ (ölçümle eklendi):
+# Örtüşme skoru, sorunun anlamlı kelimelerinin kaçının bağlamda geçtiğine
+# bakar. Soru çerçevesi kelimeleri ("... hakkında ne deniyor?") bağlamda
+# ASLA geçmez ama paydaya girer, yani her soruyu sistematik olarak eşiğin
+# altına iter.
+#
+# ÖLÇÜLEN: Sadakat örnekleminde cevaplanabilir 36 sorunun 34'ü tam olarak
+# 1/3 = 0.3333 skorluyordu (anahtar kelime tutuyor, çerçevenin iki kelimesi
+# tutmuyor); eşik 0.34. Yani cevap bağlamda olmasına rağmen 0.0067 farkla
+# reddediliyordu ve Tablo 5'e "bağlam içi yanıtlama = 0.056" olarak
+# giriyordu. Sorun modelde değil, skorun paydasındaydı.
+#
+# "gönderi/gönderide" de buradadır: gönderinin İÇERİĞİNE değil, kabına
+# atıfta bulunur ("Bu gönderi ne diyor?"). Bu kelimeler elendiğinde soru
+# anlamlı kelime bırakmaz ve `_asistan` zaten var olan "soru yoksa özet
+# döndür" dalına düşer — doğru davranış budur, reddetmek değil.
 _STOPWORDS = frozenset(
     """ve veya ile bir bu şu o da de mi mı mu mü için gibi ama fakat ancak çok az
     daha en her hiç ki ne nasıl neden kim kime kimin ise değil olarak sonra önce
-    üzerine kadar dedi diyor var yok olan olarak""".split()
+    üzerine kadar dedi diyor var yok olan olarak
+    hakkında konusunda ilgili gönderi gönderide deniyor denmiş yazılmış yazıyor
+    ediyor anlatılıyor""".split()
 )
 
 
