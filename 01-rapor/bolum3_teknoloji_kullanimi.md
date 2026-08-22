@@ -419,12 +419,59 @@ Kod düzeyinde uygulananlar:
 - Grafiklerde `role="img"` ve metinsel eşdeğer
 - `prefers-reduced-motion` sistem tercihine uyum
 
+**Bu liste bir iddia değil, ölçülmüş bir sonuçtur.** Denetim
+`02-prototip/scripts/erisilebilirlik-denetimi.mjs` ile yapılır; jüri aynı
+komutu çalıştırıp aynı sonucu alabilir. Araç **axe-core 4.13** (Deque Systems),
+ölçüt **WCAG 2.0/2.1 seviye A + AA**. Ölçüm üretim derlemesi üzerinde koşar.
+
+**Tablo 9 — Erişilebilirlik denetimi** (6 sayfa × 2 tema = 12 koşu)
+
+| Ölçüm | Değer |
+|---|---|
+| WCAG A/AA ihlali | **0** |
+| Odak halkası görünmeyen sekme durağı | **0** |
+| Klavye tuzağı | **bulunmadı** |
+
+Bu tablo ilk koşuda böyle değildi ve düzeltme süreci raporlanmaya değer:
+
+1. **46 düğümde kontrast ihlali** çıktı. Dağınık kusurlar değildi; üçü de renk
+   jetonuydu. `metin-sonuk` kart yüzeyinde 3,21:1 veriyordu (gereken 4,50).
+   `mavi` ve `mihenk` ise *dolu zemin* olarak kullanıldığında batıyordu — bir
+   renk, hem koyu zeminde metin hem de beyaz metin taşıyan dolu zemin rolünü
+   aynı anda AA seviyesinde taşıyamaz. Palet iki rol ayrılarak düzeltildi.
+
+2. **Asıl bulgu ölçüm aracının kendisindeydi.** İlk koşu açık temayı hiç
+   ölçmemişti: betik temayı `prefers-color-scheme` ile açmaya çalışıyordu, oysa
+   arayüz `data-tema` özniteliğini okuyor. İki koşu da karanlık temayı ölçüyor,
+   sonuç "iki temada da temiz" görünüyordu. Düzeltilince açık temada **190
+   düğümlük** ihlal ortaya çıktı: aksan renklerinin tamamı koyu zemin için
+   seçilmişti. Açık tema için ayrı bir aksan seti tanımlandı.
+
+İkinci madde, bu raporun Tablo 1 ile Tablo 8 arasındaki farkın da açıklamasıdır:
+**ölçüm aracı yanlış ölçtüğünde sonuç kusursuz görünür.**
+
+**Otomatik denetimin göremediği.** "0 ihlal", "erişilebilir" demek değildir.
+Odak sırasının mantıklı olması, ekran okuyucunun okuduğu metnin anlamlı olması
+ve çekimserlik mesajının bilişsel olarak nasıl okunduğu bu araçla ölçülmez;
+sonuncusu kullanılabilirlik testinin sorusudur. Bu sınır
+`eval/results/erisilebilirlik.md` içinde de yazılıdır.
+
 ### Kullanılabilirlik testi
 
-Kullanılabilirlik testi protokolü hazırlanmış olup uygulama sonuçları
-`docs/KULLANILABILIRLIK_TESTI.md` belgesinde raporlanmaktadır. Test, tıklanabilir
-prototip üzerinde görev tabanlı olarak yürütülmüş; ölçülen büyüklükler görev
-tamamlama oranı, görev süresi ve hata sayısıdır.
+Test protokolü, katılımcı profilleri, görev listesi ve ölçüm formları
+hazırlanmıştır (`docs/KULLANILABILIRLIK_TESTI.md`). **Test rapor teslimi
+itibarıyla henüz uygulanmamıştır; sonuç tablosu boştur ve öyle bırakılmıştır.**
+Ölçülmemiş bir sayıyı rapora yazmamak, bu projede modeller için uygulanan
+kuralın (bkz. 3.2) tasarım tarafındaki karşılığıdır.
+
+Uygulandığında ölçülecek büyüklükler protokolde tanımlıdır: görev tamamlama
+oranı, görev süresi (elle okuma ile özetle okuma karşılaştırmalı), kavrama
+doğruluğu ve SUS puanı. Katılımcı sayısı 5'tir ve bu **istatistiksel bir
+örneklem değil, keşifsel bir testtir**; raporda da öyle sunulacaktır.
+
+Testin cevaplaması hedeflenen asıl soru hız değildir: sistem bilinçli olarak
+bazen susuyor (İlke 2). Kullanıcı bu sessizliği **"bozuk"** mu yoksa
+**"dürüst"** mü okuyor? Otomatik hiçbir denetim bu soruyu yanıtlamaz.
 
 *[Kontrol maddeleri: kullanıcı akışları (2p) · arayüz kararlarının
 gerekçelendirilmesi (2p) · erişilebilirlik yaklaşımı (2p) · kullanılabilirlik
