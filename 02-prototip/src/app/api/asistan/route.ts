@@ -3,6 +3,15 @@ import { gonderiGetir, olayKumesiGetir } from "@/lib/veri";
 import { uret } from "@/lib/yz/saglayici";
 
 /**
+ * Vercel serverless süre sınırı.
+ * Doğrulama ucu web araması + model çağrısı yaptığı için varsayılan
+ * kısa süre yetmez; kesilirse kullanıcı sonuç göremez.
+ */
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
+
+/**
  * Entegre dijital asistan.
  * Kullanıcı, akıştan çıkmadan bir gönderi hakkında soru sorabilir.
  *

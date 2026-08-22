@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { gonderiGetir } from "@/lib/veri";
 
 /**
+ * Vercel serverless süre sınırı.
+ * Doğrulama ucu web araması + model çağrısı yaptığı için varsayılan
+ * kısa süre yetmez; kesilirse kullanıcı sonuç göremez.
+ */
+export const maxDuration = 30;
+export const runtime = "nodejs";
+
+
+/**
  * Görsel köken ve yapay üretim denetimi.
  *
  * Üretim hattı üç sinyali birleştirir:
