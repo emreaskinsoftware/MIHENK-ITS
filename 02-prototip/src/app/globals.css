@@ -37,7 +37,20 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Açık tema — NSosyal menüsündeki güneş/ay geçişinin karşılığı */
+:root[data-tema="acik"] {
+  --color-zemin: #ffffff;
+  --color-kart: #f4f6f9;
+  --color-yukseltilmis: #e8ecf2;
+  --color-hover: #dde3ec;
+  --color-cizgi: #dfe4ec;
+  --color-metin: #0f1720;
+  --color-metin-ikincil: #5a6672;
+  --color-metin-sonuk: #8a95a3;
+}
+
 html { color-scheme: dark; }
+html[data-tema="acik"] { color-scheme: light; }
 
 body {
   background: var(--color-zemin);
