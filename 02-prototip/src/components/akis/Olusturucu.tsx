@@ -24,20 +24,21 @@ export function Olusturucu() {
             className="w-full bg-transparent text-[18px] placeholder:text-metin-sonuk
                        outline-none py-2"
           />
-          <div className="flex items-center gap-1 mt-2">
+          <div className="flex items-center gap-1 mt-2 max-sm:gap-0">
             {ARACLAR.map(({ ikon: Ikon, etiket }) => (
               <button key={etiket} type="button" aria-label={etiket}
-                      className="p-2 rounded-full text-mavi hover:bg-mavi/10 transition-colors">
-                <Ikon size={19} strokeWidth={1.9} />
+                      className="p-2 max-sm:p-1.5 rounded-full text-mavi hover:bg-mavi/10 transition-colors">
+                <Ikon size={19} strokeWidth={1.9} className="max-sm:w-[17px] max-sm:h-[17px]" />
               </button>
             ))}
             <button
               type="button"
-              className="ml-auto flex items-center gap-2 rounded-full bg-yukseltilmis text-metin-ikincil
-                         px-5 py-2 text-[15px] font-semibold"
+              aria-label="Gönder"
+              className="ml-auto shrink-0 flex items-center gap-2 rounded-full bg-yukseltilmis text-metin-ikincil
+                         px-5 py-2 max-sm:px-3 text-[15px] font-semibold"
             >
               <PenLine size={16} />
-              Gönder
+              <span className="max-sm:hidden">Gönder</span>
             </button>
           </div>
         </div>
