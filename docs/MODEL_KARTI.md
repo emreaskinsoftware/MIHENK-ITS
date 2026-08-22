@@ -127,8 +127,28 @@ olasılık kalibrasyonu zayıf. Belirsizlik bandı bu boşluğu kapatır.
 | Eşik | Değer | Anlamı |
 |---|---|---|
 | `min_detection_tokens` | 20 | Bu sayının altında etiket gösterilmez |
-| `abstain_low` | 0.35 | Belirsizlik bandı alt sınırı |
-| `abstain_high` | 0.65 | Belirsizlik bandı üst sınırı |
+| `abstain_low` | 0.35 | Belirsizlik bandı alt sınırı — **yalnızca yedek** |
+| `abstain_high` | 0.65 | Belirsizlik bandı üst sınırı — **yalnızca yedek** |
+
+Bant artık config'ten değil, **modele göre kalibrasyon dosyasından** gelir
+(`ml/artifacts/calibration_<arka_uc>.json`, üreten:
+`ml/scripts/calibrate_threshold.py`). Config değerleri yalnızca kalibrasyon
+dosyası yokken kullanılır ve `detection.md` bu durumu "kalibre edilmedi"
+olarak işaretler.
+
+**Neden sabit bant yetmiyor (ölçüldü):** Model olasılıkları eğitim
+dağılımına göre kalibredir; eğitim/doğrulama kümesi sınıf-dengelidir
+(pozitif oran ~0.49), akış ise değildir (~0.18). Sabit `[0.35, 0.65]` bandı
+akışta yanlış yerde durur. Aynı beş model, akışın ölçüm yarısında:
+
+| | Etiketlendiğinde doğruluk | Etiketlenen oran |
+|---|---|---|
+| Sabit bant `[0.35, 0.65]` | 0.519 ± 0.170 | ~%85 |
+| Kalibre bant | **0.959 ± 0.003** | %50–95 (tohuma göre) |
+
+Kalibrasyon, tohumdan gelen salınımı doğruluktan kapsama taşır: zayıf bir
+model yanlış etiketlemek yerine daha çok susar. Kalibrasyon eşiği akışın
+BİR YARISINDA seçilir, sonuç diğer yarısında ölçülür.
 
 ---
 
