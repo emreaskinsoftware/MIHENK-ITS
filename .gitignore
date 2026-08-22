@@ -29,3 +29,12 @@ frontend/.vite/
 # İşletim sistemi
 .DS_Store
 Thumbs.db
+
+# Gerçek metin ölçüm kümesi — üçüncü taraf metinleri depoya girmez.
+# İnsan tarafı CC BY-SA 4.0 lisanslı bir derlemden gelir; yeniden dağıtmak
+# paylaşımlı-lisans yükümlülüğü doğurur. Bunun yerine üretim betiği
+# (build_real_eval.py) derlemi indirip deterministik olarak yeniden örnekler.
+# Bizim ürettiğimiz yapay zekâ metinleri (ai_raw.jsonl) depoda TUTULUR.
+ml/data/real_eval/_kaynak_yorumlar.parquet
+ml/data/real_eval/gen_brief.json
+ml/data/real_eval/dataset.jsonl
