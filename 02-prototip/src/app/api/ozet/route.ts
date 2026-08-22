@@ -37,8 +37,14 @@ export async function POST(istek: Request) {
       kullanici: `Şu gönderiyi tek cümlede özetle:\n\n"${g.metin}"`,
       enFazlaJeton: 200,
     });
+    // Yerel geri düşüş: metni kesmek yerine ilk paragrafı (asıl iddiayı) al
+    const paragraflar = g.metin.split(/\n+/).map((p) => p.trim()).filter(Boolean);
+    const yerelOzet = paragraflar.length > 1
+      ? `${paragraflar[0]} Gerekçe olarak ${paragraflar[1].split(/(?<=[.!?])\s/)[0].toLocaleLowerCase("tr-TR")}`
+      : paragraflar[0] ?? g.metin;
+
     return NextResponse.json({
-      ozet: yz.metin || g.metin.slice(0, 160),
+      ozet: yz.metin || yerelOzet,
       saglayici: yz.saglayici,
       kaynakGonderiSayisi: 1,
     });
