@@ -162,7 +162,7 @@ Kalibrasyon dosyası yoksa sistem çalışır ama bandı ölçülmemiştir ve
 `detection.md` bunu "config sabiti (kalibre edilmedi)" diye yazar.
 
 `seed_variance.py`, doğrulama kümesinin göremediği değişkenliği ölçer:
-aynı beş model doğrulamada 1.000 ± 0.000, aktarımda 0.483 ± 0.148 verir.
+aynı beş model doğrulamada 1.000 ± 0.000, aktarımda 0.511 ± 0.148 verir.
 Betik bitiminde diskteki modeli belgelenmiş varsayılan tohuma geri yükler.
 
 ### Eğitim uzun sürerse — parçalı koşu
