@@ -1,0 +1,835 @@
+[
+  {
+    "id": "u001",
+    "kullanici_adi": "sessiz_kalem95",
+    "rol": "kullanici",
+    "takipci_sayisi": 153,
+    "takip_edilen_sayisi": 722,
+    "hesap_yasi_gun": 2245,
+    "ilgi_alanlari": [
+      "spor",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u002",
+    "kullanici_adi": "kuzey_kıyı5",
+    "rol": "kullanici",
+    "takipci_sayisi": 122,
+    "takip_edilen_sayisi": 646,
+    "hesap_yasi_gun": 120,
+    "ilgi_alanlari": [
+      "spor",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u003",
+    "kullanici_adi": "yalın_kıyı29",
+    "rol": "kullanici",
+    "takipci_sayisi": 189,
+    "takip_edilen_sayisi": 378,
+    "hesap_yasi_gun": 1150,
+    "ilgi_alanlari": [
+      "gundem",
+      "spor",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u004",
+    "kullanici_adi": "gece_yol98",
+    "rol": "kullanici",
+    "takipci_sayisi": 164,
+    "takip_edilen_sayisi": 397,
+    "hesap_yasi_gun": 1420,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u005",
+    "kullanici_adi": "derin_defter94",
+    "rol": "kullanici",
+    "takipci_sayisi": 192,
+    "takip_edilen_sayisi": 595,
+    "hesap_yasi_gun": 1212,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u006",
+    "kullanici_adi": "geniş_yol91",
+    "rol": "kullanici",
+    "takipci_sayisi": 126,
+    "takip_edilen_sayisi": 133,
+    "hesap_yasi_gun": 1568,
+    "ilgi_alanlari": [
+      "spor",
+      "ekonomi",
+      "gundem",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u007",
+    "kullanici_adi": "derin_dal82",
+    "rol": "kullanici",
+    "takipci_sayisi": 477,
+    "takip_edilen_sayisi": 244,
+    "hesap_yasi_gun": 1105,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u008",
+    "kullanici_adi": "kuzey_tepe69",
+    "rol": "kullanici",
+    "takipci_sayisi": 327,
+    "takip_edilen_sayisi": 306,
+    "hesap_yasi_gun": 2293,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u009",
+    "kullanici_adi": "uzak_köprü99",
+    "rol": "kullanici",
+    "takipci_sayisi": 379,
+    "takip_edilen_sayisi": 440,
+    "hesap_yasi_gun": 1108,
+    "ilgi_alanlari": [
+      "gundem",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u010",
+    "kullanici_adi": "kuzey_yol73",
+    "rol": "kullanici",
+    "takipci_sayisi": 599,
+    "takip_edilen_sayisi": 688,
+    "hesap_yasi_gun": 1891,
+    "ilgi_alanlari": [
+      "spor",
+      "teknoloji",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u011",
+    "kullanici_adi": "gece_orman18",
+    "rol": "kullanici",
+    "takipci_sayisi": 149,
+    "takip_edilen_sayisi": 438,
+    "hesap_yasi_gun": 1494,
+    "ilgi_alanlari": [
+      "kultur",
+      "ekonomi",
+      "teknoloji",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u012",
+    "kullanici_adi": "uzak_liman66",
+    "rol": "kullanici",
+    "takipci_sayisi": 202,
+    "takip_edilen_sayisi": 672,
+    "hesap_yasi_gun": 667,
+    "ilgi_alanlari": [
+      "gundem",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u013",
+    "kullanici_adi": "eski_pusula50",
+    "rol": "kullanici",
+    "takipci_sayisi": 173,
+    "takip_edilen_sayisi": 726,
+    "hesap_yasi_gun": 481,
+    "ilgi_alanlari": [
+      "kultur",
+      "ekonomi",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u014",
+    "kullanici_adi": "derin_köprü15",
+    "rol": "kullanici",
+    "takipci_sayisi": 156,
+    "takip_edilen_sayisi": 769,
+    "hesap_yasi_gun": 1090,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u015",
+    "kullanici_adi": "mavi_fener81",
+    "rol": "kullanici",
+    "takipci_sayisi": 157,
+    "takip_edilen_sayisi": 412,
+    "hesap_yasi_gun": 673,
+    "ilgi_alanlari": [
+      "kultur",
+      "kisisel",
+      "spor",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u016",
+    "kullanici_adi": "yaz_köprü63",
+    "rol": "kullanici",
+    "takipci_sayisi": 121,
+    "takip_edilen_sayisi": 276,
+    "hesap_yasi_gun": 2335,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "spor",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u017",
+    "kullanici_adi": "kuzey_pusula94",
+    "rol": "kullanici",
+    "takipci_sayisi": 200,
+    "takip_edilen_sayisi": 161,
+    "hesap_yasi_gun": 1958,
+    "ilgi_alanlari": [
+      "kultur",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u018",
+    "kullanici_adi": "mavi_orman68",
+    "rol": "kullanici",
+    "takipci_sayisi": 584,
+    "takip_edilen_sayisi": 760,
+    "hesap_yasi_gun": 1288,
+    "ilgi_alanlari": [
+      "spor",
+      "kultur",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u019",
+    "kullanici_adi": "yeni_adım57",
+    "rol": "kullanici",
+    "takipci_sayisi": 703,
+    "takip_edilen_sayisi": 95,
+    "hesap_yasi_gun": 1396,
+    "ilgi_alanlari": [
+      "gundem",
+      "spor",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u020",
+    "kullanici_adi": "yaz_kapı76",
+    "rol": "kullanici",
+    "takipci_sayisi": 145,
+    "takip_edilen_sayisi": 264,
+    "hesap_yasi_gun": 288,
+    "ilgi_alanlari": [
+      "kisisel",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u021",
+    "kullanici_adi": "deniz_köprü10",
+    "rol": "kullanici",
+    "takipci_sayisi": 209,
+    "takip_edilen_sayisi": 582,
+    "hesap_yasi_gun": 553,
+    "ilgi_alanlari": [
+      "kisisel",
+      "teknoloji",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u022",
+    "kullanici_adi": "yavaş_kapı61",
+    "rol": "kullanici",
+    "takipci_sayisi": 426,
+    "takip_edilen_sayisi": 704,
+    "hesap_yasi_gun": 1777,
+    "ilgi_alanlari": [
+      "gundem",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u023",
+    "kullanici_adi": "geniş_kıyı53",
+    "rol": "kullanici",
+    "takipci_sayisi": 194,
+    "takip_edilen_sayisi": 775,
+    "hesap_yasi_gun": 1401,
+    "ilgi_alanlari": [
+      "gundem",
+      "kisisel",
+      "kultur",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u024",
+    "kullanici_adi": "sessiz_kapı25",
+    "rol": "kullanici",
+    "takipci_sayisi": 141,
+    "takip_edilen_sayisi": 315,
+    "hesap_yasi_gun": 1906,
+    "ilgi_alanlari": [
+      "spor",
+      "teknoloji",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u025",
+    "kullanici_adi": "uzak_pusula57",
+    "rol": "kullanici",
+    "takipci_sayisi": 427,
+    "takip_edilen_sayisi": 801,
+    "hesap_yasi_gun": 980,
+    "ilgi_alanlari": [
+      "gundem",
+      "kisisel",
+      "kultur",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u026",
+    "kullanici_adi": "mavi_kıyı63",
+    "rol": "kullanici",
+    "takipci_sayisi": 198,
+    "takip_edilen_sayisi": 32,
+    "hesap_yasi_gun": 1611,
+    "ilgi_alanlari": [
+      "gundem",
+      "spor",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u027",
+    "kullanici_adi": "derin_dal37",
+    "rol": "kullanici",
+    "takipci_sayisi": 183,
+    "takip_edilen_sayisi": 333,
+    "hesap_yasi_gun": 903,
+    "ilgi_alanlari": [
+      "kultur",
+      "teknoloji",
+      "spor",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u028",
+    "kullanici_adi": "deniz_defter96",
+    "rol": "kullanici",
+    "takipci_sayisi": 160,
+    "takip_edilen_sayisi": 544,
+    "hesap_yasi_gun": 2187,
+    "ilgi_alanlari": [
+      "kultur",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u029",
+    "kullanici_adi": "mavi_defter66",
+    "rol": "kullanici",
+    "takipci_sayisi": 127,
+    "takip_edilen_sayisi": 99,
+    "hesap_yasi_gun": 975,
+    "ilgi_alanlari": [
+      "gundem",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u030",
+    "kullanici_adi": "yeni_fener73",
+    "rol": "kullanici",
+    "takipci_sayisi": 149,
+    "takip_edilen_sayisi": 703,
+    "hesap_yasi_gun": 2402,
+    "ilgi_alanlari": [
+      "gundem",
+      "kultur",
+      "kisisel",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u031",
+    "kullanici_adi": "ince_orman27",
+    "rol": "kullanici",
+    "takipci_sayisi": 281,
+    "takip_edilen_sayisi": 164,
+    "hesap_yasi_gun": 1240,
+    "ilgi_alanlari": [
+      "spor",
+      "ekonomi",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u032",
+    "kullanici_adi": "hızlı_köprü97",
+    "rol": "kullanici",
+    "takipci_sayisi": 991,
+    "takip_edilen_sayisi": 606,
+    "hesap_yasi_gun": 421,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u033",
+    "kullanici_adi": "kuzey_yol65",
+    "rol": "kullanici",
+    "takipci_sayisi": 152,
+    "takip_edilen_sayisi": 321,
+    "hesap_yasi_gun": 658,
+    "ilgi_alanlari": [
+      "gundem",
+      "spor",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u034",
+    "kullanici_adi": "hızlı_vadi79",
+    "rol": "kullanici",
+    "takipci_sayisi": 2867,
+    "takip_edilen_sayisi": 136,
+    "hesap_yasi_gun": 562,
+    "ilgi_alanlari": [
+      "kultur",
+      "gundem",
+      "ekonomi",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u035",
+    "kullanici_adi": "derin_fener14",
+    "rol": "kullanici",
+    "takipci_sayisi": 340,
+    "takip_edilen_sayisi": 649,
+    "hesap_yasi_gun": 874,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u036",
+    "kullanici_adi": "ince_yol88",
+    "rol": "kullanici",
+    "takipci_sayisi": 260,
+    "takip_edilen_sayisi": 896,
+    "hesap_yasi_gun": 220,
+    "ilgi_alanlari": [
+      "kultur",
+      "teknoloji",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u037",
+    "kullanici_adi": "kuzey_kıyı36",
+    "rol": "kullanici",
+    "takipci_sayisi": 124,
+    "takip_edilen_sayisi": 789,
+    "hesap_yasi_gun": 1821,
+    "ilgi_alanlari": [
+      "spor",
+      "ekonomi",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u038",
+    "kullanici_adi": "eski_kalem15",
+    "rol": "kullanici",
+    "takipci_sayisi": 127,
+    "takip_edilen_sayisi": 626,
+    "hesap_yasi_gun": 2275,
+    "ilgi_alanlari": [
+      "spor",
+      "kultur",
+      "gundem",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u039",
+    "kullanici_adi": "gece_kıyı17",
+    "rol": "kullanici",
+    "takipci_sayisi": 124,
+    "takip_edilen_sayisi": 728,
+    "hesap_yasi_gun": 1034,
+    "ilgi_alanlari": [
+      "gundem",
+      "ekonomi",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u040",
+    "kullanici_adi": "sessiz_adım72",
+    "rol": "kullanici",
+    "takipci_sayisi": 629,
+    "takip_edilen_sayisi": 196,
+    "hesap_yasi_gun": 737,
+    "ilgi_alanlari": [
+      "kultur",
+      "spor",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u041",
+    "kullanici_adi": "eski_kalem23",
+    "rol": "kullanici",
+    "takipci_sayisi": 334,
+    "takip_edilen_sayisi": 193,
+    "hesap_yasi_gun": 454,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "spor",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u042",
+    "kullanici_adi": "yeni_defter61",
+    "rol": "kullanici",
+    "takipci_sayisi": 145,
+    "takip_edilen_sayisi": 258,
+    "hesap_yasi_gun": 108,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "kisisel",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u043",
+    "kullanici_adi": "yalın_iz43",
+    "rol": "kullanici",
+    "takipci_sayisi": 154,
+    "takip_edilen_sayisi": 686,
+    "hesap_yasi_gun": 2098,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u044",
+    "kullanici_adi": "yeni_köprü4",
+    "rol": "kullanici",
+    "takipci_sayisi": 131,
+    "takip_edilen_sayisi": 69,
+    "hesap_yasi_gun": 456,
+    "ilgi_alanlari": [
+      "spor",
+      "kultur",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u045",
+    "kullanici_adi": "eski_adım94",
+    "rol": "kullanici",
+    "takipci_sayisi": 393,
+    "takip_edilen_sayisi": 424,
+    "hesap_yasi_gun": 2373,
+    "ilgi_alanlari": [
+      "kultur",
+      "kisisel",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u046",
+    "kullanici_adi": "yalın_orman6",
+    "rol": "kullanici",
+    "takipci_sayisi": 309,
+    "takip_edilen_sayisi": 733,
+    "hesap_yasi_gun": 819,
+    "ilgi_alanlari": [
+      "kultur",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u047",
+    "kullanici_adi": "geniş_kıyı9",
+    "rol": "kullanici",
+    "takipci_sayisi": 1181,
+    "takip_edilen_sayisi": 767,
+    "hesap_yasi_gun": 1242,
+    "ilgi_alanlari": [
+      "kultur",
+      "ekonomi",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u048",
+    "kullanici_adi": "kara_kıyı42",
+    "rol": "kullanici",
+    "takipci_sayisi": 178,
+    "takip_edilen_sayisi": 460,
+    "hesap_yasi_gun": 1564,
+    "ilgi_alanlari": [
+      "kultur",
+      "spor",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u049",
+    "kullanici_adi": "mavi_vadi52",
+    "rol": "kullanici",
+    "takipci_sayisi": 221,
+    "takip_edilen_sayisi": 245,
+    "hesap_yasi_gun": 1772,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u050",
+    "kullanici_adi": "ince_dal57",
+    "rol": "kullanici",
+    "takipci_sayisi": 188,
+    "takip_edilen_sayisi": 842,
+    "hesap_yasi_gun": 707,
+    "ilgi_alanlari": [
+      "kultur",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u051",
+    "kullanici_adi": "kuzey_vadi66",
+    "rol": "kullanici",
+    "takipci_sayisi": 277,
+    "takip_edilen_sayisi": 347,
+    "hesap_yasi_gun": 932,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "gundem",
+      "spor",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u052",
+    "kullanici_adi": "yalın_liman4",
+    "rol": "kullanici",
+    "takipci_sayisi": 124,
+    "takip_edilen_sayisi": 454,
+    "hesap_yasi_gun": 2591,
+    "ilgi_alanlari": [
+      "kultur",
+      "gundem",
+      "teknoloji"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u053",
+    "kullanici_adi": "yalın_iz64",
+    "rol": "kullanici",
+    "takipci_sayisi": 177,
+    "takip_edilen_sayisi": 798,
+    "hesap_yasi_gun": 448,
+    "ilgi_alanlari": [
+      "kisisel",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u054",
+    "kullanici_adi": "eski_kapı23",
+    "rol": "kullanici",
+    "takipci_sayisi": 420,
+    "takip_edilen_sayisi": 285,
+    "hesap_yasi_gun": 509,
+    "ilgi_alanlari": [
+      "kultur",
+      "teknoloji",
+      "gundem",
+      "ekonomi"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u055",
+    "kullanici_adi": "hızlı_liman60",
+    "rol": "kullanici",
+    "takipci_sayisi": 279,
+    "takip_edilen_sayisi": 864,
+    "hesap_yasi_gun": 2079,
+    "ilgi_alanlari": [
+      "kultur",
+      "ekonomi",
+      "teknoloji",
+      "kisisel"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u056",
+    "kullanici_adi": "eski_dal21",
+    "rol": "kullanici",
+    "takipci_sayisi": 341,
+    "takip_edilen_sayisi": 890,
+    "hesap_yasi_gun": 1147,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "ekonomi",
+      "spor"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u057",
+    "kullanici_adi": "yavaş_kapı36",
+    "rol": "kullanici",
+    "takipci_sayisi": 187,
+    "takip_edilen_sayisi": 357,
+    "hesap_yasi_gun": 2224,
+    "ilgi_alanlari": [
+      "ekonomi",
+      "spor",
+      "kisisel",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u058",
+    "kullanici_adi": "kuzey_liman20",
+    "rol": "kullanici",
+    "takipci_sayisi": 146,
+    "takip_edilen_sayisi": 447,
+    "hesap_yasi_gun": 1367,
+    "ilgi_alanlari": [
+      "spor",
+      "kisisel",
+      "gundem",
+      "kultur"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u059",
+    "kullanici_adi": "hızlı_kıyı8",
+    "rol": "kullanici",
+    "takipci_sayisi": 143,
+    "takip_edilen_sayisi": 813,
+    "hesap_yasi_gun": 2370,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "kultur",
+      "gundem"
+    ],
+    "dogrulanmis": false
+  },
+  {
+    "id": "u060",
+    "kullanici_adi": "yeni_taş1",
+    "rol": "kullanici",
+    "takipci_sayisi": 1083,
+    "takip_edilen_sayisi": 529,
+    "hesap_yasi_gun": 910,
+    "ilgi_alanlari": [
+      "teknoloji",
+      "kisisel",
+      "spor"
+    ],
+    "dogrulanmis": false
+  }
+]

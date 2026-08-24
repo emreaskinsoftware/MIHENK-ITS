@@ -1,0 +1,92 @@
+{
+  "_okuma": [
+    "Kullanılabilirlik testi ham veri kaydı. Her katılımcı için bir nesne.",
+    "Doldurulmayan alan null bırakılır; hesap betiği null'ı ortalamaya KATMAZ",
+    "ve raporda [  ] olarak gösterir. Uydurma değer yazmayın.",
+    "",
+    "sure_sn        : Görev A ve B'nin saniye cinsinden süresi.",
+    "kavrama        : 4 sorunun her biri 0, 0.5 veya 1. Puanlamayı testi",
+    "                 YÜRÜTEN kişi değil, ikinci bir ekip üyesi yapar.",
+    "kaynak_tiklama : Görev B sırasında kaynak rozetine kaç kez tıklandı.",
+    "gorev_c        : basari true/false, sure_sn saniye (45 sn'de durdurulur).",
+    "gorev_d        : okuma alanı yalnızca şu dördünden biri olabilir:",
+    "                 'durust' | 'yanlis_guven' | 'bozuk' | 'belirsiz'",
+    "                 (bkz. MODERATOR_BETIGI.md §5 tablosu)",
+    "sus            : 10 madde, sırayla, her biri 1-5 arası tam sayı.",
+    "ek             : E1/E2/E3, her biri 1-5. SUS'a dahil EDİLMEZ.",
+    "",
+    "Sıra dengeleme zorunludur: 'once' alanı 'elle' veya 'ozet' olur ve",
+    "MODERATOR_BETIGI.md §0'daki tabloya uyar. Betik bunu kontrol eder."
+  ],
+
+  "katilimcilar": [
+    {
+      "kod": "K1",
+      "profil": "Yoğun sosyal medya kullanıcısı (günde 1+ saat)",
+      "once": "elle",
+      "elle": { "kategori": "gundem", "sure_sn": null, "kavrama": [null, null, null, null] },
+      "ozet": { "kategori": "spor", "sure_sn": null, "kavrama": [null, null, null, null], "kaynak_tiklama": null },
+      "gorev_c": { "basari": null, "sure_sn": null },
+      "gorev_d": { "okuma": null, "sozleri": "" },
+      "gorev_e": { "sozleri": "" },
+      "sus": [null, null, null, null, null, null, null, null, null, null],
+      "ek": { "E1": null, "E2": null, "E3": null },
+      "notlar": ""
+    },
+    {
+      "kod": "K2",
+      "profil": "Orta düzey kullanıcı",
+      "once": "ozet",
+      "elle": { "kategori": "spor", "sure_sn": null, "kavrama": [null, null, null, null] },
+      "ozet": { "kategori": "gundem", "sure_sn": null, "kavrama": [null, null, null, null], "kaynak_tiklama": null },
+      "gorev_c": { "basari": null, "sure_sn": null },
+      "gorev_d": { "okuma": null, "sozleri": "" },
+      "gorev_e": { "sozleri": "" },
+      "sus": [null, null, null, null, null, null, null, null, null, null],
+      "ek": { "E1": null, "E2": null, "E3": null },
+      "notlar": ""
+    },
+    {
+      "kod": "K3",
+      "profil": "Az kullanan / seçici okuyucu",
+      "once": "elle",
+      "elle": { "kategori": "spor", "sure_sn": null, "kavrama": [null, null, null, null] },
+      "ozet": { "kategori": "gundem", "sure_sn": null, "kavrama": [null, null, null, null], "kaynak_tiklama": null },
+      "gorev_c": { "basari": null, "sure_sn": null },
+      "gorev_d": { "okuma": null, "sozleri": "" },
+      "gorev_e": { "sozleri": "" },
+      "sus": [null, null, null, null, null, null, null, null, null, null],
+      "ek": { "E1": null, "E2": null, "E3": null },
+      "notlar": ""
+    },
+    {
+      "kod": "K4",
+      "profil": "Haber okuma alışkanlığı yüksek",
+      "once": "ozet",
+      "elle": { "kategori": "gundem", "sure_sn": null, "kavrama": [null, null, null, null] },
+      "ozet": { "kategori": "spor", "sure_sn": null, "kavrama": [null, null, null, null], "kaynak_tiklama": null },
+      "gorev_c": { "basari": null, "sure_sn": null },
+      "gorev_d": { "okuma": null, "sozleri": "" },
+      "gorev_e": { "sozleri": "" },
+      "sus": [null, null, null, null, null, null, null, null, null, null],
+      "ek": { "E1": null, "E2": null, "E3": null },
+      "notlar": ""
+    },
+    {
+      "kod": "K5",
+      "profil": "Teknik olmayan kullanıcı",
+      "once": "elle",
+      "elle": { "kategori": "gundem", "sure_sn": null, "kavrama": [null, null, null, null] },
+      "ozet": { "kategori": "spor", "sure_sn": null, "kavrama": [null, null, null, null], "kaynak_tiklama": null },
+      "gorev_c": { "basari": null, "sure_sn": null },
+      "gorev_d": { "okuma": null, "sozleri": "" },
+      "gorev_e": { "sozleri": "" },
+      "sus": [null, null, null, null, null, null, null, null, null, null],
+      "ek": { "E1": null, "E2": null, "E3": null },
+      "notlar": ""
+    }
+  ],
+
+  "nitel_bulgular": [],
+  "yapilacak_duzeltmeler": []
+}

@@ -1,4 +1,4 @@
-# Tablo 5 — Özetleme ve Asistan
+# Özetleme ve Asistan
 
 > `ml/scripts/evaluate.py` tarafından üretilir. Elle düzenlenmez.
 
@@ -29,8 +29,8 @@ Sağlayıcı: `fake-extractive` · Gömme: `intfloat/multilingual-e5-base` · Ak
 
 | Metrik | Değer |
 |---|---|
-| Özet gecikmesi p50 | 962 ms |
-| Özet gecikmesi p95 | 1101 ms |
+| Özet gecikmesi p50 | 534 ms |
+| Özet gecikmesi p95 | 767 ms |
 | Asistan gecikmesi p50 | 0.0 ms |
 | Önbellek isabet oranı | 0.750 |
 | Zenginleştirmede LLM çağrısından tasarruf | 46.0% |
@@ -47,7 +47,7 @@ Kullanıcı başına tekrarlanan tek pahalı işlem, özet başına **1** birle�
 
 Sadakat, sözcüksel örtüşme vekiliyle ölçülmüştür (NLI modeli veya insan
 değerlendirmesi değil). Düşük örtüşme kesin olarak sadakatsizliği gösterir;
-yüksek örtüşme sadakati garanti etmez. İnsan değerlendirmesi Tablo 7'dedir.
+yüksek örtüşme sadakati garanti etmez. İnsan değerlendirmesi kullanılabilirlik testine aittir (docs/KULLANILABILIRLIK_TESTI.md).
 
 > **UYARI:** Bu koşu `fake-extractive` sağlayıcıyla yapılmıştır. Bu sağlayıcı
 > gönderilerden cümle SEÇER, yeni cümle üretmez; bu yüzden sadakat skorları

@@ -62,7 +62,7 @@ doğurur — İlke 1 ihlali.
 | Parametre | ~110M |
 | Temel çizgi | TF-IDF (char_wb 2-5 + word 1-2) + Lojistik Regresyon |
 | Eğitim verisi | `ml/data/detection/train.jsonl` — sentetik, şablon üretimli |
-| Donanım | CPU (GPU kullanılmadı) |
+| Donanım | NVIDIA GeForce RTX 3050 Laptop GPU (CUDA); kısmî ince ayar sayesinde CPU yolu da desteklenir |
 
 ### Neden Türkçe-özel encoder
 
@@ -78,11 +78,15 @@ Kaynak: `ml/artifacts/training_berturk.json` (eğitim betiği yazar).
 | Parametre | Değer |
 |---|---|
 | Epoch | 3 |
-| Parti boyutu | 16 |
+| Parti boyutu | 32 |
 | Öğrenme oranı | 2e-5 |
-| Maksimum uzunluk | 256 token |
+| Maksimum uzunluk | 192 token |
+| Doldurma | dinamik (parti içi en uzun) |
 | İyileştirici | AdamW |
 | Gradyan kırpma | 1.0 |
+| Karışık hassasiyet (AMP) | açık |
+| Dondurulan encoder katmanı | 9 (gömme katmanı dahil) |
+| Eğitilen / toplam parametre | 21.855.746 / 110.618.882 (%19,8) |
 | Tohum | 20260824 |
 
 ### Ölçülen başarım

@@ -45,3 +45,14 @@ class SummaryResponse(BaseModel):
     # Zenginleştirmesi hazır olmadığı için atlanan gönderi sayısı (spec 6.2 adım 1).
     skipped_post_count: int = 0
     cache_hit_ratio: float = 0.0
+    # Birleştirme çağrısını YAPAN sağlayıcının adı ("fake-extractive", "anthropic"...).
+    #
+    # NEDEN YANITTA TAŞINIYOR: API anahtarı tanımlı değilken sistem yerel,
+    # çıkarımsal bir sahte sağlayıcıyla çalışır. Ürettiği metin bir dil
+    # modelinin çıktısı gibi görünür ama değildir. Bu bilgi yanıtta durmazsa
+    # arayüz onu bir model çıktısı gibi sunar ve demoyu izleyen kişi sistemin
+    # üretim başarımı hakkında yanlış bir izlenim edinir (spec 2).
+    #
+    # Sağlık ucundan ayrı bir çağrıyla sormak yetmez: o çağrı bu özetin
+    # üretildiği andaki sağlayıcıyı değil, sorulduğu andakini söyler.
+    provider: str = ""

@@ -1,4 +1,4 @@
-# Tablo 4 — YZ Metin Tespiti
+# YZ Metin Tespiti
 
 > `ml/scripts/evaluate.py` tarafından üretilir. Elle düzenlenmez.
 

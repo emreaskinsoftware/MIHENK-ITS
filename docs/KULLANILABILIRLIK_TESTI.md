@@ -1,6 +1,6 @@
 # Kullanılabilirlik Testi — Protokol ve Formlar
 
-> Raporun **Tablo 7**'sinin kaynağıdır. Bu test elle yapılır; `evaluate.py`
+> Raporun **Tablo 10**'unun kaynağıdır. Bu test elle yapılır; `evaluate.py`
 > üretmez (spec 7). Sonuçlar bu belgenin 6. bölümüne yazılır.
 >
 > **Sonuç bölümü şu an boştur ve `[  ]` içerir. Test yapılmadan doldurulmaz.**
@@ -122,10 +122,13 @@ tutulur:
 
 ## 6. Sonuçlar
 
-> **Bu bölüm test yapıldıktan sonra doldurulur. Boş hücreler `[  ]` kalır —
-> ölçülmeyen sayı yazılmaz (spec 2, madde 3).**
+> Bu bölüm `02-prototip/scripts/kullanilabilirlik-hesapla.mjs` tarafından
+> `docs/kullanilabilirlik/veri-girisi.json` üzerinden üretilir. Elle
+> düzenlenmez. Doldurulmamış her hücre `[  ]` kalır ve ortalamaya katılmaz.
 
-### Tablo 7 — Görev süresi ve kavrama
+**Tamamlanan katılımcı: 0/5** — eksik katılımcı var; aşağıdaki ortalamalar yalnızca tamamlananlar üzerindendir.
+
+### Tablo 10 — Görev süresi ve kavrama
 
 | Katılımcı | Elle okuma (sn) | Özetle okuma (sn) | Kazanç | Kavrama (elle) | Kavrama (özet) | SUS |
 |---|---|---|---|---|---|---|
@@ -136,26 +139,48 @@ tutulur:
 | K5 | [  ] | [  ] | [  ] | [  ] | [  ] | [  ] |
 | **Ortalama** | **[  ]** | **[  ]** | **[  ]** | **[  ]** | **[  ]** | **[  ]** |
 
+**Kavrama sütunları birlikte okunmalıdır.** Hız, doğruluk pahasına gelmemeli:
+özetle okuyan kullanıcının kavrama puanı elle okuyandan belirgin düşükse
+zaman kazancı bir başarı değil, bilgi kaybıdır.
+
 ### Ek maddeler
 
 | Madde | Ortalama (1-5) |
 |---|---|
-| E1 — Kaynağı anlayabildim | [  ] |
-| E2 — Susması güven verdi | [  ] |
-| E3 — Çipler işe yaradı | [  ] |
+| E1 — Özetteki bilgilerin nereden geldiğini anlayabildim | [  ] |
+| E2 — Sistemin bazı durumlarda bilgi göstermemesi bana güven verdi | [  ] |
+| E3 — Kaynak çiplerine tıklamak kolaydı ve işe yaradı | [  ] |
+
+E2, ürünün en ayırt edici davranışına (İlke 2 — çekimserlik) dair tek doğrudan
+ölçüdür.
+
+### Görev C — Kaynak doğrulama
+
+| Ölçüm | Değer |
+|---|---|
+| Başarı | [  ] |
+| Ortalama süre (sn) | [  ] |
+| Görev B'de kaynak rozetine tıklama (ortalama) | [  ] |
+
+Son satır, atıfın **kullanılıp kullanılmadığını** gösterir. Sıfıra yakınsa
+atıf bir güven aracı değil görsel gürültüdür ve rapor bunu yazmalıdır.
+
+### Görev D — Çekimserlik nasıl okundu
+
+| Katılımcının okuması | Kişi |
+|---|---|
+| "Sistem emin değil / karar vermiyor" | [  ] |
+| "Bu gönderi temiz / insan yazmış" ⚠️ | [  ] |
+| "Sistem bozuk / eksik" ⚠️ | [  ] |
+| Anlamadı | [  ] |
 
 ### Nitel bulgular
 
-| Görev | Bulgu | Kaç katılımcı |
-|---|---|---|
-| D — Çekimserlik yorumu | [  ] | [  ] |
-| E — Asistan reddi | [  ] | [  ] |
+[  ] — test yapıldığında doldurulur.
 
 ### Yapılacak düzeltmeler
 
-| # | Bulgu | Düzeltme | Durum |
-|---|---|---|---|
-| 1 | [  ] | [  ] | [  ] |
+[  ] — test yapıldığında doldurulur.
 
 ## 7. Etik ve veri
 

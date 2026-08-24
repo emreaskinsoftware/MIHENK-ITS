@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/*
+  MİHENK — NSosyal görsel dili
+  Renkler ve ölçüler, NSosyal masaüstü arayüzünün karanlık temasından
+  referans alınarak tanımlanmıştır.
+*/
+@theme {
+  /* Yüzeyler */
+  --color-zemin: #0a0e15;
+  --color-kart: #141a24;
+  --color-yukseltilmis: #1b2331;
+  --color-hover: #212b3b;
+  --color-cizgi: #242e3e;
+
+  /* Metin
+     Üç kademe de WCAG 2.1 AA (4.5:1) eşiğini bu temanın TÜM yüzeylerinde
+     geçer: zemin, kart, yükseltilmiş ve hover.
+
+     ÖNCEKİ DEĞERLER BATIYORDU (axe-core ile ölçüldü, eval/results/
+     erisilebilirlik.md): `metin-sonuk: #5d6b7c` kart üzerinde 3,21:1
+     veriyordu — gereken 4,50. Tek başına 28 ihlal düğümü bu jetondan
+     geliyordu. Kademeler korunsun diye ikisi birden açıldı; yalnızca
+     `sonuk` açılsaydı `ikincil` ile aynı renge gelirdi ve görsel
+     hiyerarşi kaybolurdu. */
+  --color-metin: #e9edf2;
+  --color-metin-ikincil: #a3aebb;
+  --color-metin-sonuk: #8a97a6;
+
+  /* Marka */
+  --color-mavi: #2e90fa;
+  --color-mavi-koyu: #1d6fd4;
+  --color-camgobegi: #22c7e8;
+  --color-onayli: #1d9bf0;
+
+  /* Durum */
+  --color-basari: #22c55e;
+  --color-uyari: #f5a524;
+  --color-tehlike: #f4525f;
+
+  /* MİHENK katmanı — platformdan ayrışsın diye mor-menekşe aksan */
+  /* `mihenk` ve `mavi` KOYU AKSAN ÜZERİNE METİN rengidir; koyu zeminde
+     rahatça geçer (7,10:1 ve 5,97:1). Beyaz metin taşıyan DOLU bir zemin
+     olarak kullanıldıklarında ise batarlar (2,72:1 ve 3,24:1) — bir renk
+     iki rolü aynı anda AA seviyesinde taşıyamaz. Dolu zemin rolü için
+     `-koyu` değişkenleri vardır; `bg-mihenk text-white` yerine
+     `bg-mihenk-koyu text-white` yazılır. */
+  --color-mihenk: #a78bfa;
+  /* #7c5cf0 beyazla 4,52:1 verip sınırı kıl payı geçiyordu; ölçüm
+     gürültüsüne yer bırakmamak için koyulaştırıldı (5,53:1). */
+  --color-mihenk-koyu: #6d4ae8;
+
+  --radius-kart: 18px;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Açık tema — NSosyal menüsündeki güneş/ay geçişinin karşılığı */
+:root[data-tema="acik"] {
+  --color-zemin: #ffffff;
+  --color-kart: #f4f6f9;
+  --color-yukseltilmis: #e8ecf2;
+  --color-hover: #dde3ec;
+  --color-cizgi: #dfe4ec;
+  --color-metin: #0f1720;
+  /* Açık temada kademeler koyulaştırılarak aynı eşik sağlanır. */
+  --color-metin-ikincil: #4a5560;
+  --color-metin-sonuk: #4f5a66;
+
+  /* --- AKSAN RENKLERİ AÇIK TEMADA YENİDEN TANIMLANIR -------------------
+     Yukarıdaki aksanların hepsi KOYU zemin için seçilmişti ve beyaz üzerinde
+     tamamı WCAG AA eşiğinin altında kalıyordu: mihenk 2,72:1 · mavi 3,24:1 ·
+     uyarı 2,04:1 · başarı 2,28:1 · camgöbeği 2,02:1 (gereken 4,50).
+
+     Bu, tek tük bir kusur değil sistematik bir boşluktu: açık tema yalnızca
+     YÜZEY ve METİN jetonlarını geçersiz kılıyor, aksanları olduğu gibi
+     bırakıyordu. Tek başına "Özetle" düğmesinin etiketi 130 ihlal düğümü
+     üretiyordu.
+
+     Neden önce fark edilmedi: denetim betiği açık temayı `prefers-color-scheme`
+     ile açmaya çalışıyordu, oysa arayüz `data-tema` özniteliğini okuyor. İki
+     koşu da karanlık temayı ölçüyor, "açık tema denetlendi" sanılıyordu.
+     Ölçüm aracının kendisi yanlış ölçtüğünde, sonuç kusursuz görünür.
+
+     Ton korunur, parlaklık düşürülür: renkler aynı ailede kalır, marka kimliği
+     bozulmaz. Değerler açık temanın DÖRT yüzeyinde birden (zemin, kart,
+     yükseltilmiş, hover) eşiği geçecek şekilde seçilmiştir. */
+  --color-mihenk: #5b3ad6;
+  --color-mavi: #1a63bf;
+  --color-onayli: #1a63bf;
+  --color-camgobegi: #0b6c80;
+  --color-basari: #0f6e33;
+  --color-uyari: #7d5000;
+  --color-tehlike: #b01d29;
+}
+
+html { color-scheme: dark; }
+html[data-tema="acik"] { color-scheme: light; }
+
+body {
+  background: var(--color-zemin);
+  color: var(--color-metin);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Marka gradyanı — "Yeni Gönderi" butonu ve logo */
+.gradyan-marka {
+  background-image: linear-gradient(100deg, var(--color-camgobegi), var(--color-mavi));
+}
+.gradyan-metin {
+  background-image: linear-gradient(100deg, var(--color-camgobegi), var(--color-mavi));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Odak halkası — erişilebilirlik denetiminde klavye görünürlüğü için */
+:focus-visible {
+  outline: 2px solid var(--color-mavi);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-yukseltilmis);
+  border-radius: 999px;
+  border: 2px solid var(--color-zemin);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-hover); }
+
+/* Hareket azaltma tercihi */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

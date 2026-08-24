@@ -1,4 +1,7 @@
-# Python
+# Bu dosya iki ayrı depodan birleştirildi (backend/ml + 02-prototip).
+# İki tarafın kuralları da korunmuştur; ortak olanlar tekilleştirilmiştir.
+
+# --- Python ---
 __pycache__/
 *.py[cod]
 .venv/
@@ -7,34 +10,57 @@ venv/
 .mypy_cache/
 *.egg-info/
 
-# Model ağırlıkları — spec 4.2: git'e girmez
+# --- Node / Next.js / Vite ---
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+out/
+build/
+dist/
+frontend/dist/
+frontend/.vite/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Model ağırlıkları — spec 4.2: git'e girmez ---
 ml/artifacts/
+04-model/**/*.bin
+04-model/**/*.safetensors
+04-model/**/*.pt
+04-model/**/checkpoints/
 *.safetensors
 *.bin
 
-# Yerel veritabanı ve önbellek dosyaları
+# --- Ortam değişkenleri — API anahtarları ASLA depoya girmez ---
+.env
+.env.local
+.env*.local
+
+# --- Yerel veritabanı ve önbellek ---
 *.db
 *.sqlite3
 .cache/
 
-# Ortam
-.env
-.env.local
-
-# Ön yüz
-node_modules/
-frontend/dist/
-frontend/.vite/
-
-# İşletim sistemi
-.DS_Store
-Thumbs.db
-
-# Gerçek metin ölçüm kümesi — üçüncü taraf metinleri depoya girmez.
-# İnsan tarafı CC BY-SA 4.0 lisanslı bir derlemden gelir; yeniden dağıtmak
-# paylaşımlı-lisans yükümlülüğü doğurur. Bunun yerine üretim betiği
-# (build_real_eval.py) derlemi indirip deterministik olarak yeniden örnekler.
-# Bizim ürettiğimiz yapay zekâ metinleri (ai_raw.jsonl) depoda TUTULUR.
+# --- Gerçek metin ölçüm kümesi ---
+# Üçüncü taraf metinleri depoya girmez. İnsan tarafı CC BY-SA 4.0 lisanslı bir
+# derlemden gelir; yeniden dağıtmak paylaşımlı-lisans yükümlülüğü doğurur.
+# Bunun yerine üretim betiği (build_real_eval.py) derlemi indirip deterministik
+# olarak yeniden örnekler. Bizim ürettiğimiz yapay zekâ metinleri
+# (ai_raw.jsonl) depoda TUTULUR.
 ml/data/real_eval/_kaynak_yorumlar.parquet
 ml/data/real_eval/gen_brief.json
 ml/data/real_eval/dataset.jsonl
+
+# --- İşletim sistemi ve editör ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Playwright tarayici ikilileri (npx playwright install ile kurulur)
+02-prototip/test-results/
+
+# Next.js derleme sirasinda otomatik uretilen ajan dosyalari
+02-prototip/AGENTS.md
+02-prototip/CLAUDE.md

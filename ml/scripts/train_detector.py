@@ -240,7 +240,7 @@ def egit_berturk(seed: int, *, max_steps: int = 0, devam: bool = True) -> Egitim
     #
     # 2) KISMÎ İNCE AYAR: Gömme katmanı ve alt encoder katmanları dondurulur;
     #    yalnızca üst katmanlar ve sınıflandırma başlığı eğitilir. Bu hem geri
-    #    yayılım maliyetini yarıya indirir hem de 714 örneklik küçük veri
+    #    yayılım maliyetini yarıya indirir hem de 836 örneklik küçük veri
     #    setinde aşırı öğrenmeyi azaltır. Alt katmanlar genel dil bilgisini
     #    taşır ve bu görev için yeniden öğrenilmesine gerek yoktur.
     class MetinKumesi(Dataset):

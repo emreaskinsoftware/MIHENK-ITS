@@ -84,9 +84,9 @@ flowchart LR
     subgraph API["API — backend/app/main.py"]
         direction TB
         E1["/api/akis"]
-        E2["/api/ozetle"]
+        E2["/api/ozetle<br/>+ /api/ozetle/metinler"]
         E3["/api/sor"]
-        E4["/api/tespit"]
+        E4["/api/tespit<br/>(kimlikli + kimliksiz)"]
         E5["/api/koken"]
         E6["/api/itiraz"]
     end
